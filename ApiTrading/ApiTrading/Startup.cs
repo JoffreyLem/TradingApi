@@ -1,17 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
+using ApiTrading.Configuration;
 using ApiTrading.DbContext;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace ApiTrading
@@ -33,8 +32,41 @@ namespace ApiTrading
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ApiTrading", Version = "v1"});
             });
-            var connectionString = "server=172.18.0.2;user=root;password=root1;database=ApiTrading";
-            services.AddDbContext<ApiTradingDatabaseContext>(options => options.UseMySQL(connectionString));
+            var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+            var tokenValidationParameters = new TokenValidationParameters {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                RequireExpirationTime = false,
+
+                // Allow to use seconds for expiration of token
+                // Required only when token lifetime less than 5 minutes
+                // THIS ONE
+                ClockSkew = TimeSpan.Zero
+            };
+            services.AddSingleton(tokenValidationParameters);
+            services.AddDbContext<ApiTradingDatabaseContext>(options =>
+                options.UseMySQL(Configuration.GetConnectionString("ApiTradingDb")));
+            services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+            
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                
+                .AddJwtBearer(jwt =>
+                {
+                    jwt.SaveToken = true;
+                    jwt.TokenValidationParameters = tokenValidationParameters;
+                });
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApiTradingDatabaseContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +80,7 @@ namespace ApiTrading
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();

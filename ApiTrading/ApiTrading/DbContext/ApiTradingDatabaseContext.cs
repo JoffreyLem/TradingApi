@@ -1,12 +1,13 @@
 using ApiTrading.Modele;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiTrading.DbContext
 {
-    public class ApiTradingDatabaseContext : Microsoft.EntityFrameworkCore.DbContext
+    public class ApiTradingDatabaseContext : IdentityDbContext
     {
         public DbSet<Test> Tests { get; set; }
-        
+        public virtual DbSet<RefreshToken> RefreshTokens {get;set;}
         public ApiTradingDatabaseContext(DbContextOptions<ApiTradingDatabaseContext> options)
             : base(options)
         {
@@ -23,6 +24,7 @@ namespace ApiTrading.DbContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Test>().HasNoKey();
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

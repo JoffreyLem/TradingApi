@@ -11,6 +11,7 @@ using ApiTrading.Domain;
 using ApiTrading.Modele;
 using ApiTrading.Modele.DTO.Request;
 using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.Mail;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -26,16 +27,19 @@ namespace ApiTrading.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApiTradingDatabaseContext _apiDbContext;
+        private readonly IMail _mailService;
         
         public UtilisateurController(UserManager<IdentityUser> userManager,
                                     IOptionsMonitor<JwtConfig> optionsMonitor,
                                     TokenValidationParameters tokenValidationParameters,
-                                    ApiTradingDatabaseContext apiDbContext)
+                                    ApiTradingDatabaseContext apiDbContext,
+                                    IMail mailService)
         {
             _userManager = userManager;
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
             _apiDbContext = apiDbContext;
+            _mailService = mailService;
         }
 
         [HttpPost]
@@ -60,7 +64,7 @@ namespace ApiTrading.Controllers
                 if (isCreated.Succeeded)
                 {
                     var jwtToken = await GenerateJwtToken(newUser);
-
+                    await _mailService.Send(user.Email, "test registrationOK", "test");
                     return Ok(new RegistrationResponse
                     {
                         Result = true,

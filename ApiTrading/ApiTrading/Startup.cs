@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ApiTrading.Configuration;
 using ApiTrading.DbContext;
@@ -23,7 +24,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ApplicationException = ApiTrading.Exception.ApplicationException;
+
 
 namespace ApiTrading
 {
@@ -44,14 +45,17 @@ namespace ApiTrading
                 {
                     var errorModel = new ErrorModel();
                     errorModel.StatusCode = 400;
-                    errorModel.Message = context.ModelState.Values.SelectMany(x => x.Errors)
-                        .Select(x => x.ErrorMessage).ToString();
+                    errorModel.ErrorMessage = context.ModelState.Values.SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage).ToList();
                     return new BadRequestObjectResult(new {
                         Code = 400,
                         Messages = context.ModelState.Values.SelectMany(x => x.Errors)
                             .Select(x => x.ErrorMessage)
                     });
-                }  );
+                }  ).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+            } );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ApiTrading", Version = "v1"});
@@ -106,7 +110,7 @@ namespace ApiTrading
 
                 });
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser<int>>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApiTradingDatabaseContext>();
 
             services.AddScoped<IMail, MailService>();

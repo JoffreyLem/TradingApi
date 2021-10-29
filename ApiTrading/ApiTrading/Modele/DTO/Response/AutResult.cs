@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using ApiTrading.Modele.DTO.Response;
 
 namespace ApiTrading.Domain
 {
-    public class AutResult
+    public class AutResult : ResponseModel
     {
-      
+        public int Id { get; set; }
         public string Token {get;set;}
         public string RefreshToken { get; set; }
-        public bool Result { get; set; }
-        public List<string> Errors { get; set; }
+ 
+  
     }
 }

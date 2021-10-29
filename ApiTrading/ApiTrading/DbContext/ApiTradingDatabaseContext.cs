@@ -1,10 +1,11 @@
 using ApiTrading.Modele;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiTrading.DbContext
 {
-    public class ApiTradingDatabaseContext : IdentityDbContext
+    public class ApiTradingDatabaseContext : IdentityDbContext<IdentityUser<int>,IdentityRole<int>,int>
     {
      
         public virtual DbSet<RefreshToken> RefreshTokens {get;set;}

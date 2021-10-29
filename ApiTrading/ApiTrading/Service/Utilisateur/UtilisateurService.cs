@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,12 +23,12 @@ namespace ApiTrading.Service.Utilisateur
 {
     public class UtilisateurService : IUtilisateurService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<IdentityUser<int>> _userManager;
         private readonly JwtConfig _jwtConfig;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApiTradingDatabaseContext _apiDbContext;
         private readonly IMail _mailService;
-        public UtilisateurService(UserManager<IdentityUser> userManager,
+        public UtilisateurService(UserManager<IdentityUser<int>> userManager,
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
             ApiTradingDatabaseContext apiDbContext,
@@ -49,30 +50,29 @@ namespace ApiTrading.Service.Utilisateur
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
             if (existingUser != null)
-                throw new ApplicationException("Email Already Exist");
+                throw new AlreadyExistException("Email Already Exist");
 
-            var newUser = new IdentityUser {Email = user.Email, UserName = user.Email};
+            var newUser = new IdentityUser<int> {Email = user.Email, UserName = user.Email};
             var isCreated = await _userManager.CreateAsync(newUser, user.Password);
+         
             if (isCreated.Succeeded)
             {
+                var userretrived = await _userManager.FindByEmailAsync(user.Email);
                 var jwtToken = await GenerateJwtToken(newUser);
                 await _mailService.Send(user.Email, "test registrationOK", "test");
                 return new RegistrationResponse
                 {
-                    Result = true,
+                    Message = "Inscription réussi",
+                    StatusCode = 201,
                     Token = jwtToken.Token,
+                    Id=userretrived.Id,
                     
                 };
             }
             else
             {
                 var messageErrorList = isCreated.Errors.Select(x => x.Description).ToList();
-                string messageError ="";
-                foreach (var s in messageErrorList)
-                {
-                    messageError += s;
-                }
-                throw new ApplicationException(messageError);
+                throw new AppException(messageErrorList);
             }
         }
 
@@ -81,7 +81,7 @@ namespace ApiTrading.Service.Utilisateur
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
             if(existingUser == null)
             {
-                throw new ApplicationException("Invalid authentication request");
+                throw new NotFoundException("User not found");
             }
 
          
@@ -89,21 +89,97 @@ namespace ApiTrading.Service.Utilisateur
 
             if(isCorrect)
             {
+   
                 var jwtToken = await GenerateJwtToken(existingUser);
 
                 return new RegistrationResponse() {
-                    Result = true, 
-                    Token =  jwtToken.Token
+                    Message = "Connexion réussi",
+                    Token =  jwtToken.Token,
+                    Id = existingUser.Id
                 };
             }
             else 
             {
-                throw new NotFoundException("Utilisateur introuvable");
-                 
+                throw new AuthException("Echec de l'authentication, utilisateur/mdp incorrect");
             }
         }
-        
-        private async Task<AutResult> GenerateJwtToken(IdentityUser user)
+
+        public async Task<TokenResponse> GetId(string email)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if(existingUser == null)
+            {
+                throw new NotFoundException("Mail not found");
+            }
+            else
+            {
+                var tokenResponse = new TokenResponse();
+                tokenResponse.StatusCode = 200;
+                tokenResponse.ID = existingUser.Id;
+
+                return tokenResponse;
+            }
+        }
+
+        public async Task<ResponseModel> Update(UserUpdateRequest user, int id)
+        {
+            var existingUser = await _userManager.FindByIdAsync(id.ToString());
+            if(existingUser == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            if (user.OldPassword != null && user.NewPassword !=null)
+            {
+                var updatePwd = await _userManager.ChangePasswordAsync(existingUser, user.OldPassword, user.NewPassword);
+
+                if (!updatePwd.Succeeded)
+                {
+                    var messageErrorList = updatePwd.Errors.Select(x => x.Description).ToList();
+                    throw new AppException(messageErrorList);
+                }
+            }
+
+            existingUser.Email = user.Email;
+            var update = await _userManager.UpdateAsync(existingUser);
+            if (update.Succeeded)
+            {
+                return new ResponseModel() {
+                    StatusCode =(int) HttpStatusCode.OK,
+                    Message = "Update réussi",
+                };
+            }
+            else
+            {
+                var messageErrorList = update.Errors.Select(x => x.Description).ToList();
+                throw new AppException(messageErrorList);
+            }
+        }
+
+        public async Task<ResponseModel> Delete(int id)
+        {
+            var existingUser = await _userManager.FindByIdAsync(id.ToString());
+            if(existingUser == null)
+            {
+                throw new NotFoundException("User not found");
+            }
+
+            var deleteUser = await _userManager.DeleteAsync(existingUser);
+
+            if (deleteUser.Succeeded)
+            {
+                return new ResponseModel() {
+                    Message = "Update réussi",
+                };
+            }
+            else
+            {
+                var messageErrorList = deleteUser.Errors.Select(x => x.Description).ToList();
+                throw new AppException(messageErrorList);
+            }
+        }
+
+        private async Task<AutResult> GenerateJwtToken(IdentityUser<int> user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -113,7 +189,7 @@ namespace ApiTrading.Service.Utilisateur
             {
                 Subject = new ClaimsIdentity(new []
                 {
-                    new Claim("Id", user.Id), 
+                    new Claim("Id", user.Id.ToString()), 
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -140,7 +216,6 @@ namespace ApiTrading.Service.Utilisateur
 
             return new AutResult() {
                 Token = jwtToken,
-                Result = true,
                 RefreshToken = refreshToken.Token
             };
         }
@@ -152,5 +227,7 @@ namespace ApiTrading.Service.Utilisateur
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
+        
+  
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using ApiTrading.Exception;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ApiTrading
@@ -9,8 +10,7 @@ namespace ApiTrading
         {
             if (!context.ModelState.IsValid)
             {
-                throw new ApplicationException("Invalid Payload");
-
+                throw new AppException("Invalid Payload");
             }
             base.OnActionExecuting(context);
         }

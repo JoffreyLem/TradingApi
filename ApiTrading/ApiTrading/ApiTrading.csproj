@@ -5,6 +5,11 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
+<PropertyGroup>
+  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  <NoWarn>$(NoWarn);1591</NoWarn>
+</PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="MailKit" Version="2.15.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.11" />
@@ -21,6 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Helper" />
       <Folder Include="Repository" />
     </ItemGroup>
 

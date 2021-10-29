@@ -1,18 +1,29 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using ApiTrading.Configuration;
 using ApiTrading.DbContext;
+using ApiTrading.Exception;
 using ApiTrading.Service.Mail;
+using ApiTrading.Service.Utilisateur;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ApplicationException = ApiTrading.Exception.ApplicationException;
 
 namespace ApiTrading
 {
@@ -28,10 +39,26 @@ namespace ApiTrading
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(x => { x.Filters.Add(new ValidateModelAttribute());}).ConfigureApiBehaviorOptions(options => 
+                options.InvalidModelStateResponseFactory= context =>
+                {
+                    var errorModel = new ErrorModel();
+                    errorModel.StatusCode = 400;
+                    errorModel.Message = context.ModelState.Values.SelectMany(x => x.Errors)
+                        .Select(x => x.ErrorMessage).ToString();
+                    return new BadRequestObjectResult(new {
+                        Code = 400,
+                        Messages = context.ModelState.Values.SelectMany(x => x.Errors)
+                            .Select(x => x.ErrorMessage)
+                    });
+                }  );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ApiTrading", Version = "v1"});
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
             });
             var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
 
@@ -52,24 +79,38 @@ namespace ApiTrading
             services.AddDbContext<ApiTradingDatabaseContext>(options =>
                 options.UseMySQL(Configuration.GetConnectionString("ApiTradingDb")));
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
-            
+            services.AddScoped<ValidateModelAttribute>();
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                
                 .AddJwtBearer(jwt =>
                 {
                     jwt.SaveToken = true;
                     jwt.TokenValidationParameters = tokenValidationParameters;
+
+                    jwt.Events = new JwtBearerEvents()
+                    {
+                        
+                        OnAuthenticationFailed = ctx =>
+                        {
+                            ctx.Response.StatusCode = 401;
+                           ErrorModel errormodel = new ErrorModel(401,"Echec d'authentification");
+                           return ctx.Response.WriteAsJsonAsync(errormodel);
+                        },
+                        
+                    };
+
+
                 });
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApiTradingDatabaseContext>();
 
             services.AddScoped<IMail, MailService>();
+            services.AddScoped<IUtilisateurService, UtilisateurService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,7 +128,7 @@ namespace ApiTrading
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <RootNamespace>Strategy</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="MoneyManagement\**"/>
+        <Compile Include="MoneyManagement\MoneyManagementHandler.cs"/>
+        <Compile Include="MoneyManagement\MoneyManagementTresholdEventArgs.cs"/>
+        <Compile Include="MoneyManagement\PositionHandler.cs"/>
+        <Compile Include="MoneyManagement\Result.cs"/>
+        <EmbeddedResource Remove="MoneyManagement\**"/>
+        <None Remove="MoneyManagement\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\APIhandler\APIhandler.csproj"/>
+        <ProjectReference Include="..\CandleBuilder\CandleBuilder.csproj"/>
+        <ProjectReference Include="..\Indicator\Indicator.csproj"/>
+
+        <ProjectReference Include="..\MetatraderDataSource\Backtest.csproj"/>
+        <ProjectReference Include="..\Modèle\Modele.csproj"/>
+        <ProjectReference Include="..\Utility\Utility.csproj"/>
+        <ProjectReference Include="..\XtbLibrairie\XtbLibrairie.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ConsoleTables" Version="2.4.2"/>
+        <PackageReference Include="Skender.Stock.Indicators" Version="1.12.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Exception\"/>
+    </ItemGroup>
+
+</Project>

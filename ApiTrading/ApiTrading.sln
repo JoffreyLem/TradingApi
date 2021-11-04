@@ -2,6 +2,22 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTrading", "ApiTrading\ApiTrading.csproj", "{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIhandler", "APIhandler\APIhandler.csproj", "{60D08ABB-42A8-4184-99C1-35981A1D688B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CandleBuilder", "CandleBuilder\CandleBuilder.csproj", "{B562EA27-999E-4EE5-8D74-0572036A8B4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indicator", "Indicator\Indicator.csproj", "{20B7DF1F-CC91-49C3-9F8E-A666AE509820}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modele", "Modèle\Modele.csproj", "{59022F40-2511-458A-9693-192679E56348}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScalpingStrategy", "ScalpingStrategy\ScalpingStrategy.csproj", "{1F86D10C-F4E1-4DD6-B14E-FF5B39A2BFB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyBuilderProject", "StrategyBuilder\StrategyBuilderProject.csproj", "{81BCCDED-BE09-4241-BCE2-0F872DB2FAE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{A97C1A85-4C93-4DC8-9EBD-C2A99A2BA972}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtbLibrairie", "XtbLibrairie\XtbLibrairie.csproj", "{021C115F-04F3-4291-825E-30CB48A755D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +28,37 @@ Global
 		{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60D08ABB-42A8-4184-99C1-35981A1D688B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60D08ABB-42A8-4184-99C1-35981A1D688B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60D08ABB-42A8-4184-99C1-35981A1D688B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60D08ABB-42A8-4184-99C1-35981A1D688B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20B7DF1F-CC91-49C3-9F8E-A666AE509820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20B7DF1F-CC91-49C3-9F8E-A666AE509820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20B7DF1F-CC91-49C3-9F8E-A666AE509820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20B7DF1F-CC91-49C3-9F8E-A666AE509820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59022F40-2511-458A-9693-192679E56348}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59022F40-2511-458A-9693-192679E56348}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59022F40-2511-458A-9693-192679E56348}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59022F40-2511-458A-9693-192679E56348}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F86D10C-F4E1-4DD6-B14E-FF5B39A2BFB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F86D10C-F4E1-4DD6-B14E-FF5B39A2BFB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F86D10C-F4E1-4DD6-B14E-FF5B39A2BFB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F86D10C-F4E1-4DD6-B14E-FF5B39A2BFB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81BCCDED-BE09-4241-BCE2-0F872DB2FAE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81BCCDED-BE09-4241-BCE2-0F872DB2FAE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81BCCDED-BE09-4241-BCE2-0F872DB2FAE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81BCCDED-BE09-4241-BCE2-0F872DB2FAE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A97C1A85-4C93-4DC8-9EBD-C2A99A2BA972}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A97C1A85-4C93-4DC8-9EBD-C2A99A2BA972}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A97C1A85-4C93-4DC8-9EBD-C2A99A2BA972}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A97C1A85-4C93-4DC8-9EBD-C2A99A2BA972}.Release|Any CPU.Build.0 = Release|Any CPU
+		{021C115F-04F3-4291-825E-30CB48A755D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{021C115F-04F3-4291-825E-30CB48A755D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{021C115F-04F3-4291-825E-30CB48A755D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{021C115F-04F3-4291-825E-30CB48A755D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

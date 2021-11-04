@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace ApiTrading.Modele.DTO.Response
 {
@@ -9,16 +10,16 @@ namespace ApiTrading.Modele.DTO.Response
         {
             
         }
-        protected ResponseModel(int statusCode, string message)
+        public ResponseModel(int statusCode, string message)
         {
             this.StatusCode = statusCode;
             this.Message = message;
         }
-
+        [JsonProperty(Order = 2)]
         [Required]
         public string? Message { get; set; }
         
-        
+        [JsonProperty(Order = 1)]
         [Required]
         public int StatusCode { get; set; }
     }

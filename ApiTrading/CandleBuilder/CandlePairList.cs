@@ -17,7 +17,7 @@ namespace CandleBuilder
         {
         }
 
-        public CandlePairList(Timeframe petitTimeFrame, Timeframe grandTimeFrame, string symbol, ApiHandler handler,
+        public CandlePairList(Timeframe petitTimeFrame, Timeframe grandTimeFrame, string symbol, IApiHandler handler,
             bool isbacktest = false, bool useHistory = true)
         {
             Handler = handler;
@@ -25,23 +25,14 @@ namespace CandleBuilder
             ListTick = new List<Tick>();
             List = new CandleList(petitTimeFrame, symbol, TickSize, handler, useHistory);
             List1 = new CandleList(grandTimeFrame, symbol, TickSize, handler, useHistory);
-
             Symbol = symbol;
-            if (!isbacktest)
-            {
-                Handler.SubscribePrice(symbol);
-                Handler.SubscribeCandle(symbol);
-                Handler.AddCallBackPriceReceived(StreamingOnTickRecordReceived);
-                Handler.AddCallBackCandleReceived(StreamingOnCandleRecordReceived);
-            }
-
             List.NewCandle += List_NewCandle;
             List1.NewCandle += List_NewCandle;
             List.SetTickList(ref listTick);
             List1.SetTickList(ref listTick);
         }
 
-        public ApiHandler Handler { get; set; }
+        public IApiHandler Handler { get; set; }
 
 
         public string Symbol { get; set; }

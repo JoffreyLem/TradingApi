@@ -16,7 +16,7 @@ namespace CandleBuilder
         {
         }
 
-        public CandleList(Timeframe tf, string symbol, double? symbolTickSyze, ApiHandler handler,
+        public CandleList(Timeframe tf, string symbol, double? symbolTickSyze, IApiHandler handler,
             bool useHistory = false)
         {
             Handler = handler;
@@ -34,7 +34,7 @@ namespace CandleBuilder
             SymbolTickSyze = symbolTickSyze;
         }
 
-        public ApiHandler Handler { get; set; }
+        public IApiHandler Handler { get; set; }
         public bool ProcessCanRun { get; set; }
         public string TimeFrame { get; set; }
         public string Symbol { get; set; }

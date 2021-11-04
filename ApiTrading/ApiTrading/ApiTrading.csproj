@@ -27,9 +27,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Helper" />
       <Folder Include="Migrations" />
       <Folder Include="Repository" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\APIhandler\APIhandler.csproj" />
     </ItemGroup>
 
 </Project>

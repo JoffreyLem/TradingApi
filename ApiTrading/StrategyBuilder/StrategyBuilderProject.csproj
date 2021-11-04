@@ -7,10 +7,6 @@
 
     <ItemGroup>
         <Compile Remove="MoneyManagement\**" />
-        <Compile Include="MoneyManagement\MoneyManagementHandler.cs" />
-        <Compile Include="MoneyManagement\MoneyManagementTresholdEventArgs.cs" />
-        <Compile Include="MoneyManagement\PositionHandler.cs" />
-        <Compile Include="MoneyManagement\Result.cs" />
         <EmbeddedResource Remove="MoneyManagement\**" />
         <None Remove="MoneyManagement\**" />
     </ItemGroup>

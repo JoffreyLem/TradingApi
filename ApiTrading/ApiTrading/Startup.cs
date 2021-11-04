@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using APIhandler;
 using ApiTrading.Configuration;
+using ApiTrading.Controllers;
 using ApiTrading.DbContext;
 using ApiTrading.Exception;
 using ApiTrading.Service.Mail;
@@ -40,7 +42,11 @@ namespace ApiTrading
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers(x => { x.Filters.Add(new ValidateModelAttribute());}).ConfigureApiBehaviorOptions(options => 
+            services.AddControllers(x =>
+            {
+                x.Filters.Add(new ValidateModelAttribute());
+            }).ConfigureApiBehaviorOptions(options =>
+                
                 options.InvalidModelStateResponseFactory= context =>
                 {
                     var errorModel = new ErrorModel();
@@ -115,6 +121,7 @@ namespace ApiTrading
 
             services.AddScoped<IMail, MailService>();
             services.AddScoped<IUtilisateurService, UtilisateurService>();
+            services.AddScoped<IApiHandler, XtbApiHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

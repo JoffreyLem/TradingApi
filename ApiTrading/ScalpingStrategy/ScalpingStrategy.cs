@@ -9,7 +9,7 @@ namespace ScalpingStrategy
 {
     public class ScalpingStrategy : Strategy.Strategy
     {
-        public ScalpingStrategy(string symbol, Timeframe petitTimeFrame, Timeframe grandTimeframe, ApiHandler handler,
+        public ScalpingStrategy(string symbol, Timeframe petitTimeFrame, Timeframe grandTimeframe, IApiHandler handler,
             bool isbacktest) : base(symbol,
             petitTimeFrame, grandTimeframe, handler, isbacktest)
         {
@@ -42,31 +42,9 @@ namespace ScalpingStrategy
                 var sl = SarIndicator.Last().Sar;
                 var tp = 0;
 
-                if (PositionInProgress && AllowMultiplePosition)
-                    await OpenPosition(signal, sl, tp, 0);
-                else if (!PositionInProgress) await OpenPosition(signal, sl, tp, 0);
             }
         }
 
-        public override (bool updatable, double? sl, double? tp) IsPositionUpdatable(Position position)
-        {
-            var close = History.Last().Close;
-            var currentState = SarIndicator.GetState(0, close);
-            var positionState = position.TypePosition;
-
-            if (currentState.GetEnumDescription() == positionState.GetEnumDescription())
-            {
-                var newSl = (double?) SarIndicator.Last().Sar;
-                var newTp = 0;
-                return (true, newSl, newTp);
-            }
-
-            return (false, 0, 0);
-        }
-
-        public override bool IsPositionClosable(Position position)
-        {
-            return false;
-        }
+        
     }
 }

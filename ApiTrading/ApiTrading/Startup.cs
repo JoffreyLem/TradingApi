@@ -121,7 +121,7 @@ namespace ApiTrading
 
             services.AddScoped<IMail, MailService>();
             services.AddScoped<IUtilisateurService, UtilisateurService>();
-            services.AddScoped<IApiHandler, XtbApiHandler>();
+            services.AddSingleton<IApiHandler, XtbApiHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

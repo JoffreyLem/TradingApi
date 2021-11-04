@@ -57,6 +57,8 @@ namespace Modele
 
             ListTick = new List<Tick>();
         }
+        
+        
 
 
         public long BidVolume { get; set; }

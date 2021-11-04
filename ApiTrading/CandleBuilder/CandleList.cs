@@ -24,7 +24,7 @@ namespace CandleBuilder
             if (useHistory)
             {
                 var data = Handler.GetAllChart(symbol, tf.GetEnumDescription(), symbolTickSyze).Result;
-                AddRange(data);
+                //AddRange(data);
             }
 
             ListTick = new List<Tick>();

@@ -33,7 +33,7 @@ namespace APIhandler
 
        
 
-        public abstract Task<List<Candle>> GetAllChart(string symbol, string periodCodeStr, double? symbolTickSize,
+        public abstract Task<CandleListDto> GetAllChart(string symbol, string periodCodeStr, double? symbolTickSize,
             bool fullData = false);
 
         public abstract Task<List<Candle>> GetPartialChart(string symbol, string periodCodeStr, double? symbolTickSize,

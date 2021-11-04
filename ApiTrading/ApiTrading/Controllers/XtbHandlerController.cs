@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using APIhandler;
 using ApiTrading.Modele.DTO.Request;
@@ -14,6 +15,7 @@ namespace ApiTrading.Controllers
     [ProducesResponseType(500)]
     [ProducesResponseType(400)]
     [ProducesResponseType(403)]
+    [ProducesResponseType(415)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
@@ -30,6 +32,7 @@ namespace ApiTrading.Controllers
         /// </summary>
         [ProducesResponseType(typeof(ResponseModel),200)]
         [HttpPost]
+        [AllowAnonymous]
         [Route("Connect")]
    
         public async Task<IActionResult> Connect([FromBody] ApiConnectionRequestDto user)
@@ -46,6 +49,21 @@ namespace ApiTrading.Controllers
         public async Task<IActionResult> Logout()
         {
             return Ok(await _apiHandler.Logout());
+        }
+        
+        /// <summary>
+        /// Récupération du symbol par apport au timeframe spécifié
+        /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="timeframe"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(CandleListDto),200)]
+        [HttpGet]
+        [Route("Symbol/{symbol}/{timeframe}")]
+        public async Task<IActionResult> GetSymbol([Required][FromRoute] string symbol,[Required] [FromRoute] string timeframe)
+        {
+            return Ok(await _apiHandler.GetAllChart(symbol, timeframe, null,true));
         }
     }
 }

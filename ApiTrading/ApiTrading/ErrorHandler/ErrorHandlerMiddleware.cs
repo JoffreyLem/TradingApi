@@ -36,6 +36,7 @@ namespace ApiTrading
                     case AppException e:
                         response.StatusCode = (int) HttpStatusCode.BadRequest;
                         break;
+                    case TimeFrameDontExistException e:
                         response.StatusCode = (int) HttpStatusCode.BadRequest;
                         break;
                     case AlreadyExistException e:

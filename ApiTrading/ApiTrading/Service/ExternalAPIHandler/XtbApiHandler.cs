@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using ApiTrading.Exception;
 using ApiTrading.Modele.DTO.Response;
 using Modele;
 using Modele.StramingModel;
@@ -83,7 +85,7 @@ namespace APIhandler
 
   
 
-        public  async Task<List<Candle>> GetAllChart(string symbol, string periodCodeStr,
+        public  async Task<CandleListDto> GetAllChart(string symbol, string periodCodeStr,
             double? symbolTickSize, bool fullData = false)
         {
             (PERIOD_CODE periodCode, DateTime dateTime) data;
@@ -94,12 +96,15 @@ namespace APIhandler
 
             var chartLastResponse = APICommandFactory.ExecuteChartLastCommand(connector, symbol, data.periodCode,
                 data.dateTime.ConvertToUnixTime());
+            var ratioConverted = GetSymbolInformation(symbol).TickSize;
             var convertedData = chartLastResponse.RateInfos
                 .Where(x => x.Ctm.ConvertToDatetime() > DateTime.Now.AddMonths(-1)).Select(x =>
-                    new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol, symbolTickSize))
+                    new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol,ratioConverted))
                 .ToList();
 
-            return convertedData;
+            var candleListDTO = new CandleListDto((int) HttpStatusCode.OK, "",convertedData);
+
+            return candleListDTO;
         }
 
         public  async Task<List<Candle>> GetPartialChart(string symbol, string periodCodeStr,
@@ -170,7 +175,8 @@ namespace APIhandler
                     return (PERIOD_CODE.PERIOD_MN1, dateTime);
 
                 default:
-                    throw new Exception("Periode code n'existe pas");
+                    var message = "le timeframe n'existe pas";
+                    throw new TimeFrameDontExistException(message);
             }
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using APIhandler;
+
 using CandleBuilder.EventArgs;
 using Modele;
 using Modele.StramingModel;
@@ -16,17 +16,10 @@ namespace CandleBuilder
         {
         }
 
-        public CandleList(Timeframe tf, string symbol, double? symbolTickSyze, IApiHandler handler,
-            bool useHistory = false)
+        public CandleList(Timeframe tf, string symbol, double? symbolTickSyze, bool useHistory = false)
         {
-            Handler = handler;
+            
             IsProcessRunning = true;
-            if (useHistory)
-            {
-                var data = Handler.GetAllChart(symbol, tf.GetEnumDescription(), symbolTickSyze).Result;
-                //AddRange(data);
-            }
-
             ListTick = new List<Tick>();
             TimeFrame = tf.GetEnumDescription();
             Symbol = symbol;
@@ -34,7 +27,7 @@ namespace CandleBuilder
             SymbolTickSyze = symbolTickSyze;
         }
 
-        public IApiHandler Handler { get; set; }
+    
         public bool ProcessCanRun { get; set; }
         public string TimeFrame { get; set; }
         public string Symbol { get; set; }
@@ -110,22 +103,6 @@ namespace CandleBuilder
                     last.Type = last.Close > last.Open ? CandleType.buy : CandleType.sell;
                     last.AskVolume += lastTick.AskVolume;
                     last.BidVolume += lastTick.BidVolume;
-                }
-            }
-        }
-
-        private async Task CorrectHistory(long? start, long? end)
-        {
-            var test = start.ConvertToDatetime();
-            var test2 = start.ConvertToDatetime().AddMinutes(+1).ConvertToUnixTime();
-            var data = await Handler.GetPartialChart(Symbol, TimeFrame, SymbolTickSyze, start, test2);
-            foreach (var candle in data)
-            {
-                Add(candle);
-                if (NewCandle != null)
-                {
-                    var candleEvent = new CandleEventArgs(candle, TimeFrame);
-                    NewCandle(this, candleEvent);
                 }
             }
         }

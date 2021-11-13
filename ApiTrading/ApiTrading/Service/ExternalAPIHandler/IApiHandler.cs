@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ApiTrading.Modele.DTO.Response;
 using Modele;
-using Modele.StramingModel;
 using XtbLibrairie.sync;
 
-namespace APIhandler
+namespace ApiTrading.Service.ExternalAPIHandler
 {
     public interface IApiHandler
     {

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using APIhandler;
 using Indicator.Indicator;
 using Modele;
 using Utility;
@@ -9,9 +8,9 @@ namespace ScalpingStrategy
 {
     public class ScalpingStrategy : Strategy.Strategy
     {
-        public ScalpingStrategy(string symbol, Timeframe petitTimeFrame, Timeframe grandTimeframe, IApiHandler handler,
+        public ScalpingStrategy(string symbol, Timeframe petitTimeFrame, Timeframe grandTimeframe, 
             bool isbacktest) : base(symbol,
-            petitTimeFrame, grandTimeframe, handler, isbacktest)
+            petitTimeFrame, grandTimeframe,  isbacktest)
         {
             CciIndicator = new CciIndicator(History);
             SarIndicator = new SarIndicator(History);

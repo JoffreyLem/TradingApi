@@ -10,6 +10,7 @@ using ApiTrading.Configuration;
 using ApiTrading.Controllers;
 using ApiTrading.DbContext;
 using ApiTrading.Exception;
+using ApiTrading.Service.ExternalAPIHandler;
 using ApiTrading.Service.Mail;
 using ApiTrading.Service.Utilisateur;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

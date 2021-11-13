@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using APIhandler;
 using CandleBuilder.EventArgs;
 using Modele;
 using Modele.StramingModel;
@@ -17,14 +16,12 @@ namespace CandleBuilder
         {
         }
 
-        public CandlePairList(Timeframe petitTimeFrame, Timeframe grandTimeFrame, string symbol, IApiHandler handler,
+        public CandlePairList(Timeframe petitTimeFrame, Timeframe grandTimeFrame, string symbol, 
             bool isbacktest = false, bool useHistory = true)
         {
-            Handler = handler;
-            SymbolData = Handler.RequestSymbol(symbol);
             ListTick = new List<Tick>();
-            List = new CandleList(petitTimeFrame, symbol, TickSize, handler, useHistory);
-            List1 = new CandleList(grandTimeFrame, symbol, TickSize, handler, useHistory);
+            List = new CandleList(petitTimeFrame, symbol, TickSize,  useHistory);
+            List1 = new CandleList(grandTimeFrame, symbol, TickSize,  useHistory);
             Symbol = symbol;
             List.NewCandle += List_NewCandle;
             List1.NewCandle += List_NewCandle;
@@ -32,7 +29,7 @@ namespace CandleBuilder
             List1.SetTickList(ref listTick);
         }
 
-        public IApiHandler Handler { get; set; }
+
 
 
         public string Symbol { get; set; }

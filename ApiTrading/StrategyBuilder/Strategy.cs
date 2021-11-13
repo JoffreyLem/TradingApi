@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using APIhandler;
 using CandleBuilder;
 using CandleBuilder.EventArgs;
 using Indicator;
@@ -18,14 +17,14 @@ namespace Strategy
 
         public string description;
 
-        public Strategy(string symbol, Timeframe petitTimeframe, Timeframe grandTimeframe, IApiHandler handler,
+        public Strategy(string symbol, Timeframe petitTimeframe, Timeframe grandTimeframe, 
             bool isBackTest = false)
         {
-            ApIhandler = handler;
+ 
             IsBackTest = isBackTest;
             Symbol = symbol;
             CanRun = true;
-            CandlePairList = new CandlePairList(petitTimeframe, grandTimeframe, symbol, ApIhandler, isBackTest);
+            CandlePairList = new CandlePairList(petitTimeframe, grandTimeframe, symbol, isBackTest);
             CandlePairList.NewCandle += CandlePairList_NewCandle;
             CandlePairList.NewTick += CandlePairList_NewTick;
         
@@ -43,7 +42,6 @@ namespace Strategy
 
         public string Symbol { get; set; }
 
-        public IApiHandler ApIhandler { get; set; }
 
         public string Description
         {

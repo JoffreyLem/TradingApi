@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using APIhandler;
 using ApiTrading.Modele.DTO.Request;
 using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.ExternalAPIHandler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

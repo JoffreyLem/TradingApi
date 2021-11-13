@@ -5,8 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\APIhandler\APIhandler.csproj" />
-        <ProjectReference Include="..\ApiTrading\ApiTrading.csproj" />
+     
         <ProjectReference Include="..\Modèle\Modele.csproj" />
         <ProjectReference Include="..\Utility\Utility.csproj" />
     </ItemGroup>

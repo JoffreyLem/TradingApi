@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ApiTrading.Exception;
 using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.ExternalAPIHandler;
 using Modele;
 using Modele.StramingModel;
 using Utility;

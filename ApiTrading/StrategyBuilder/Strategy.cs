@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using ApiTrading.Modele;
 using CandleBuilder;
 using CandleBuilder.EventArgs;
 using Indicator;
@@ -34,7 +33,7 @@ namespace Strategy
             }
         }
 
-        public abstract Task<List<SignalInfo>> Run();
+        public abstract Task<List<SignalInfoStrategy>> Run();
 
 
      

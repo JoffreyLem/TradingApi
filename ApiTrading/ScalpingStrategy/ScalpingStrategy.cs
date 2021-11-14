@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ApiTrading.Modele;
 using Indicator.Indicator;
 using Modele;
 using Utility;
@@ -31,9 +30,9 @@ namespace ScalpingStrategy
 
   
 
-        public override async Task<List<SignalInfo>> Run()
+        public override async Task<List<SignalInfoStrategy>> Run()
         {
-            List<SignalInfo> signalInfos = new List<SignalInfo>();
+            List<SignalInfoStrategy> signalInfos = new List<SignalInfoStrategy>();
             
             for (var i = 0; i < History.Count; i++)
             {
@@ -45,7 +44,7 @@ namespace ScalpingStrategy
 
                     if (globalSignal)
                     {
-                        var signalInfo = new SignalInfo();
+                        var signalInfo = new SignalInfoStrategy();
                         signalInfo.Signal = sarSignal;
                         signalInfo.EntryLevel = History[i].Close;
                         signalInfo.StopLoss = SarIndicator[i].Sar;

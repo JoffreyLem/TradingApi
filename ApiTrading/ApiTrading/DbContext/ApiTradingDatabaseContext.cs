@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApiTrading.DbContext
 {
-    public class ApiTradingDatabaseContext : IdentityDbContext<IdentityUser<int>,IdentityRole<int>,int>
+    public class ApiTradingDatabaseContext :  IdentityDbContext<IdentityUser<int>,IdentityRole<int>,int>
     {
      
         public virtual DbSet<RefreshToken> RefreshTokens {get;set;}
@@ -18,9 +18,13 @@ namespace ApiTrading.DbContext
         {
         
  
-    
+        base.OnConfiguring(optionsBuilder);
 
         }
+        
+        
+        
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

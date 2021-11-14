@@ -28,7 +28,7 @@
 
     <ItemGroup>
       <Folder Include="Migrations" />
-      <Folder Include="Repository" />
+      <Folder Include="Repository\Signal" />
     </ItemGroup>
 
     <ItemGroup>

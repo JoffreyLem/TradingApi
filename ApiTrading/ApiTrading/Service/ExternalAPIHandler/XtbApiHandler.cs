@@ -87,7 +87,7 @@ namespace APIhandler
   
 
         public  async Task<CandleListDto> GetAllChart(string symbol, string periodCodeStr,
-            double? symbolTickSize, bool fullData = false)
+            double? symbolTickSize, bool fullData = true)
         {
             (PERIOD_CODE periodCode, DateTime dateTime) data;
             if (fullData)
@@ -103,9 +103,9 @@ namespace APIhandler
                     new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol,ratioConverted))
                 .ToList();
 
-            var candleListDTO = new CandleListDto((int) HttpStatusCode.OK, "",convertedData);
+            var candleListDto = new CandleListDto((int) HttpStatusCode.OK, "",convertedData);
 
-            return candleListDTO;
+            return candleListDto;
         }
 
         public  async Task<List<Candle>> GetPartialChart(string symbol, string periodCodeStr,

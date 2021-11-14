@@ -32,7 +32,7 @@ namespace ApiTrading.Service.ExternalAPIHandler
        
 
         public abstract Task<CandleListDto> GetAllChart(string symbol, string periodCodeStr, double? symbolTickSize,
-            bool fullData = false);
+            bool fullData = true);
 
         public abstract Task<List<Candle>> GetPartialChart(string symbol, string periodCodeStr, double? symbolTickSize,
             long? start, long? end);

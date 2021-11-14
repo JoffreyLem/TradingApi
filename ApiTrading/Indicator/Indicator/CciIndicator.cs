@@ -41,7 +41,15 @@ namespace Indicator.Indicator
 
             return false;
         }
-
+        
+        public sealed override void Update(List<Candle> history)
+        {
+            if (history.Count > LookbackPeriod)
+            {
+                var data = Skender.Stock.Indicators.Indicator.GetCci(history, LookbackPeriod);
+                base.Update(data);
+            }
+        }
     
     }
 }

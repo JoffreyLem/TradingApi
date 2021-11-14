@@ -3,39 +3,46 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading.Tasks;
+using ApiTrading.Exception;
 using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.ExternalAPIHandler;
 using Modele;
+using Strategy;
 using StrategyManager;
+using StrategyList = ApiTrading.Modele.DTO.Response.StrategyList;
 
 namespace ApiTrading.Service.Strategy
 {
     public class StrategyService : IStrategyService
     {
-        public List<StrategyResponse> StrategyResponses { get; set; }
-
-        public StrategyService()
+      
+        private  IApiHandler _apiHandler;
+        public StrategyService(IApiHandler apiHandler)
         {
-            StrategyResponses = new List<StrategyResponse>();
+            _apiHandler = apiHandler;
+
         }
         
-        public async Task<List<StrategyResponse>> GetAllStrategy()
+        public async Task<StrategyResponse> GetAllStrategy()
         {
-            foreach (Enum enumVal in Enum.GetValues(typeof(StrategyList)))
+            var strategyResponses = new StrategyResponse(200,"");
+            foreach (Enum enumVal in Enum.GetValues(typeof(StrategyManager.StrategyList)))
             {
-                var strategyResponse = new StrategyResponse();
+                var strategyList = new StrategyList();
                 
                 var memInfo = enumVal?.GetType().GetMember(enumVal.ToString());
                 var attribute = (memInfo?[0] ?? throw new InvalidOperationException())
                     .GetCustomAttribute<StrategyAttributeType>();
-                strategyResponse.Name = attribute?.Name;
-                strategyResponse.Description = attribute?.Description;
-                StrategyResponses.Add(strategyResponse);
+                strategyList.Name = attribute?.Name;
+                strategyList.Description = attribute?.Description;
+                strategyResponses.StrategyLists.Add(strategyList);
             }
-            return StrategyResponses;
+            return strategyResponses;
         }
 
-        public async Task<List<string>> GetAllTimeframe()
+        public async Task<TimeframeResponse> GetAllTimeframe()
         {
+            var timeframersp = new TimeframeResponse(200,"");
             var listTf = new List<string>();
             foreach (Enum enumVal in Enum.GetValues(typeof(Timeframe)))
             {
@@ -45,7 +52,42 @@ namespace ApiTrading.Service.Strategy
                 listTf.Add(attribute?.Description);
             }
 
-            return listTf;
+            timeframersp.Timeframes = listTf;
+
+            return timeframersp;
+        }
+
+        public async Task<SignalResponse> GetSignals(string strategy, string symbol, string timeframe)
+        {
+            var strategyInitialized = GetStrategyType(strategy);
+            var data = await _apiHandler.GetAllChart(symbol, timeframe,null);
+            var data2 = data.Data;
+            strategyInitialized.History = data2;
+            var dataSignals =await strategyInitialized.Run();
+            var signalResponse = new SignalResponse(200,"",dataSignals);
+
+            return signalResponse;
+        }
+
+        private global::Strategy.Strategy GetStrategyType(string strategy)
+        {
+            foreach (Enum enumVal in Enum.GetValues(typeof(Timeframe)))
+            {
+                var memInfo = enumVal?.GetType().GetMember(enumVal.ToString());
+                var attribute = (memInfo?[0] ?? throw new InvalidOperationException())
+                    .GetCustomAttribute<StrategyAttributeType>();
+
+                if (attribute?.Name == strategy)
+                {
+                    var type = attribute?.Type;
+                    
+                    return StrategyFactory.GetStrategy(type);
+
+                }
+            }
+
+            throw new NotFoundException("La strategy n'existe pas");
+
         }
     }
 }

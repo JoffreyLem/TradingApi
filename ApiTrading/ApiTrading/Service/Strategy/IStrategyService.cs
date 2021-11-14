@@ -6,8 +6,10 @@ namespace ApiTrading.Service.Strategy
 {
     public interface IStrategyService
     {
-        public Task<List<StrategyResponse>> GetAllStrategy();
+        public Task<StrategyResponse> GetAllStrategy();
 
-        public Task<List<string>> GetAllTimeframe();
+        public Task<TimeframeResponse> GetAllTimeframe();
+
+        public Task<SignalResponse> GetSignals(string strategy, string symbol, string timeframe);
     }
 }

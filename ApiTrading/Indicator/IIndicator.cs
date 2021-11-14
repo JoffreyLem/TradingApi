@@ -3,7 +3,7 @@ using Utility;
 
 namespace Indicator
 {
-    public interface IIndicator :  IBuySellSignal
+    public interface IIndicator : IUpdate,  IBuySellSignal
     {
         public int LookbackPeriod { get; set; }
 

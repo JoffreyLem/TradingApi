@@ -49,6 +49,16 @@ namespace Indicator.Indicator
 
             return false;
         }
+        
+        public sealed override void Update(List<Candle> history)
+        {
+            if (history.Count > 2)
+            {
+                var data = Skender.Stock.Indicators.Indicator.GetParabolicSar(history, AccelerationStep,
+                    MaxAccelerationFactor);
+                base.Update(data);
+            }
+        }
 
    
     }

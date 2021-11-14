@@ -1,6 +1,6 @@
-using System;
+using StrategyManager;
 
-namespace StrategyManager
+namespace ApiTrading.StrategyManager
 {
     public enum StrategyList
     {

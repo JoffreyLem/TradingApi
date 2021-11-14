@@ -25,7 +25,7 @@ namespace ApiTrading.Service.Utilisateur
     {
         private readonly UserManager<IdentityUser<int>> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
-        private readonly SignInManager<IdentityUser<int>> _signInManager;
+
         private readonly JwtConfig _jwtConfig;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApiTradingDatabaseContext _apiDbContext;
@@ -35,7 +35,7 @@ namespace ApiTrading.Service.Utilisateur
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
             ApiTradingDatabaseContext apiDbContext,
-            IMail mailService, SignInManager<IdentityUser<int>> signInManager)
+            IMail mailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -43,7 +43,7 @@ namespace ApiTrading.Service.Utilisateur
             _tokenValidationParameters = tokenValidationParameters;
             _apiDbContext = apiDbContext;
             _mailService = mailService;
-            _signInManager = signInManager;
+
         }
         
         public Task SendMessageRegistration()

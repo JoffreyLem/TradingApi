@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\APIhandler\APIhandler.csproj" />
+       
         <ProjectReference Include="..\CandleBuilder\CandleBuilder.csproj" />
         <ProjectReference Include="..\Indicator\Indicator.csproj" />
 

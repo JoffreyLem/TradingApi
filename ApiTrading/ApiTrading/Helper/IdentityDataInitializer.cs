@@ -20,7 +20,7 @@ namespace ApiTrading.Helper
             {
                 IdentityUser<int> identityUser = new IdentityUser<int>();
                 identityUser.UserName = "System";
-                var passwd = ConfigurationManager.AppSettings["SystemPasswd"];
+                string passwd = PasswordGenerator.GenerateRandomPassword();
                 IdentityResult result = userManager.CreateAsync(identityUser, passwd).Result;
 
                 if (result.Succeeded)

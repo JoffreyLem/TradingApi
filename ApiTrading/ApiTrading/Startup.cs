@@ -121,8 +121,10 @@ namespace ApiTrading
 
                 });
 
-            services.AddDefaultIdentity<IdentityUser<int>>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser<int>,IdentityRole<int>>()
                 .AddEntityFrameworkStores<ApiTradingDatabaseContext>();
+
+         
 
             services.AddScoped<IMail, MailService>();
             services.AddScoped<IUtilisateurService, UtilisateurService>();

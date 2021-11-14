@@ -10,10 +10,9 @@ namespace Indicator
 {
     public abstract class BaseIndicator<T> : List<T>, IIndicator
     {
-        protected BaseIndicator(IndicatorLevel indicatorLevel = IndicatorLevel.L1,
-            int loopBackPeriodRequested = 0)
+        protected BaseIndicator(int loopBackPeriodRequested = 0)
         {
-            IndicatorLevel = indicatorLevel;
+            IndicatorLevel = IndicatorLevel.L1;
             if (loopBackPeriodRequested == 0)
                 LookbackPeriod = loopBackPeriodRequested + 2;
             else
@@ -28,7 +27,7 @@ namespace Indicator
 
         public abstract bool Sell(int i);
 
-        public abstract void Update(List<Candle> history);
+    
 
 
         public Signal GetSignal(int i)
@@ -62,35 +61,7 @@ namespace Indicator
         }
 
 
-        protected void Update(IEnumerable<T> data)
-        {
-            if (data.Count() > LookbackPeriod)
-            {
-                dynamic last = data.Last();
-                dynamic actualLast = this.LastOrDefault();
-
-                decimal? lastValue = GetDynamicDecimalValue(last);
-                decimal? actualLastValue = GetDynamicDecimalValue(actualLast);
-
-
-                if (actualLast is null)
-                {
-                    AddRange(data);
-                }
-                else
-                {
-                    if (last.Date > actualLast.Date)
-                    {
-                        Add(last);
-                    }
-                    else if (last.Date == actualLast.Date && lastValue != actualLastValue)
-                    {
-                        Remove(actualLast);
-                        Add(last);
-                    }
-                }
-            }
-        }
+       
 
         private decimal? GetDynamicDecimalValue(dynamic test)
         {
@@ -138,9 +109,6 @@ namespace Indicator
         }
 
 
-        public int CompareTo(T obj, Type type)
-        {
-            throw new NotImplementedException();
-        }
+     
     }
 }

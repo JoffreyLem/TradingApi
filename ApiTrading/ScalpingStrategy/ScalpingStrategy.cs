@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Indicator.Indicator;
 using Modele;
@@ -8,40 +9,41 @@ namespace ScalpingStrategy
 {
     public class ScalpingStrategy : Strategy.Strategy
     {
-        public ScalpingStrategy(string symbol, Timeframe petitTimeFrame, Timeframe grandTimeframe, 
-            bool isbacktest) : base(symbol,
-            petitTimeFrame, grandTimeframe,  isbacktest)
+        public string Symbol { get; private set; }
+        public List<Candle> History { get;  set; }
+
+        public ScalpingStrategy(string symbol, List<Candle> history) : base(symbol)
         {
-            CciIndicator = new CciIndicator(History);
-            SarIndicator = new SarIndicator(History);
-            SarIndicatorL1 = new SarIndicator(HistoryL1);
-            FastSarIndicator = new SarIndicator(History, 0.08);
-            FastSarIndicatorL1 = new SarIndicator(HistoryL1, 0.08);
+            Symbol = symbol;
+            this.History = history;
+            CciIndicator = new CciIndicator(history);
+            SarIndicator = new SarIndicator(history);
+            FastSarIndicator = new SarIndicator(history, 0.08);
             Description = "Scalping strategy TEST";
         }
 
+
+
         public CciIndicator CciIndicator { get; set; }
         public SarIndicator SarIndicator { get; set; }
-
-        public SarIndicator SarIndicatorL1 { get; set; }
         public SarIndicator FastSarIndicator { get; set; }
 
-        public SarIndicator FastSarIndicatorL1 { get; set; }
+  
 
         public override async Task Run()
         {
-            var close = History.Last().Close;
-            var refSignal = SarIndicatorL1.GetState(0, close);
-            // var cciSignal = CciIndicator.GetSignal(3);
-            var sarSignal = SarIndicator.GetSignal(1);
-            var globalSignal = /*cciSignal ==*/ sarSignal;
-            if (sarSignal == refSignal && sarSignal != Signal.None)
-            {
-                var signal = (TypePosition) sarSignal.GetTypePositionBySignal();
-                var sl = SarIndicator.Last().Sar;
-                var tp = 0;
-
-            }
+            // var close = History.Last().Close;
+            //
+            // // var cciSignal = CciIndicator.GetSignal(3);
+            // var sarSignal = SarIndicator.GetSignal(1);
+            // var globalSignal = /*cciSignal ==*/ sarSignal;
+            // if (sarSignal == refSignal && sarSignal != Signal.None)
+            // {
+            //     var signal = (TypePosition) sarSignal.GetTypePositionBySignal();
+            //     var sl = SarIndicator.Last().Sar;
+            //     var tp = 0;
+            //
+            // }
         }
 
         

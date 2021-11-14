@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using ApiTrading.Modele.DTO.Request;
 using ApiTrading.Service.Strategy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using XtbLibrairie.commands;
 
 namespace ApiTrading.Controllers
 {
@@ -28,10 +30,24 @@ namespace ApiTrading.Controllers
         }
         
         [HttpGet]
-        [Route("GetAllStrategy")]
+        [Route("Strategy")]
         public async Task<IActionResult> GetAllStrategy()
         {
             return Ok(await _strategyService.GetAllStrategy());
+        }
+
+        [HttpGet]
+        [Route("Timeframes")]
+        public async Task<IActionResult> Timeframes()
+        {
+            return Ok(await _strategyService.GetAllTimeframe());
+        }
+
+        [HttpGet]
+        [Route("signal/{strategy}/{symbol}/{timeframe}")]
+        public async Task<IActionResult> GetSignal([FromRoute][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
+        {
+            return Ok();
         }
     }
 }

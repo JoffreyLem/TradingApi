@@ -7,9 +7,9 @@ namespace Indicator.Indicator
     public class CciIndicator : BaseIndicator<CciResult>
     {
         public CciIndicator(List<Candle> history, int lookbackPeriod = 20,
-            IndicatorLevel indicatorLevel = IndicatorLevel.L1) : base(indicatorLevel, lookbackPeriod)
+            IndicatorLevel indicatorLevel = IndicatorLevel.L1) : base( lookbackPeriod)
         {
-            Update(history);
+          
         }
 
         public override bool Buy(int i)
@@ -42,14 +42,6 @@ namespace Indicator.Indicator
             return false;
         }
 
-
-        public sealed override void Update(List<Candle> history)
-        {
-            if (history.Count > LookbackPeriod)
-            {
-                var data = Skender.Stock.Indicators.Indicator.GetCci(history, LookbackPeriod);
-                base.Update(data);
-            }
-        }
+    
     }
 }

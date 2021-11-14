@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Threading.Tasks;
 using ApiTrading.Modele.DTO.Response;
+using Modele;
 using StrategyManager;
 
 namespace ApiTrading.Service.Strategy
@@ -31,6 +32,20 @@ namespace ApiTrading.Service.Strategy
                 StrategyResponses.Add(strategyResponse);
             }
             return StrategyResponses;
+        }
+
+        public async Task<List<string>> GetAllTimeframe()
+        {
+            var listTf = new List<string>();
+            foreach (Enum enumVal in Enum.GetValues(typeof(Timeframe)))
+            {
+                var memInfo = enumVal?.GetType().GetMember(enumVal.ToString());
+                var attribute = (memInfo?[0] ?? throw new InvalidOperationException())
+                    .GetCustomAttribute<DescriptionAttribute>();
+                listTf.Add(attribute?.Description);
+            }
+
+            return listTf;
         }
     }
 }

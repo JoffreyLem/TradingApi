@@ -49,6 +49,7 @@ namespace ApiTrading
                 x.Filters.Add(new ValidateModelAttribute());
             }).ConfigureApiBehaviorOptions(options =>
                 
+                
                 options.InvalidModelStateResponseFactory= context =>
                 {
                     var errorModel = new ErrorModel();

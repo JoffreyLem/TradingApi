@@ -10,6 +10,7 @@ using ApiTrading.Configuration;
 using ApiTrading.Controllers;
 using ApiTrading.DbContext;
 using ApiTrading.Exception;
+using ApiTrading.Helper;
 using ApiTrading.Service.ExternalAPIHandler;
 using ApiTrading.Service.Mail;
 using ApiTrading.Service.Strategy;
@@ -130,7 +131,8 @@ namespace ApiTrading
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,UserManager<IdentityUser<int>> userManager, 
+            RoleManager<IdentityRole<int>> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -142,6 +144,7 @@ namespace ApiTrading
             app.UseHttpsRedirection();
             
             app.UseAuthentication();
+            IdentityDataInitializer.SeedData(userManager,roleManager);
             app.UseRouting();
 
             app.UseAuthorization();

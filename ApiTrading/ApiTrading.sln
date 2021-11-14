@@ -16,8 +16,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtbLibrairie", "XtbLibrairie\XtbLibrairie.csproj", "{021C115F-04F3-4291-825E-30CB48A755D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategyManager", "StrategyManager\StrategyManager.csproj", "{E6C49DB1-FABB-497E-880F-D6DC057151DC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,9 +54,5 @@ Global
 		{021C115F-04F3-4291-825E-30CB48A755D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{021C115F-04F3-4291-825E-30CB48A755D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{021C115F-04F3-4291-825E-30CB48A755D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E6C49DB1-FABB-497E-880F-D6DC057151DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E6C49DB1-FABB-497E-880F-D6DC057151DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E6C49DB1-FABB-497E-880F-D6DC057151DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E6C49DB1-FABB-497E-880F-D6DC057151DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

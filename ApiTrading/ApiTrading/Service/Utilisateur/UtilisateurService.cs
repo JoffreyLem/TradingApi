@@ -24,21 +24,26 @@ namespace ApiTrading.Service.Utilisateur
     public class UtilisateurService : IUtilisateurService
     {
         private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private readonly SignInManager<IdentityUser<int>> _signInManager;
         private readonly JwtConfig _jwtConfig;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApiTradingDatabaseContext _apiDbContext;
         private readonly IMail _mailService;
         public UtilisateurService(UserManager<IdentityUser<int>> userManager,
+            RoleManager<IdentityRole<int>> roleManager,
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
             ApiTradingDatabaseContext apiDbContext,
-            IMail mailService)
+            IMail mailService, SignInManager<IdentityUser<int>> signInManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
             _apiDbContext = apiDbContext;
             _mailService = mailService;
+            _signInManager = signInManager;
         }
         
         public Task SendMessageRegistration()
@@ -57,6 +62,18 @@ namespace ApiTrading.Service.Utilisateur
          
             if (isCreated.Succeeded)
             {
+                if (! _roleManager.RoleExistsAsync("User").Result)
+                {
+                    IdentityRole<int> identityRole = new IdentityRole<int>();
+                    identityRole.Name = "User";
+                    IdentityResult roleResult = _roleManager.CreateAsync(identityRole).Result;
+                    if (!roleResult.Succeeded)
+                    {
+                        throw new AppException("Création du role imposible");
+                    }
+
+                }
+                await _userManager.AddToRoleAsync(newUser, "User");
                 var userretrived = await _userManager.FindByEmailAsync(user.Email);
                 var jwtToken = await GenerateJwtToken(newUser);
                 await _mailService.Send(user.Email, "test registrationOK", "test");
@@ -89,6 +106,7 @@ namespace ApiTrading.Service.Utilisateur
 
             if(isCorrect)
             {
+               
    
                 var jwtToken = await GenerateJwtToken(existingUser);
 

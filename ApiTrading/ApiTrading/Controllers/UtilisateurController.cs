@@ -72,6 +72,7 @@ namespace ApiTrading.Controllers
        [ProducesResponseType(403)]
        [ProducesResponseType(typeof(RegistrationResponse),200)]
        [HttpPost]
+       [ValidateAntiForgeryToken]
        [AllowAnonymous]
        [Route("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)

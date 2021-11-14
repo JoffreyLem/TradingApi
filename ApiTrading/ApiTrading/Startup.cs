@@ -12,6 +12,7 @@ using ApiTrading.DbContext;
 using ApiTrading.Exception;
 using ApiTrading.Service.ExternalAPIHandler;
 using ApiTrading.Service.Mail;
+using ApiTrading.Service.Strategy;
 using ApiTrading.Service.Utilisateur;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -122,6 +123,7 @@ namespace ApiTrading
 
             services.AddScoped<IMail, MailService>();
             services.AddScoped<IUtilisateurService, UtilisateurService>();
+            services.AddScoped<IStrategyService, StrategyService>();
             services.AddSingleton<IApiHandler, XtbApiHandler>();
         }
 

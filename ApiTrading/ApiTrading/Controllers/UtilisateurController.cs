@@ -82,23 +82,6 @@ namespace ApiTrading.Controllers
         }
 
        /// <summary>
-       /// Récupération de l'ID par l'adresse mail
-       /// </summary>
-       /// <response code="404">Email introuvable</response>
-       /// <response code="403">Token incorrect</response>
-       [ProducesResponseType(typeof(TokenResponse),200)]
-       [ProducesResponseType(404)]
-       [ProducesResponseType(403)]
-       [HttpGet]
-       [ClaimUserFilter]
-       [Route("GetId")]
-       public async Task<IActionResult> GetId([FromQuery(Name = "email")] string email)
-       {
-           var user = HttpContext.GetCurrentUser();
-           return Ok(await _utilisateurService.GetId(email));
-       }
-
-       /// <summary>
        /// Mise à jour des informations de l'utilisateur
        /// </summary>
        /// <response code="404">ID Introuvable</response>

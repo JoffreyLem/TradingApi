@@ -84,7 +84,6 @@ namespace ApiTrading.Controllers
        /// <summary>
        /// Mise à jour des informations de l'utilisateur
        /// </summary>
-       /// <response code="404">ID Introuvable</response>
        /// <response code="403">Token incorrect</response>
        [HttpPut]
        [ProducesResponseType(typeof(ResponseModel),200)]
@@ -99,7 +98,7 @@ namespace ApiTrading.Controllers
        /// <summary>
        /// Suppression de l'utilisateur
        /// </summary>
-       /// <response code="404">ID Introuvable</response>
+
        /// <response code="403">Token incorrect</response>
        [ProducesResponseType(typeof(ResponseModel),200)]
        [HttpDelete]

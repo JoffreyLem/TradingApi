@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTrading", "ApiTrading\ApiTrading.csproj", "{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CandleBuilder", "CandleBuilder\CandleBuilder.csproj", "{B562EA27-999E-4EE5-8D74-0572036A8B4E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indicator", "Indicator\Indicator.csproj", "{20B7DF1F-CC91-49C3-9F8E-A666AE509820}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Modele", "Modèle\Modele.csproj", "{59022F40-2511-458A-9693-192679E56348}"
@@ -26,10 +24,6 @@ Global
 		{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDAFF0FB-AB2E-4B29-9E84-B1CD739B178F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B562EA27-999E-4EE5-8D74-0572036A8B4E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20B7DF1F-CC91-49C3-9F8E-A666AE509820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20B7DF1F-CC91-49C3-9F8E-A666AE509820}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20B7DF1F-CC91-49C3-9F8E-A666AE509820}.Release|Any CPU.ActiveCfg = Release|Any CPU

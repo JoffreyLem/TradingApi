@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using ApiTrading.Configuration;
 using ApiTrading.DbContext;
 using ApiTrading.Domain;
+using ApiTrading.Filter;
 using ApiTrading.Modele;
 using ApiTrading.Modele.DTO.Request;
 using ApiTrading.Modele.DTO.Response;
@@ -89,9 +90,11 @@ namespace ApiTrading.Controllers
        [ProducesResponseType(404)]
        [ProducesResponseType(403)]
        [HttpGet]
+       [ClaimUserFilter]
        [Route("GetId")]
        public async Task<IActionResult> GetId([FromQuery(Name = "email")] string email)
        {
+           var user = HttpContext.GetCurrentUser();
            return Ok(await _utilisateurService.GetId(email));
        }
 
@@ -102,10 +105,12 @@ namespace ApiTrading.Controllers
        /// <response code="403">Token incorrect</response>
        [HttpPut]
        [ProducesResponseType(typeof(ResponseModel),200)]
-       [Route("Update/{id}")]
-       public async Task<IActionResult> Update([FromRoute][Required] int id,[FromBody] UserUpdateRequest user)
+    
+       [Route("Update")]
+       public async Task<IActionResult> Update([FromBody] UserUpdateRequest userUpdate)
        {
-           return Ok(await _utilisateurService.Update(user, id));
+           var user = HttpContext.GetCurrentUser();
+           return Ok(await _utilisateurService.Update(userUpdate, user));
        }
 
        /// <summary>
@@ -115,10 +120,11 @@ namespace ApiTrading.Controllers
        /// <response code="403">Token incorrect</response>
        [ProducesResponseType(typeof(ResponseModel),200)]
        [HttpDelete]
-       [Route("Delete/{id}")]
-       public async Task<IActionResult> Delete([FromRoute] [Required] int id)
+       [Route("Delete")]
+       public async Task<IActionResult> Delete()
        {
-           return Ok(await _utilisateurService.Delete(id));
+           var user = HttpContext.GetCurrentUser();
+           return Ok(await _utilisateurService.Delete(user));
        }
 
    

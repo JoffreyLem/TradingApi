@@ -51,7 +51,7 @@ namespace ApiTrading.Service.Utilisateur
             throw new System.NotImplementedException();
         }
 
-        public async Task<RegistrationResponse> Register(UserRegistrationRequestDto user)
+        public async Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
             if (existingUser != null)
@@ -77,14 +77,15 @@ namespace ApiTrading.Service.Utilisateur
                 var userretrived = await _userManager.FindByEmailAsync(user.Email);
                 var jwtToken = await GenerateJwtToken(newUser);
                 await _mailService.Send(user.Email, "test registrationOK", "test");
-                return new RegistrationResponse
+                var registration = new RegistrationResponse
                 {
-                    Message = "Inscription réussi",
-                    StatusCode = 201,
+                   
                     Token = jwtToken.Token,
                     Id=userretrived.Id,
                     
                 };
+
+                return new BaseResponse<RegistrationResponse>(registration);
             }
             else
             {
@@ -93,7 +94,7 @@ namespace ApiTrading.Service.Utilisateur
             }
         }
 
-        public async Task<RegistrationResponse> Login(UserLoginRequest user)
+        public async Task<BaseResponse<RegistrationResponse>> Login(UserLoginRequest user)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
             if(existingUser == null)
@@ -110,11 +111,13 @@ namespace ApiTrading.Service.Utilisateur
    
                 var jwtToken = await GenerateJwtToken(existingUser);
 
-                return new RegistrationResponse() {
-                    Message = "Connexion réussi",
+                var registration = new RegistrationResponse() {
+                  
                     Token =  jwtToken.Token,
                     Id = existingUser.Id
                 };
+
+                return new BaseResponse<RegistrationResponse>(registration);
             }
             else 
             {
@@ -122,7 +125,7 @@ namespace ApiTrading.Service.Utilisateur
             }
         }
 
-        public async Task<TokenResponse> GetId(string email)
+        public async Task<BaseResponse<TokenResponse>> GetId(string email)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
             if(existingUser == null)
@@ -132,14 +135,14 @@ namespace ApiTrading.Service.Utilisateur
             else
             {
                 var tokenResponse = new TokenResponse();
-                tokenResponse.StatusCode = 200;
+                
                 tokenResponse.ID = existingUser.Id;
-
-                return tokenResponse;
+                var rsp = new BaseResponse<TokenResponse>(tokenResponse);
+                return rsp;
             }
         }
 
-        public async Task<ResponseModel> Update(UserUpdateRequest user, IdentityUser<int> userCurrent)
+        public async Task<BaseResponse> Update(UserUpdateRequest user, IdentityUser<int> userCurrent)
         {
             if (user.OldPassword != null && user.NewPassword !=null)
             {
@@ -156,8 +159,8 @@ namespace ApiTrading.Service.Utilisateur
             var update = await _userManager.UpdateAsync(userCurrent);
             if (update.Succeeded)
             {
-                return new ResponseModel() {
-                    StatusCode =(int) HttpStatusCode.OK,
+                return new BaseResponse("Update réussi") {
+              
                     Message = "Update réussi",
                 };
             }
@@ -168,7 +171,7 @@ namespace ApiTrading.Service.Utilisateur
             }
         }
 
-        public async Task<ResponseModel> Delete(IdentityUser<int> userCurrent)
+        public async Task<BaseResponse> Delete(IdentityUser<int> userCurrent)
         {
          
 
@@ -176,9 +179,7 @@ namespace ApiTrading.Service.Utilisateur
 
             if (deleteUser.Succeeded)
             {
-                return new ResponseModel() {
-                    Message = "Update réussi",
-                };
+                return new BaseResponse("Update réussi");
             }
             else
             {

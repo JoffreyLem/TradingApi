@@ -10,10 +10,10 @@ namespace ApiTrading.Service.Utilisateur
     {
         
         public Task SendMessageRegistration();
-        public Task<RegistrationResponse> Register(UserRegistrationRequestDto user);
-        public Task<RegistrationResponse> Login(UserLoginRequest user);
-        public Task<TokenResponse> GetId(string email);
-        public Task<ResponseModel> Update(UserUpdateRequest user,IdentityUser<int> userCurrent);
-        public Task<ResponseModel> Delete(IdentityUser<int> userCurrent);
+        public Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user);
+        public Task<BaseResponse<RegistrationResponse>> Login(UserLoginRequest user);
+        public Task<BaseResponse<TokenResponse>> GetId(string email);
+        public Task<BaseResponse> Update(UserUpdateRequest user,IdentityUser<int> userCurrent);
+        public Task<BaseResponse> Delete(IdentityUser<int> userCurrent);
     }
 }

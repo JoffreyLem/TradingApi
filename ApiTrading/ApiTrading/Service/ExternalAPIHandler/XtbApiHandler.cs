@@ -15,6 +15,7 @@ using XtbLibrairie.commands;
 using XtbLibrairie.records;
 using XtbLibrairie.responses;
 using XtbLibrairie.sync;
+using BaseResponse = ApiTrading.Modele.DTO.Response.BaseResponse;
 
 namespace APIhandler
 {
@@ -25,7 +26,7 @@ namespace APIhandler
         private  string password = "";
         private  string appName = "RobotData <DEMO>";
         private  string appId = "";
-        public async Task<ResponseModel> Login(string user, string passwordData)
+        public async Task<BaseResponse> Login(string user, string passwordData)
         {
             userId = user;
                 password = passwordData;
@@ -36,16 +37,16 @@ namespace APIhandler
                 //ConnectStreaming();
                 GetAllSymbol();
                 Ping();
-                return new ResponseModel(200,"Connection API XTB Ok");
+                return new BaseResponse("Connection à l'api XTB Ok");
           
          
           
         }
 
-        public async Task<ResponseModel> Logout()
+        public async Task<BaseResponse> Logout()
         {
             var logOutResponse = APICommandFactory.CreateLogoutCommand();
-            return new ResponseModel(200,"Logout API XTB Ok");
+            return new BaseResponse("Logout API XTB Ok");
         }
 
         public SyncAPIConnector connector { get; set; }
@@ -73,7 +74,7 @@ namespace APIhandler
             }
         }
 
-        public  SymbolInformations GetSymbolInformation(string symbol)
+        public SymbolInformations? GetSymbolInformation(string symbol)
         {
             return AllSymbolList.FirstOrDefault(x => x.Symbol == symbol);
         }
@@ -86,7 +87,7 @@ namespace APIhandler
 
   
 
-        public  async Task<CandleListDto> GetAllChart(string symbol, string periodCodeStr,
+        public  async Task<BaseResponse<List<Candle>>> GetAllChart(string symbol, string periodCodeStr,
             double? symbolTickSize, bool fullData = true)
         {
             (PERIOD_CODE periodCode, DateTime dateTime) data;
@@ -103,29 +104,33 @@ namespace APIhandler
                     new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol,ratioConverted))
                 .ToList();
 
-            var candleListDto = new CandleListDto((int) HttpStatusCode.OK, "",convertedData);
+            var response = new BaseResponse<List<Candle>>(convertedData);
 
-            return candleListDto;
+            return response;
         }
 
-        public  async Task<List<Candle>> GetPartialChart(string symbol, string periodCodeStr,
+        public  async Task<BaseResponse<List<Candle>>> GetPartialChart(string symbol, string periodCodeStr,
             double? symbolTickSize, long? start, long? end)
         {
             var data = SetDateTime(periodCodeStr);
             var chartrangeinfo = new ChartRangeInfoRecord(symbol, data.periodCode, start, end, 0);
             var chartLastResponse = APICommandFactory.ExecuteChartRangeCommand(connector, chartrangeinfo);
-            return chartLastResponse.RateInfos.Where(x => x.Ctm.ConvertToDatetime() > DateTime.Now.AddMonths(-1))
+            var data2= chartLastResponse.RateInfos.Where(x => x.Ctm.ConvertToDatetime() > DateTime.Now.AddMonths(-1))
                 .Select(x =>
                     new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol, symbolTickSize))
                 .ToList();
+            var response = new BaseResponse<List<Candle>>(data2);
+
+            return response;
         }
 
        
 
-        public  async Task<AccountInfo> GetAccountInfo()
+        public  async Task<BaseResponse<AccountInfo>> GetAccountInfo()
         {
             var data = APICommandFactory.ExecuteMarginLevelCommand(connector);
-            return new AccountInfo(data);
+            var account = new AccountInfo(data);
+            return new BaseResponse<AccountInfo>(account);
         }
 
 

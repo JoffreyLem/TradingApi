@@ -31,7 +31,7 @@ namespace ApiTrading.Controllers
         /// <summary>
         /// Connection à l'API Externe XTB
         /// </summary>
-        [ProducesResponseType(typeof(ResponseModel),200)]
+        [ProducesResponseType(typeof(BaseResponse),200)]
         [HttpPost]
         [AllowAnonymous]
         [Route("Connect")]
@@ -43,7 +43,7 @@ namespace ApiTrading.Controllers
         /// <summary>
         /// Deconnection de l'API Externe XTB
         /// </summary>
-        [ProducesResponseType(typeof(ResponseModel),200)]
+        [ProducesResponseType(typeof(BaseResponse),200)]
         [HttpPost]
         [Route("Logout")]
     
@@ -59,7 +59,7 @@ namespace ApiTrading.Controllers
         /// <param name="timeframe"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        [ProducesResponseType(typeof(CandleListDto),200)]
+        [ProducesResponseType(typeof(BaseResponse<CandleListResponse>),200)]
         [HttpGet]
         [Route("Symbol/{symbol}/{timeframe}")]
         public async Task<IActionResult> GetSymbol([Required][FromRoute] string symbol,[Required] [FromRoute] string timeframe)

@@ -11,6 +11,7 @@ using ApiTrading.Controllers;
 using ApiTrading.DbContext;
 using ApiTrading.Exception;
 using ApiTrading.Helper;
+using ApiTrading.Modele.DTO.Response;
 using ApiTrading.Service.ExternalAPIHandler;
 using ApiTrading.Service.Mail;
 using ApiTrading.Service.Strategy;
@@ -55,7 +56,7 @@ namespace ApiTrading
                 options.InvalidModelStateResponseFactory= context =>
                 {
                     var errorModel = new ErrorModel();
-                    errorModel.StatusCode = 400;
+                   
                     errorModel.ErrorMessage = context.ModelState.Values.SelectMany(x => x.Errors)
                         .Select(x => x.ErrorMessage).ToList();
                     return new BadRequestObjectResult(new {
@@ -112,7 +113,7 @@ namespace ApiTrading
                         OnAuthenticationFailed = ctx =>
                         {
                             ctx.Response.StatusCode = 401;
-                           ErrorModel errormodel = new ErrorModel(401,"Echec d'authentification");
+                           BaseResponse errormodel = new BaseResponse("Echec d'authentification");
                            return ctx.Response.WriteAsJsonAsync(errormodel);
                         },
                         

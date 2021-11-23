@@ -9,22 +9,19 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace ApiTrading
 {
-    public class ErrorModel :ResponseModel
+    public class ErrorModel 
     {
         [JsonProperty(Order = 3)]
         public List<string> ErrorMessage { get; set; }
 
-        public ErrorModel()
-        {
-            ErrorMessage = new List<string>();
-        }
+  
         public ErrorModel(int statusCode,List<string> errorMessage)
         {
-            StatusCode = statusCode;
+    
             ErrorMessage = errorMessage;
         }
         
-        public ErrorModel(int statusCode, string message) : base(statusCode,message)
+        public ErrorModel()
         {
             ErrorMessage = new List<string>();
 

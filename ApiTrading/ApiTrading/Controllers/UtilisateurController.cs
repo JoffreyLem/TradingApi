@@ -33,6 +33,7 @@ namespace ApiTrading.Controllers
     ///  <response code="400">Requête incorrecte</response>
     [Consumes("application/json")]
     [Produces("application/json")]
+ 
     [ProducesErrorResponseType(typeof(ErrorModel))]
     [ProducesResponseType(500)]
     [ProducesResponseType(400)]
@@ -55,7 +56,7 @@ namespace ApiTrading.Controllers
        /// <response code="409">Informations utilisateur déja existant</response>
        [HttpPost]
        [AllowAnonymous]
-       [ProducesResponseType(typeof(RegistrationResponse),201)]
+       [ProducesResponseType(typeof(BaseResponse<RegistrationResponse>),201)]
        [ProducesResponseType(409)]
        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto user)
@@ -86,7 +87,7 @@ namespace ApiTrading.Controllers
        /// </summary>
        /// <response code="403">Token incorrect</response>
        [HttpPut]
-       [ProducesResponseType(typeof(ResponseModel),200)]
+       
     
        [Route("Update")]
        public async Task<IActionResult> Update([FromBody] UserUpdateRequest userUpdate)
@@ -100,7 +101,7 @@ namespace ApiTrading.Controllers
        /// </summary>
 
        /// <response code="403">Token incorrect</response>
-       [ProducesResponseType(typeof(ResponseModel),200)]
+  
        [HttpDelete]
        [Route("Delete")]
        public async Task<IActionResult> Delete()

@@ -27,7 +27,7 @@ namespace ApiTrading.Service.Strategy
         
         public async Task<StrategyResponse> GetAllStrategy()
         {
-            var strategyResponses = new StrategyResponse(200,"");
+            var strategyResponses = new StrategyResponse();
             foreach (Enum enumVal in Enum.GetValues(typeof(StrategyManager.StrategyList)))
             {
                 var strategyList = new StrategyList();
@@ -44,7 +44,7 @@ namespace ApiTrading.Service.Strategy
 
         public async Task<TimeframeResponse> GetAllTimeframe()
         {
-            var timeframersp = new TimeframeResponse(200,"");
+            var timeframersp = new TimeframeResponse();
             var listTf = new List<string>();
             foreach (Enum enumVal in Enum.GetValues(typeof(Timeframe)))
             {
@@ -66,7 +66,7 @@ namespace ApiTrading.Service.Strategy
             var data2 = data.Data;
             strategyInitialized.History = data2;
             var dataSignals =await strategyInitialized.Run();
-            var signalResponse = new SignalResponse(200,"",dataSignals.Select(x=>new ApiTrading.Modele.SignalInfo(x)).ToList());
+            var signalResponse = new SignalResponse(dataSignals.Select(x=>new ApiTrading.Modele.SignalInfo(x)).ToList());
 
             return signalResponse;
         }

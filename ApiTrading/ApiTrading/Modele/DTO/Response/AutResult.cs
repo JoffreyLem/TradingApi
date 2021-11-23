@@ -4,7 +4,7 @@ using ApiTrading.Modele.DTO.Response;
 
 namespace ApiTrading.Domain
 {
-    public class AutResult : ResponseModel
+    public class AutResult
     {
         public int Id { get; set; }
         public string Token {get;set;}

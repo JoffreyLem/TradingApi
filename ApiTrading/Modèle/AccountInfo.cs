@@ -26,6 +26,11 @@ namespace Modele
             Credit = marginLevelResponse.Credit;
         }
 
+        public AccountInfo()
+        {
+            
+        }
+
         public double? Balance { get; }
         public double? Equity { get; }
         public double? Margin { get; }

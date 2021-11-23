@@ -62,7 +62,7 @@ namespace ApiTrading
                 var response = context.Response;
                 var result = new ErrorModel();
                 response.StatusCode = (int) HttpStatusCode.BadRequest;
-                result.StatusCode = (int) HttpStatusCode.BadRequest;
+               
                 result.ErrorMessage.Add(err.ErrorDescr);
                 await response.WriteAsync(result.ToString());
             }
@@ -71,7 +71,7 @@ namespace ApiTrading
                 var response = context.Response;
                 var result = new ErrorModel();
                 response.StatusCode = (int) HttpStatusCode.InternalServerError;
-                result.StatusCode = (int) HttpStatusCode.InternalServerError;
+          
                 result.ErrorMessage.Add("Erreur communication API XTB");
                 await response.WriteAsync(result.ToString());
             }

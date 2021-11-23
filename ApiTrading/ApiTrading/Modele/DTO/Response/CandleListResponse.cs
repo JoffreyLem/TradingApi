@@ -5,14 +5,19 @@ using Newtonsoft.Json;
 
 namespace ApiTrading.Modele.DTO.Response
 {
-    public class CandleListDto : ResponseModel
+    public class CandleListResponse 
     {
         [JsonProperty(Order = 3)]
         public List<Candle> Data { get; set; }
 
-        public CandleListDto(int statusCode, string message, List<Candle> data) : base(statusCode, message)
+        public CandleListResponse( List<Candle> data) 
         {
             Data = data;
+        }
+
+        public CandleListResponse()
+        {
+           
         }
 
 

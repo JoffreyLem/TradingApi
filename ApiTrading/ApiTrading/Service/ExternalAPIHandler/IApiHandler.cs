@@ -13,15 +13,15 @@ namespace ApiTrading.Service.ExternalAPIHandler
 
         public List<SymbolInformations> AllSymbolList { get; set; }
 
-        public Task<ResponseModel> Login(string user, string password);
+        public Task<BaseResponse> Login(string user, string password);
 
-        public Task<ResponseModel> Logout();
+        public Task<BaseResponse> Logout();
         public  SyncAPIConnector connector { get; set; }
       
 
 
         public abstract void Ping();
-        public abstract SymbolInformations GetSymbolInformation(string symbol);
+        public abstract SymbolInformations? GetSymbolInformation(string symbol);
         public abstract void GetAllSymbol();
 
         public SymbolInformations RequestSymbol(string symbol)
@@ -31,13 +31,13 @@ namespace ApiTrading.Service.ExternalAPIHandler
 
        
 
-        public abstract Task<CandleListDto> GetAllChart(string symbol, string periodCodeStr, double? symbolTickSize,
+        public abstract Task<BaseResponse<List<Candle>>> GetAllChart(string symbol, string periodCodeStr, double? symbolTickSize,
             bool fullData = true);
 
-        public abstract Task<List<Candle>> GetPartialChart(string symbol, string periodCodeStr, double? symbolTickSize,
+        public abstract Task<BaseResponse<List<Candle>>> GetPartialChart(string symbol, string periodCodeStr, double? symbolTickSize,
             long? start, long? end);
 
-        public abstract Task<AccountInfo> GetAccountInfo();
+        public abstract Task<BaseResponse<AccountInfo>> GetAccountInfo();
       
     }
 }

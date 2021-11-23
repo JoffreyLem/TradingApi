@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using CandleBuilder;
-using CandleBuilder.EventArgs;
+
 using Indicator;
 using Modele;
 using Utility;

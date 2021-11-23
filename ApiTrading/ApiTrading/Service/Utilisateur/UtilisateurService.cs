@@ -139,17 +139,11 @@ namespace ApiTrading.Service.Utilisateur
             }
         }
 
-        public async Task<ResponseModel> Update(UserUpdateRequest user, int id)
+        public async Task<ResponseModel> Update(UserUpdateRequest user, IdentityUser<int> userCurrent)
         {
-            var existingUser = await _userManager.FindByIdAsync(id.ToString());
-            if(existingUser == null)
-            {
-                throw new NotFoundException("User not found");
-            }
-
             if (user.OldPassword != null && user.NewPassword !=null)
             {
-                var updatePwd = await _userManager.ChangePasswordAsync(existingUser, user.OldPassword, user.NewPassword);
+                var updatePwd = await _userManager.ChangePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
 
                 if (!updatePwd.Succeeded)
                 {
@@ -158,8 +152,8 @@ namespace ApiTrading.Service.Utilisateur
                 }
             }
 
-            existingUser.Email = user.Email;
-            var update = await _userManager.UpdateAsync(existingUser);
+            userCurrent.Email = user.Email;
+            var update = await _userManager.UpdateAsync(userCurrent);
             if (update.Succeeded)
             {
                 return new ResponseModel() {
@@ -174,15 +168,11 @@ namespace ApiTrading.Service.Utilisateur
             }
         }
 
-        public async Task<ResponseModel> Delete(int id)
+        public async Task<ResponseModel> Delete(IdentityUser<int> userCurrent)
         {
-            var existingUser = await _userManager.FindByIdAsync(id.ToString());
-            if(existingUser == null)
-            {
-                throw new NotFoundException("User not found");
-            }
+         
 
-            var deleteUser = await _userManager.DeleteAsync(existingUser);
+            var deleteUser = await _userManager.DeleteAsync(userCurrent);
 
             if (deleteUser.Succeeded)
             {

@@ -33,10 +33,9 @@ namespace ApiTrading
 
                 switch (error)
                 {
-                    case AppException e:
-                        response.StatusCode = (int) HttpStatusCode.BadRequest;
-                        break;
-                    case TimeFrameDontExistException e:
+                    case AppException appException:
+                    case TimeFrameDontExistException timeFrameDontExistException:
+                    case PasswordUpdateException passwordUpdateException:
                         response.StatusCode = (int) HttpStatusCode.BadRequest;
                         break;
                     case AlreadyExistException e:

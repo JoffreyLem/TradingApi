@@ -4,15 +4,20 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ApiTrading
 {
-    public class ValidateModelAttribute : ActionFilterAttribute
+    public class ValidateModelAttribute : Attribute, IActionFilter
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        public  void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)
             {
                 throw new AppException("Invalid Payload");
             }
-            base.OnActionExecuting(context);
+          
+        }
+
+        public void OnActionExecuted(ActionExecutedContext context)
+        {
+          
         }
     }
 }

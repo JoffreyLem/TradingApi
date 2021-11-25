@@ -29,15 +29,13 @@ using Microsoft.IdentityModel.Tokens;
 namespace ApiTrading.Controllers
 {
  
-    /// <response code="500" cref="ErrorModel">Service indisponible</response>
-    ///  <response code="400">Requête incorrecte</response>
+
     [Consumes("application/json")]
     [Produces("application/json")]
- 
     [ProducesErrorResponseType(typeof(ErrorModel))]
     [ProducesResponseType(500)]
-    [ProducesResponseType(400)]
     [ProducesResponseType(415)]
+    [ProducesResponseType(400)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
@@ -53,7 +51,7 @@ namespace ApiTrading.Controllers
        /// <summary>
        /// Creation compte utilisateur
        /// </summary>
-       /// <response code="409">Informations utilisateur déja existant</response>
+       /// <response code="409">L'email existe déja</response>
        [HttpPost]
        [AllowAnonymous]
        [ProducesResponseType(typeof(BaseResponse<RegistrationResponse>),201)]
@@ -68,13 +66,10 @@ namespace ApiTrading.Controllers
        /// Connexion de l'utilisateur
        /// </summary>
        /// <remarks>Connexion de l'utilisateur</remarks>
-       /// <response code="404">Informations utilisateur introuvable</response>
        /// <response code="403">Informations utilisateur incorrect</response>
-       [ProducesResponseType(404)]
        [ProducesResponseType(403)]
        [ProducesResponseType(typeof(RegistrationResponse),200)]
        [HttpPost]
-       [ValidateAntiForgeryToken]
        [AllowAnonymous]
        [Route("Login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
@@ -85,9 +80,9 @@ namespace ApiTrading.Controllers
        /// <summary>
        /// Mise à jour des informations de l'utilisateur
        /// </summary>
-       /// <response code="403">Token incorrect</response>
+       /// <response code="403">Token bearer incorrect</response>
        [HttpPut]
-       
+       [ProducesResponseType(403)]
     
        [Route("Update")]
        public async Task<IActionResult> Update([FromBody] UserUpdateRequest userUpdate)
@@ -99,8 +94,7 @@ namespace ApiTrading.Controllers
        /// <summary>
        /// Suppression de l'utilisateur
        /// </summary>
-
-       /// <response code="403">Token incorrect</response>
+       /// <response code="403">Token bearer incorrect</response>
   
        [HttpDelete]
        [Route("Delete")]

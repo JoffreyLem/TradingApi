@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ApiTrading.Configuration;
 using ApiTrading.DbContext;
@@ -45,17 +46,12 @@ namespace ApiTrading.Service.Utilisateur
             _mailService = mailService;
 
         }
-        
-        public Task SendMessageRegistration()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public async Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
             if (existingUser != null)
-                throw new AlreadyExistException("Email Already Exist");
+                throw new AlreadyExistException("L'email existe déja");
 
             var newUser = new IdentityUser<int> {Email = user.Email, UserName = user.Email};
             var isCreated = await _userManager.CreateAsync(newUser, user.Password);
@@ -76,7 +72,10 @@ namespace ApiTrading.Service.Utilisateur
                 await _userManager.AddToRoleAsync(newUser, "User");
                 var userretrived = await _userManager.FindByEmailAsync(user.Email);
                 var jwtToken = await GenerateJwtToken(newUser);
-                await _mailService.Send(user.Email, "test registrationOK", "test");
+                StringBuilder message = new StringBuilder();
+                message.Append("Inscription réussi\n");
+                message.Append($"Le compte {user.Email} a été crée");
+                await _mailService.Send(user.Email, "Inscription réussi !", message.ToString());
                 var registration = new RegistrationResponse
                 {
                    
@@ -97,6 +96,7 @@ namespace ApiTrading.Service.Utilisateur
         public async Task<BaseResponse<RegistrationResponse>> Login(UserLoginRequest user)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
+            
             if(existingUser == null)
             {
                 throw new NotFoundException("User not found");
@@ -144,8 +144,20 @@ namespace ApiTrading.Service.Utilisateur
 
         public async Task<BaseResponse> Update(UserUpdateRequest user, IdentityUser<int> userCurrent)
         {
-            if (user.OldPassword != null && user.NewPassword !=null)
+            if (string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword))
             {
+                var checkPasswd = await _userManager.CheckPasswordAsync(userCurrent, user.OldPassword);
+
+                if (!checkPasswd)
+                {
+                    throw new PasswordUpdateException("Ancien mot de passe incorrect");
+                }
+                
+                if (string.IsNullOrWhiteSpace(user.NewPassword))
+                {
+                    throw new PasswordUpdateException("Le nouveau mot de passe ne peut pas être vide");
+                }
+                
                 var updatePwd = await _userManager.ChangePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
 
                 if (!updatePwd.Succeeded)
@@ -154,11 +166,19 @@ namespace ApiTrading.Service.Utilisateur
                     throw new AppException(messageErrorList);
                 }
             }
+            else if (string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword) ||
+                     !string.IsNullOrEmpty(user.OldPassword) && string.IsNullOrEmpty(user.NewPassword))
+            {
+                throw new PasswordUpdateException("Veuillez indiquer l'ancien et le nouveau mot de passe");
+            }
 
             userCurrent.Email = user.Email;
             var update = await _userManager.UpdateAsync(userCurrent);
             if (update.Succeeded)
             {
+                StringBuilder message = new StringBuilder();
+                message.Append($"Le compte {user.Email} a été mit à jour");
+                await _mailService.Send(user.Email, "Compte mit à jour !", message.ToString());
                 return new BaseResponse("Update réussi") {
               
                     Message = "Update réussi",
@@ -179,7 +199,10 @@ namespace ApiTrading.Service.Utilisateur
 
             if (deleteUser.Succeeded)
             {
-                return new BaseResponse("Update réussi");
+                StringBuilder message = new StringBuilder();
+                message.Append($"Le compte {userCurrent.Email} a été supprilé");
+                await _mailService.Send(userCurrent.Email, "Compte supprimé !", message.ToString());
+                return new BaseResponse("Delete réussi");
             }
             else
             {

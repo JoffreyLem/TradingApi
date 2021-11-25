@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +29,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -56,13 +58,15 @@ namespace ApiTrading
                 options.InvalidModelStateResponseFactory= context =>
                 {
                     var errorModel = new ErrorModel();
-                   
-                    errorModel.ErrorMessage = context.ModelState.Values.SelectMany(x => x.Errors)
-                        .Select(x => x.ErrorMessage).ToList();
+                    var test = context.ModelState.Keys.ToList();
+                    List<string> tmp = new List<string>();
+                    foreach (var s1 in test)
+                    {
+                        tmp.Add($"Le champ {s1} est invalide");
+                    }
                     return new BadRequestObjectResult(new {
                         Code = 400,
-                        Messages = context.ModelState.Values.SelectMany(x => x.Errors)
-                            .Select(x => x.ErrorMessage)
+                        Messages = tmp,
                     });
                 }  ).AddJsonOptions(options =>
             {
@@ -71,6 +75,29 @@ namespace ApiTrading
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ApiTrading", Version = "v1"});
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
@@ -85,10 +112,6 @@ namespace ApiTrading
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 RequireExpirationTime = false,
-
-                // Allow to use seconds for expiration of token
-                // Required only when token lifetime less than 5 minutes
-                // THIS ONE
                 ClockSkew = TimeSpan.Zero
             };
             services.AddSingleton(tokenValidationParameters);
@@ -122,8 +145,14 @@ namespace ApiTrading
 
                 });
 
-            services.AddIdentity<IdentityUser<int>,IdentityRole<int>>()
-                .AddEntityFrameworkStores<ApiTradingDatabaseContext>();
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>(options =>
+                {
+
+
+
+                })
+                .AddEntityFrameworkStores<ApiTradingDatabaseContext>()
+                .AddPasswordValidator<PasswordValidatorHelper<IdentityUser<int>>>();
 
          
 
@@ -141,7 +170,11 @@ namespace ApiTrading
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiTrading v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiTrading v1");
+                    
+                });
             }
 
             app.UseHttpsRedirection();

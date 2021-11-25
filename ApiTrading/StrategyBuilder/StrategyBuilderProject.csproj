@@ -13,7 +13,7 @@
 
     <ItemGroup>
        
-        <ProjectReference Include="..\CandleBuilder\CandleBuilder.csproj" />
+      
         <ProjectReference Include="..\Indicator\Indicator.csproj" />
 
       

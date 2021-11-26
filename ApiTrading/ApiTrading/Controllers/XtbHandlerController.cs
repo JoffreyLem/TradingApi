@@ -14,9 +14,9 @@ namespace ApiTrading.Controllers
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]
     [ProducesResponseType(500)]
+    [ProducesResponseType(415)]
     [ProducesResponseType(400)]
     [ProducesResponseType(403)]
-    [ProducesResponseType(415)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
@@ -28,17 +28,16 @@ namespace ApiTrading.Controllers
         {
             _apiHandler = apiHandler;
         }
+        
         /// <summary>
         /// Connection à l'API Externe XTB
         /// </summary>
         [ProducesResponseType(typeof(BaseResponse),200)]
         [HttpPost]
-        [AllowAnonymous]
         [Route("Connect")]
-   
-        public async Task<IActionResult> Connect([FromBody] ApiConnectionRequestDto user)
+        public async Task<IActionResult> Connect([FromBody] UserLoginRequest user)
         {
-            return Ok(await _apiHandler.Login(user.Account, user.Password));
+            return Ok(await _apiHandler.Login(user.Login, user.Password));
         }
         /// <summary>
         /// Deconnection de l'API Externe XTB
@@ -52,19 +51,6 @@ namespace ApiTrading.Controllers
             return Ok(await _apiHandler.Logout());
         }
         
-        /// <summary>
-        /// Récupération du symbol par apport au timeframe spécifié
-        /// </summary>
-        /// <param name="symbol"></param>
-        /// <param name="timeframe"></param>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [ProducesResponseType(typeof(BaseResponse<CandleListResponse>),200)]
-        [HttpGet]
-        [Route("Symbol/{symbol}/{timeframe}")]
-        public async Task<IActionResult> GetSymbol([Required][FromRoute] string symbol,[Required] [FromRoute] string timeframe)
-        {
-            return Ok(await _apiHandler.GetAllChart(symbol, timeframe, null,true));
-        }
+     
     }
 }

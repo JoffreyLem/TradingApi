@@ -36,6 +36,8 @@ using Microsoft.OpenApi.Models;
 
 namespace ApiTrading
 {
+    using Microsoft.AspNetCore.Mvc.ApiExplorer;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -75,6 +77,7 @@ namespace ApiTrading
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ApiTrading", Version = "v1"});
+                c.SchemaFilter<SchemaFilter>();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",

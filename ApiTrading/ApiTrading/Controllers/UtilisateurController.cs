@@ -68,7 +68,7 @@ namespace ApiTrading.Controllers
        /// <remarks>Connexion de l'utilisateur</remarks>
        /// <response code="403">Informations utilisateur incorrect</response>
        [ProducesResponseType(403)]
-       [ProducesResponseType(typeof(RegistrationResponse),200)]
+       [ProducesResponseType(typeof(BaseResponse<RegistrationResponse>),200)]
        [HttpPost]
        [AllowAnonymous]
        [Route("Login")]
@@ -80,10 +80,11 @@ namespace ApiTrading.Controllers
        /// <summary>
        /// Mise à jour des informations de l'utilisateur
        /// </summary>
-       /// <response code="403">Token bearer incorrect</response>
+
+       /// <response code="200">Utilisateurs mit à jour</response>
        [HttpPut]
        [ProducesResponseType(403)]
-    
+       [ProducesResponseType(typeof(BaseResponse),200)]
        [Route("Update")]
        public async Task<IActionResult> Update([FromBody] UserUpdateRequest userUpdate)
        {
@@ -95,8 +96,9 @@ namespace ApiTrading.Controllers
        /// Suppression de l'utilisateur
        /// </summary>
        /// <response code="403">Token bearer incorrect</response>
-  
+       /// <response code="200">Utilisateurs deleted</response>
        [HttpDelete]
+       [ProducesResponseType(typeof(BaseResponse),200)]
        [Route("Delete")]
        public async Task<IActionResult> Delete()
        {

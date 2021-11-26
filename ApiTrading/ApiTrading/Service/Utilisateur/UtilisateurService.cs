@@ -95,7 +95,7 @@ namespace ApiTrading.Service.Utilisateur
 
         public async Task<BaseResponse<RegistrationResponse>> Login(UserLoginRequest user)
         {
-            var existingUser = await _userManager.FindByEmailAsync(user.Email);
+            var existingUser = await _userManager.FindByEmailAsync(user.Login);
             
             if(existingUser == null)
             {

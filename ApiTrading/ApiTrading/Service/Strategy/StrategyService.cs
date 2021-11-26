@@ -62,7 +62,7 @@ namespace ApiTrading.Service.Strategy
         public async Task<SignalResponse> GetSignals(string strategy, string symbol, string timeframe)
         {
             var strategyInitialized = GetStrategyType(strategy);
-            var data = await _apiHandler.GetAllChart(symbol, timeframe,null);
+            var data = await _apiHandler.GetAllChart(symbol, timeframe,true);
             var data2 = data.Data;
             strategyInitialized.History = data2;
             var dataSignals =await strategyInitialized.Run();

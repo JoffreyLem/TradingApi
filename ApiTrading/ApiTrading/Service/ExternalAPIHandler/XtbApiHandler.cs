@@ -50,21 +50,7 @@ namespace APIhandler
         }
 
         public SyncAPIConnector connector { get; set; }
-        public  string ApiName { get => "XtbApi"; }
-        public virtual string CredentialFileName => ApiName + "Credential.txt";
-        public string CredentialFileFolder =>
-            AppDomain.CurrentDomain.BaseDirectory + @"CredentialsFolder/" + CredentialFileName;
-        public string CredentialFolder =>
-            AppDomain.CurrentDomain.BaseDirectory + @"CredentialsFolder";
-        public XtbApiHandler()
-        {
-            
-        }
 
-
-    
-
-        
         public async void Ping()
         {
             while (true)
@@ -88,7 +74,7 @@ namespace APIhandler
   
 
         public  async Task<BaseResponse<List<Candle>>> GetAllChart(string symbol, string periodCodeStr,
-            double? symbolTickSize, bool fullData = true)
+             bool fullData = true)
         {
             (PERIOD_CODE periodCode, DateTime dateTime) data;
             if (fullData)
@@ -100,28 +86,65 @@ namespace APIhandler
                 data.dateTime.ConvertToUnixTime());
             var ratioConverted = GetSymbolInformation(symbol).TickSize;
             var convertedData = chartLastResponse.RateInfos
-                .Where(x => x.Ctm.ConvertToDatetime() > DateTime.Now.AddMonths(-1)).Select(x =>
+              .Select(x =>
                     new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol,ratioConverted))
                 .ToList();
-
+            if (convertedData.Count == 0)
+            {
+                return new BaseResponse<List<Candle>>("Pas de données disponible", convertedData);
+            }
             var response = new BaseResponse<List<Candle>>(convertedData);
 
             return response;
         }
 
         public  async Task<BaseResponse<List<Candle>>> GetPartialChart(string symbol, string periodCodeStr,
-            double? symbolTickSize, long? start, long? end)
+            string? start, string? end)
         {
+            var dateTuple = DateControl(start, end);
+            var endtest = dateTuple.end;
             var data = SetDateTime(periodCodeStr);
-            var chartrangeinfo = new ChartRangeInfoRecord(symbol, data.periodCode, start, end, 0);
+            var ratioConverted = GetSymbolInformation(symbol).TickSize;
+            var chartrangeinfo = new ChartRangeInfoRecord(symbol, data.periodCode, dateTuple.start.ConvertToUnixTime(), dateTuple.end?.ConvertToUnixTime(), 0);
             var chartLastResponse = APICommandFactory.ExecuteChartRangeCommand(connector, chartrangeinfo);
-            var data2= chartLastResponse.RateInfos.Where(x => x.Ctm.ConvertToDatetime() > DateTime.Now.AddMonths(-1))
+            var data2= chartLastResponse.RateInfos
                 .Select(x =>
-                    new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol, symbolTickSize))
+                    new Candle(x.Open, x.High, x.Low, x.Close, x.Ctm.ConvertToDatetime(), x.Vol, ratioConverted))
                 .ToList();
-            var response = new BaseResponse<List<Candle>>(data2);
 
-            return response;
+            if (data2.Count == 0)
+            {
+                return new BaseResponse<List<Candle>>("Pas de données pour cette période", data2);
+            }
+            return new BaseResponse<List<Candle>>(data2);
+            
+        }
+
+        private (DateTime start, DateTime? end) DateControl(string start, string? end)
+        {
+            DateTime dateStart = default;
+            DateTime dateEnd = default;
+
+            
+                start = start ?? throw new FormatDateException($"L'argument start ne doit pas être vide");
+                if (!DateTime.TryParse(start, out dateStart))
+                {
+                    throw new FormatDateException("La start date n'est pas au bon format");
+                }
+                if (end is not null)
+                {
+                    if (!DateTime.TryParse(end, out dateEnd))
+                    {
+                        throw new FormatDateException("La start date n'est pas au bon format");
+                    }
+                    if (dateEnd < dateStart)
+                    {
+                        throw new InvalideDateRangeException("La end date doit être supérieur à la start date");
+                    }
+                    return (dateStart,dateEnd);
+                }
+                return (dateStart,null);
+
         }
 
        

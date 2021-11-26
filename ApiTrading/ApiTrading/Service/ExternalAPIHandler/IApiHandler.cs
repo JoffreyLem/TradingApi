@@ -31,11 +31,11 @@ namespace ApiTrading.Service.ExternalAPIHandler
 
        
 
-        public abstract Task<BaseResponse<List<Candle>>> GetAllChart(string symbol, string periodCodeStr, double? symbolTickSize,
+        public abstract Task<BaseResponse<List<Candle>>> GetAllChart(string symbol, string periodCodeStr, 
             bool fullData = true);
 
-        public abstract Task<BaseResponse<List<Candle>>> GetPartialChart(string symbol, string periodCodeStr, double? symbolTickSize,
-            long? start, long? end);
+        public abstract Task<BaseResponse<List<Candle>>> GetPartialChart(string symbol, string periodCodeStr, 
+            string? start, string? end);
 
         public abstract Task<BaseResponse<AccountInfo>> GetAccountInfo();
       

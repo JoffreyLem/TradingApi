@@ -8,14 +8,16 @@ using Microsoft.CodeAnalysis.CodeActions;
 
 namespace ApiTrading.Filter
 {
+    using System.Linq;
+
     public static class ClaimUserHelper
     {
         public static  IdentityUser<int> GetCurrentUser(this HttpContext context)
         {
+            
             var service =(UserManager<IdentityUser<int>>) context.RequestServices.GetService(typeof(UserManager<IdentityUser<int>>));
-            var claim = context.User.FindFirst(ClaimTypes.NameIdentifier);
-            var user = service.FindByEmailAsync(claim.Value).Result;
-
+            var claim = context.User.FindFirst("Id");
+            var user = service.FindByIdAsync(claim.Value).Result;
             return (IdentityUser<int>) user;
 
         }

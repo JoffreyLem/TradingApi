@@ -29,7 +29,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace ApiTrading.Controllers
 {
  
-
+    /// <response code="415">Header Content-type manquant/Invalide</response>
     [Consumes("application/json")]
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]
@@ -88,8 +88,10 @@ namespace ApiTrading.Controllers
        [Route("Update")]
        public async Task<IActionResult> Update([FromBody] UserUpdateRequest userUpdate)
        {
+           var test = ControllerContext.HttpContext.User;
+           
            var user = HttpContext.GetCurrentUser();
-           return Ok(await _utilisateurService.Update(userUpdate, user));
+           return Ok(await _utilisateurService.Update(userUpdate, user,ControllerContext.HttpContext.User));
        }
 
        /// <summary>

@@ -22,6 +22,9 @@ using ApplicationException = System.ApplicationException;
 
 namespace ApiTrading.Service.Utilisateur
 {
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Authorization;
+
     public class UtilisateurService : IUtilisateurService
     {
         private readonly UserManager<IdentityUser<int>> _userManager;
@@ -54,6 +57,7 @@ namespace ApiTrading.Service.Utilisateur
                 throw new AlreadyExistException("L'email existe déja");
 
             var newUser = new IdentityUser<int> {Email = user.Email, UserName = user.Email};
+          
             var isCreated = await _userManager.CreateAsync(newUser, user.Password);
          
             if (isCreated.Succeeded)
@@ -69,6 +73,15 @@ namespace ApiTrading.Service.Utilisateur
                     }
 
                 }
+
+     
+                
+                var claim = new List<Claim>();
+                claim.Add(new Claim(ClaimTypes.NameIdentifier,newUser.Id.ToString()));
+                claim.Add(new Claim(ClaimTypes.Name,newUser.UserName));
+                
+                await _userManager.AddClaimsAsync(newUser, claim);
+                
                 await _userManager.AddToRoleAsync(newUser, "User");
                 var userretrived = await _userManager.FindByEmailAsync(user.Email);
                 var jwtToken = await GenerateJwtToken(newUser);
@@ -97,67 +110,58 @@ namespace ApiTrading.Service.Utilisateur
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Login);
             
-            if(existingUser == null)
+            if(existingUser != null)
             {
-                throw new NotFoundException("User not found");
-            }
-
-         
-            var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
-
-            if(isCorrect)
-            {
-               
-   
-                var jwtToken = await GenerateJwtToken(existingUser);
-
-                var registration = new RegistrationResponse() {
-                  
-                    Token =  jwtToken.Token,
-                    Id = existingUser.Id
-                };
-
-                return new BaseResponse<RegistrationResponse>(registration);
-            }
-            else 
-            {
-                throw new AuthException("Echec de l'authentication, utilisateur/mdp incorrect");
-            }
-        }
-
-        public async Task<BaseResponse<TokenResponse>> GetId(string email)
-        {
-            var existingUser = await _userManager.FindByEmailAsync(email);
-            if(existingUser == null)
-            {
-                throw new NotFoundException("Mail not found");
-            }
-            else
-            {
-                var tokenResponse = new TokenResponse();
+                var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
                 
-                tokenResponse.ID = existingUser.Id;
-                var rsp = new BaseResponse<TokenResponse>(tokenResponse);
-                return rsp;
+                if(isCorrect)
+                {
+
+                    var jwtToken = await GenerateJwtToken(existingUser);
+
+                    var registration = new RegistrationResponse() {
+                  
+                        Token =  jwtToken.Token,
+                        Id = existingUser.Id
+                    };
+
+                    return new BaseResponse<RegistrationResponse>(registration);
+                }
             }
+
+            throw new AuthException("Echec de l'authentication, utilisateur/mdp incorrect");
+          
         }
 
-        public async Task<BaseResponse> Update(UserUpdateRequest user, IdentityUser<int> userCurrent)
+        public Task<BaseResponse<TokenResponse>> GetId(string email)
         {
-            if (string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword))
+            throw new NotImplementedException();
+        }
+
+
+        public async Task<BaseResponse> Update(UserUpdateRequest user, IdentityUser<int> userCurrent,
+            ClaimsPrincipal claimsPrincipal)
+        {
+           
+            if (!string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword))
             {
                 var checkPasswd = await _userManager.CheckPasswordAsync(userCurrent, user.OldPassword);
 
                 if (!checkPasswd)
                 {
-                    throw new PasswordUpdateException("Ancien mot de passe incorrect");
+                    throw new PasswordUpdateException("Password incorrect");
+                }
+                else if (user.OldPassword == user.NewPassword)
+                {
+                    throw new PasswordUpdateException("L'ancien mot de passe doit être changer");
                 }
                 
-                if (string.IsNullOrWhiteSpace(user.NewPassword))
+                else if (string.IsNullOrWhiteSpace(user.NewPassword))
                 {
                     throw new PasswordUpdateException("Le nouveau mot de passe ne peut pas être vide");
                 }
-                
+
+
                 var updatePwd = await _userManager.ChangePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
 
                 if (!updatePwd.Succeeded)
@@ -166,29 +170,35 @@ namespace ApiTrading.Service.Utilisateur
                     throw new AppException(messageErrorList);
                 }
             }
-            else if (string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword) ||
+            else if ((string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword)) ||
                      !string.IsNullOrEmpty(user.OldPassword) && string.IsNullOrEmpty(user.NewPassword))
             {
                 throw new PasswordUpdateException("Veuillez indiquer l'ancien et le nouveau mot de passe");
             }
-
+            var claim =await _userManager.GetClaimsAsync(userCurrent);
             userCurrent.Email = user.Email;
+            userCurrent.UserName = user.Email;
             var update = await _userManager.UpdateAsync(userCurrent);
-            if (update.Succeeded)
-            {
-                StringBuilder message = new StringBuilder();
-                message.Append($"Le compte {user.Email} a été mit à jour");
-                await _mailService.Send(user.Email, "Compte mit à jour !", message.ToString());
-                return new BaseResponse("Update réussi") {
-              
-                    Message = "Update réussi",
-                };
-            }
-            else
+            if (!update.Succeeded)
             {
                 var messageErrorList = update.Errors.Select(x => x.Description).ToList();
                 throw new AppException(messageErrorList);
             }
+
+            var claimToUpdate = claim.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
+            var newClaim =new Claim(ClaimTypes.NameIdentifier, user.Email);
+            var test=  await _userManager.ReplaceClaimAsync(userCurrent, claimToUpdate, newClaim);
+            
+
+          
+            StringBuilder message = new StringBuilder();
+            message.Append($"Le compte {user.Email} a été mit à jour");
+            await _mailService.Send(user.Email, "Compte mit à jour !", message.ToString());
+            
+            return new BaseResponse("Update réussi") {
+              
+                Message = "Update réussi",
+            };
         }
 
         public async Task<BaseResponse> Delete(IdentityUser<int> userCurrent)

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiTrading.Service.Utilisateur
 {
+    using System.Security.Claims;
+
     public interface IUtilisateurService
     {
         
@@ -13,7 +15,8 @@ namespace ApiTrading.Service.Utilisateur
         public Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user);
         public Task<BaseResponse<RegistrationResponse>> Login(UserLoginRequest user);
         public Task<BaseResponse<TokenResponse>> GetId(string email);
-        public Task<BaseResponse> Update(UserUpdateRequest user,IdentityUser<int> userCurrent);
+        public Task<BaseResponse> Update(UserUpdateRequest user, IdentityUser<int> userCurrent,
+            ClaimsPrincipal httpContextUser);
         public Task<BaseResponse> Delete(IdentityUser<int> userCurrent);
     }
 }

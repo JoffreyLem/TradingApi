@@ -56,7 +56,7 @@ namespace ApiTrading.Controllers
             return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe));
         }
         
-        [HttpGet]
+        [HttpPost]
         [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
         public async Task<IActionResult> PostSignal([FromQuery][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
         {

@@ -16,7 +16,7 @@ namespace ApiTrading.Modele.DTO.Response
 
         public BaseResponse()
         {
-            
+            Data = new T();
         }
 
         public string Message { get; set; }

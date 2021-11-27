@@ -46,6 +46,7 @@ namespace APIhandler
         public async Task<BaseResponse> Logout()
         {
             var logOutResponse = APICommandFactory.CreateLogoutCommand();
+            connector = null;
             return new BaseResponse("Logout API XTB Ok");
         }
 

@@ -60,9 +60,22 @@ namespace ApiTrading
             {
                 var response = context.Response;
                 var result = new ErrorModel();
-                response.StatusCode = (int) HttpStatusCode.BadRequest;
+
+                
+                if (err.ErrorCode.ToString() == ERR_CODE.LOGIN_NOT_FOUND.ToString())
+                {
+                    response.StatusCode = (int) HttpStatusCode.Forbidden;
+                    result.ErrorMessage.Add("Login/Password XTB Incorrect");
+                }
+                else
+                {
+                    response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                    result.ErrorMessage.Add("Erreur de communication avec l'API XTB");
+                }
                
-                result.ErrorMessage.Add(err.ErrorDescr);
+                
+               
+               
                 await response.WriteAsync(result.ToString());
             }
             catch (APICommunicationException e)

@@ -145,6 +145,7 @@ namespace ApiTrading
                            return ctx.Response.WriteAsJsonAsync(errormodel);
                         },
                         
+                        
                     };
 
 

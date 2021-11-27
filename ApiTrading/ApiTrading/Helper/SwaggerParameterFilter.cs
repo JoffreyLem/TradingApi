@@ -24,15 +24,10 @@
             {
                 using (var scope = _serviceScopeFactory.CreateScope())
                 {
-                   
                     var serviceStrategy = scope.ServiceProvider.GetRequiredService<IStrategyService>();
                     var allStrategy = serviceStrategy.GetAllStrategy().Result;
-                    var data = allStrategy.StrategyLists;
-
+                    var data = allStrategy.Data;
                     parameter.Schema.Enum = data.Select(x => new OpenApiString(x.Name)).ToList<IOpenApiAny>();
-                    
-                    
-
 
                 }
             }

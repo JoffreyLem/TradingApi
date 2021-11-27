@@ -8,6 +8,11 @@ namespace ApiTrading.Modele.DTO.Response
     {
         public List<SignalInfoStrategy> Signals { get; set; }
 
+
+        public SignalResponse()
+        {
+            
+        }
      
 
         public SignalResponse(List<SignalInfoStrategy> signals) 

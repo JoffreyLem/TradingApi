@@ -17,6 +17,7 @@ namespace ApiTrading.Service.Strategy
 {
     using DbContext;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.OpenApi.Any;
     using Strategy = global::Strategy.Strategy;
 
     public class StrategyService : IStrategyService
@@ -34,9 +35,10 @@ namespace ApiTrading.Service.Strategy
             _userManager = userManager;
         }
         
-        public async Task<StrategyResponse> GetAllStrategy()
+        public async Task<BaseResponse<List<StrategyList>>> GetAllStrategy()
         {
-            var strategyResponses = new StrategyResponse();
+            var rsp = new BaseResponse<List<StrategyList>>();
+          
             foreach (Enum enumVal in Enum.GetValues(typeof(StrategyManager.StrategyList)))
             {
                 var strategyList = new StrategyList();
@@ -46,14 +48,15 @@ namespace ApiTrading.Service.Strategy
                     .GetCustomAttribute<StrategyAttributeType>();
                 strategyList.Name = attribute?.Name;
                 strategyList.Description = attribute?.Description;
-                strategyResponses.StrategyLists.Add(strategyList);
+               rsp.Data.Add(strategyList);
+           
             }
-            return strategyResponses;
+            return rsp;
         }
 
-        public async Task<TimeframeResponse> GetAllTimeframe()
+        public async Task<BaseResponse<List<string>>> GetAllTimeframe()
         {
-            var timeframersp = new TimeframeResponse();
+            var timeframersp = new BaseResponse<List<string>>();
             var listTf = new List<string>();
             foreach (Enum enumVal in Enum.GetValues(typeof(Timeframe)))
             {
@@ -63,25 +66,39 @@ namespace ApiTrading.Service.Strategy
                 listTf.Add(attribute?.Description);
             }
 
-            timeframersp.Timeframes = listTf;
-
+            timeframersp.Data = listTf;
+            
             return timeframersp;
         }
 
-        public async Task<SignalResponse> GetSignals(string strategy, string symbol, string timeframe,IdentityUser<int> user = null)
+        public async Task<BaseResponse<List<SignalInfoStrategy>>> GetSignals(string strategy, string symbol, string timeframe,IdentityUser<int> user = null)
         {
-            
-            
-       
-            var data = await _apiHandler.GetAllChart(symbol, timeframe,true);
-            var data2 = data.Data;
-            var strategyInitialized = GetStrategyType(strategy,symbol,timeframe,data2);
-            strategyInitialized.History = data2;
-            var dataSignals =await strategyInitialized.Run();
-            await SaveSignal(dataSignals,user);
-            var signalResponse = new SignalResponse(dataSignals);
+            var signalResponse = new BaseResponse<List<SignalInfoStrategy>>();
+            if (user == null)
+            {
+                var data = await _apiHandler.GetAllChart(symbol, timeframe,true);
+                var data2 = data.Data;
+                var strategyInitialized = GetStrategyType(strategy,symbol,timeframe,data2);
+                strategyInitialized.History = data2;
+                var dataSignals =await strategyInitialized.Run();
+                await SaveSignal(dataSignals,user);
+                signalResponse.Data = dataSignals;
+              
+    
+            }
+            else
+            {
+              var data=  _context.SignalInfoStrategies.Where(x => x.User == user).ToList();
+              signalResponse.Data = data;
 
+            }
+            if (signalResponse.Data.Count == 0)
+            {
+                 signalResponse.Message = $"Aucuns signals disponible sur la période";
+            }
+                    
             return signalResponse;
+            
         }
 
         private async Task SaveSignal(List<SignalInfoStrategy> signals, IdentityUser<int> user = null)

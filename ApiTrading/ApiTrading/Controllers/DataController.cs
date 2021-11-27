@@ -12,9 +12,7 @@
     using Service.ExternalAPIHandler;
     using Utility;
 
-    /// <summary>
-/// test
-/// </summary>
+
     [Consumes("application/json")]
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]
@@ -37,7 +35,7 @@
         /// <summary>
         /// Récupération du symbol par apport au timeframe spécifié
         /// </summary>
-        /// <param name="symbol"></param>
+        /// <param name="symbol">truc</param>
         /// <param name="timeframe"></param>
         /// <returns></returns>
          [ProducesResponseType(typeof(BaseResponse<CandleListResponse>),200)]

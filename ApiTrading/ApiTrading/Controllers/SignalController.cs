@@ -50,9 +50,15 @@ namespace ApiTrading.Controllers
 
         [HttpGet]
         [TypeFilter(typeof(XtbCheckConnectorFilter))]
-       
-        [ProducesResponseType(typeof(SignalResponse),200)]
+        [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
         public async Task<IActionResult> GetSignals([FromQuery][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
+        {
+            return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe));
+        }
+        
+        [HttpGet]
+        [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
+        public async Task<IActionResult> PostSignal([FromQuery][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
         {
             return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe));
         }

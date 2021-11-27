@@ -79,7 +79,7 @@ namespace ApiTrading.Service.Strategy
             strategyInitialized.History = data2;
             var dataSignals =await strategyInitialized.Run();
             await SaveSignal(dataSignals,user);
-            var signalResponse = new SignalResponse(dataSignals.Select(x=>new ApiTrading.Modele.SignalInfo(x)).ToList());
+            var signalResponse = new SignalResponse(dataSignals);
 
             return signalResponse;
         }

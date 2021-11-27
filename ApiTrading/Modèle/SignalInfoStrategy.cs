@@ -3,7 +3,9 @@ namespace Modele
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics;
+    using System.Text.Json.Serialization;
     using Microsoft.AspNetCore.Identity;
+   
 
     public class SignalInfoStrategy
     {
@@ -17,13 +19,14 @@ namespace Modele
         }
         
         [Key]
+        [JsonIgnore]
         public int Id { get; set; }
         
-        
+        [JsonIgnore]
         public string Strategy { get; set; }
-        
+        [JsonIgnore]
         public string Timeframe { get; set; }
-        
+        [JsonIgnore]
         public string Symbol { get; set; }
         public Signal Signal { get; set; }
         
@@ -33,7 +36,7 @@ namespace Modele
         public decimal? StopLoss { get; set; }
         
         public decimal? TakeProfit { get; set; }
-        
+        [JsonIgnore]
         public IdentityUser<int> User { get; set; }
     }
 }

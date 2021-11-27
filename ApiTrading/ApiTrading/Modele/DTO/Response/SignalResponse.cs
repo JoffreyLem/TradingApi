@@ -2,13 +2,15 @@ using System.Collections.Generic;
 
 namespace ApiTrading.Modele.DTO.Response
 {
+    using global::Modele;
+
     public class SignalResponse 
     {
-        public List<SignalInfo> Signals { get; set; }
+        public List<SignalInfoStrategy> Signals { get; set; }
 
      
 
-        public SignalResponse(List<SignalInfo> signals) 
+        public SignalResponse(List<SignalInfoStrategy> signals) 
         {
             Signals = signals;
         }

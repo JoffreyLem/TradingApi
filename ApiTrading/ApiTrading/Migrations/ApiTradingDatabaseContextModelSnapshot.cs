@@ -320,6 +320,46 @@ namespace ApiTrading.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Modele.SignalInfoStrategy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<decimal>("EntryLevel")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<int>("Signal")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("StopLoss")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("Strategy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("TakeProfit")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<string>("Timeframe")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SignalInfoStrategies");
+                });
+
             modelBuilder.Entity("ApiTrading.Modele.RefreshToken", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<int>", "User")
@@ -380,6 +420,15 @@ namespace ApiTrading.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Modele.SignalInfoStrategy", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<int>", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

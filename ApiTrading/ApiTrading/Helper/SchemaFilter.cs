@@ -16,7 +16,7 @@
             {
                 if (property.Value.Default != null && property.Value.Example == null)
                 {
-                    property.Value.Example = property.Value.Default;
+                    property.Value.Default = property.Value.Default;
                 }
             }
         }

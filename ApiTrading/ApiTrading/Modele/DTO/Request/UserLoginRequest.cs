@@ -3,13 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiTrading.Modele.DTO.Request
 {
-    using System.ComponentModel;
-
     public class UserLoginRequest
     {
    
         [Required]
-        [DefaultValue("test")]
         public string Login { get; set; }
         
 

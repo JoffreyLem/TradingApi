@@ -7,18 +7,20 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using XtbLibrairie.commands;
-
+using ApiTrading.Filter;
 namespace ApiTrading.Controllers
 {
     
+
     [Consumes("application/json")]
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]
     [ProducesResponseType(500)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(403)]
     [ProducesResponseType(415)]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+  
     [Route("api/[controller]")]
     [ApiController]
     public class SignalController : ControllerBase
@@ -47,11 +49,12 @@ namespace ApiTrading.Controllers
         }
 
         [HttpGet]
-        [Route("signals/{strategy}/{symbol}/{timeframe}")]
+        [TypeFilter(typeof(XtbCheckConnectorFilter))]
+       
         [ProducesResponseType(typeof(SignalResponse),200)]
-        public async Task<IActionResult> GetSignals([FromRoute][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
+        public async Task<IActionResult> GetSignals([FromQuery][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
         {
-            return Ok();
+            return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe));
         }
     }
 }

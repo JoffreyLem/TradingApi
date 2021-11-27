@@ -2,6 +2,8 @@ using Modele;
 
 namespace ApiTrading.Modele
 {
+    using System;
+
     public class SignalInfo
     {
         public SignalInfo(SignalInfoStrategy signalInfo)
@@ -10,10 +12,13 @@ namespace ApiTrading.Modele
             EntryLevel = signalInfo.EntryLevel;
             StopLoss = signalInfo.StopLoss;
             TakeProfit = signalInfo.TakeProfit;
+            DateTime = signalInfo.DateTime;
 
         }
 
         public Signal Signal { get; set; }
+        
+        public DateTime DateTime { get; set; }
         
         public decimal EntryLevel { get; set; }
         

@@ -15,14 +15,23 @@ using StrategyList = ApiTrading.Modele.DTO.Response.StrategyList;
 
 namespace ApiTrading.Service.Strategy
 {
+    using DbContext;
+    using Microsoft.AspNetCore.Identity;
+    using Strategy = global::Strategy.Strategy;
+
     public class StrategyService : IStrategyService
     {
       
         private  IApiHandler _apiHandler;
-        public StrategyService(IApiHandler apiHandler)
+        private readonly UserManager<IdentityUser<int>> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private ApiTradingDatabaseContext _context;
+        public StrategyService(IApiHandler apiHandler, ApiTradingDatabaseContext apiDbContext, RoleManager<IdentityRole<int>> roleManager, UserManager<IdentityUser<int>> userManager)
         {
             _apiHandler = apiHandler;
-
+            _context = apiDbContext;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
         
         public async Task<StrategyResponse> GetAllStrategy()
@@ -59,21 +68,41 @@ namespace ApiTrading.Service.Strategy
             return timeframersp;
         }
 
-        public async Task<SignalResponse> GetSignals(string strategy, string symbol, string timeframe)
+        public async Task<SignalResponse> GetSignals(string strategy, string symbol, string timeframe,IdentityUser<int> user = null)
         {
-            var strategyInitialized = GetStrategyType(strategy);
+            
+            
+       
             var data = await _apiHandler.GetAllChart(symbol, timeframe,true);
             var data2 = data.Data;
+            var strategyInitialized = GetStrategyType(strategy,symbol,timeframe,data2);
             strategyInitialized.History = data2;
             var dataSignals =await strategyInitialized.Run();
+            await SaveSignal(dataSignals,user);
             var signalResponse = new SignalResponse(dataSignals.Select(x=>new ApiTrading.Modele.SignalInfo(x)).ToList());
 
             return signalResponse;
         }
 
-        private global::Strategy.Strategy GetStrategyType(string strategy)
+        private async Task SaveSignal(List<SignalInfoStrategy> signals, IdentityUser<int> user = null)
         {
-            foreach (Enum enumVal in Enum.GetValues(typeof(Timeframe)))
+            if (user is null)
+            {
+                user = await _userManager.FindByIdAsync("1");
+            }
+
+            foreach (var signalInfoStrategy in signals)
+            {
+                signalInfoStrategy.User = user;
+
+               await _context.SignalInfoStrategies.AddAsync(signalInfoStrategy);
+               await _context.SaveChangesAsync();
+            }
+        }
+
+        private Strategy GetStrategyType(string strategy, string symbol, string timeframe, List<Candle> data)
+        {
+            foreach (Enum enumVal in Enum.GetValues(typeof(StrategyManager.StrategyList)))
             {
                 var memInfo = enumVal?.GetType().GetMember(enumVal.ToString());
                 var attribute = (memInfo?[0] ?? throw new InvalidOperationException())
@@ -83,7 +112,7 @@ namespace ApiTrading.Service.Strategy
                 {
                     var type = attribute?.Type;
                     
-                    return StrategyFactory.GetStrategy(type);
+                    return StrategyFactory.GetStrategy(type,symbol,timeframe,data);
 
                 }
             }

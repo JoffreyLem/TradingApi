@@ -10,10 +10,13 @@ namespace ScalpingStrategy
     public class ScalpingStrategy : Strategy.Strategy
     {
         public string Symbol { get; private set; }
+        
+        public string Timeframe { get; set; }
         public List<Candle> History { get;  set; }
 
-        public ScalpingStrategy(string symbol, List<Candle> history) : base(symbol)
+        public ScalpingStrategy(string symbol,string timeframe, List<Candle> history) : base(symbol)
         {
+            Timeframe = timeframe;
             Symbol = symbol;
             this.History = history;
             CciIndicator = new CciIndicator(history);
@@ -21,6 +24,8 @@ namespace ScalpingStrategy
             FastSarIndicator = new SarIndicator(history, 0.08);
             Description = "Scalping strategy TEST";
         }
+        
+     
 
 
 
@@ -34,7 +39,7 @@ namespace ScalpingStrategy
         {
             List<SignalInfoStrategy> signalInfos = new List<SignalInfoStrategy>();
             
-            for (var i = 0; i < History.Count; i++)
+            for (var i = 0; i < 5; i++)
             {
                 if (i > 1)
                 {
@@ -42,12 +47,12 @@ namespace ScalpingStrategy
                     var sarSignal = SarIndicator.GetSignal(1);
                     var globalSignal = cciSignal == sarSignal;
 
-                    if (globalSignal)
+                    if (true)
                     {
-                        var signalInfo = new SignalInfoStrategy();
+                        var signalInfo = new SignalInfoStrategy(Timeframe,Symbol);
                         signalInfo.Signal = sarSignal;
                         signalInfo.EntryLevel = History[i].Close;
-                        signalInfo.StopLoss = SarIndicator[i].Sar;
+                        signalInfo.DateTime = History[i].Date;
                         signalInfos.Add(signalInfo);
                     }
                 }

@@ -20,6 +20,11 @@ namespace Strategy
             Symbol = symbol;
         }
 
+        protected Strategy()
+        {
+            
+        }
+
         public string Symbol { get; set; }
 
         public List<Candle> History

@@ -10,6 +10,7 @@ namespace ApiTrading.Modele.DTO.Response
     
         public StrategyResponse()
         {
+            StrategyLists = new List<StrategyList>();
         }
 
 

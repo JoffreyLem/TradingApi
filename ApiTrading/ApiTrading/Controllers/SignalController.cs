@@ -11,7 +11,6 @@ namespace ApiTrading.Controllers
     using Modele.DTO.Response;
     using Service.Strategy;
 
-
     [Consumes("application/json")]
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]
@@ -56,7 +55,7 @@ namespace ApiTrading.Controllers
         public async Task<IActionResult> GetSignals(
             [FromQuery] [Required] string symbol,
             [FromQuery] [Required] string timeframe,
-            [FromQuery]  string strategy,
+            [FromQuery] string strategy,
             [FromQuery] string user)
         {
             return Ok(await _strategyService.GetSignals(strategy, symbol, timeframe, user));
@@ -69,19 +68,17 @@ namespace ApiTrading.Controllers
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseResponse), 200)]
-        public async Task<IActionResult> PostSignal([FromBody]SignalInfoRequest infoRequest)
+        public async Task<IActionResult> PostSignal([FromBody] SignalInfoRequest infoRequest)
         {
             var user = HttpContext.GetCurrentUser();
             return CreatedAtAction(nameof(PostSignal), await _strategyService.PostSignal(infoRequest, user));
         }
 
         [HttpGet("UserGiverSignals")]
-        [ProducesResponseType(typeof(BaseResponse<List<string>>),200)]
+        [ProducesResponseType(typeof(BaseResponse<List<string>>), 200)]
         public async Task<IActionResult> GetAllUserGiverSignal()
         {
             return Ok(await _strategyService.GetUsersGiverSignal());
         }
-
-       
     }
 }

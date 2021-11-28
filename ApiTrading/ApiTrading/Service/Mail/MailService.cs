@@ -13,8 +13,8 @@ namespace ApiTrading.Service.Mail
         private readonly string _password;
         private readonly int _smtpPort;
         private readonly string _smtpServer;
-        private bool _useDefaultCredentials;
         private readonly string _username;
+        private bool _useDefaultCredentials;
 
         public
             MailService(IConfiguration configuration) // configuration is automatically added to DI in ASP.NET Core 3.0

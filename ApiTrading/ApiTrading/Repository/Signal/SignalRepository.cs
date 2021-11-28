@@ -6,41 +6,40 @@
     using DbContext;
     using global::Modele;
 
-    public class SignalRepository : GenericRepository<SignalInfoStrategy> , ISignalRepository
+    public class SignalRepository : GenericRepository<SignalInfoStrategy>, ISignalRepository
     {
         public SignalRepository(ApiTradingDatabaseContext context) : base(context)
         {
         }
-        
+
         public async Task SaveSignal(SignalInfoStrategy signal)
         {
-            await _context.SignalInfoStrategies.AddAsync(signal);
+            await Context.SignalInfoStrategies.AddAsync(signal);
         }
 
         public async Task<List<string>> GetAllGiverSignal()
         {
-            return  _context.SignalInfoStrategies.Where(x=>x.User.Id != 1).GroupBy(x=>x.User.UserName) .Select(x=>x.First()).Select(x=>x.User.UserName).ToList();
+            return Context.SignalInfoStrategies.Where(x => x.User.Id != 1).GroupBy(x => x.User.UserName)
+                .Select(x => x.First()).Select(x => x.User.UserName).ToList();
         }
 
         public async Task SaveSignals(List<SignalInfoStrategy> signals)
         {
-            await _context.SignalInfoStrategies.AddRangeAsync(signals);
+            await Context.SignalInfoStrategies.AddRangeAsync(signals);
         }
 
         public async Task<List<SignalInfoStrategy>> GetSignalsOfUser(string symbol, string timeframe, string userName)
         {
-            return _context.SignalInfoStrategies.Where(x => x.User.UserName == userName).Where(x => x.Symbol == symbol)
+            return Context.SignalInfoStrategies.Where(x => x.User.UserName == userName).Where(x => x.Symbol == symbol)
                 .Where(x => x.Timeframe == timeframe).ToList();
         }
 
-        public async Task<List<SignalInfoStrategy>> GetSignalsOfSystem(string strategyName, string symbol, string timeframe)
+        public async Task<List<SignalInfoStrategy>> GetSignalsOfSystem(string strategyName, string symbol,
+            string timeframe)
         {
-            return _context.SignalInfoStrategies.Where(x =>
-                x.Symbol == symbol && x.Timeframe == timeframe && x.Strategy == strategyName && x.User.Id ==1).ToList();
+            return Context.SignalInfoStrategies.Where(x =>
+                    x.Symbol == symbol && x.Timeframe == timeframe && x.Strategy == strategyName && x.User.Id == 1)
+                .ToList();
         }
-        
-        
-
-    
     }
 }

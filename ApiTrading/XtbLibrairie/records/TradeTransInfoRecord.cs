@@ -18,7 +18,7 @@ namespace XtbLibrairie.records
             Volume = volume;
             Order = order;
             CustomComment = customComment;
-            this.Expiration = expiration;
+            Expiration = expiration;
         }
 
         [Obsolete("Fields ie_devation and comment are not used anymore. Use another constructor instead.")]
@@ -34,7 +34,7 @@ namespace XtbLibrairie.records
             Symbol = symbol;
             Volume = volume;
             Order = order;
-            this.Expiration = expiration;
+            Expiration = expiration;
             CustomComment = comment;
         }
 

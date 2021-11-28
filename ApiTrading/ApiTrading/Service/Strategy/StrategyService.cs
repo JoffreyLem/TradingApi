@@ -6,7 +6,6 @@ namespace ApiTrading.Service.Strategy
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
-    using DbContext;
     using Exception;
     using ExternalAPIHandler;
     using global::Modele;
@@ -20,20 +19,18 @@ namespace ApiTrading.Service.Strategy
 
     public class StrategyService : IStrategyService
     {
-       
-
         private readonly IApiHandler _apiHandler;
-        private readonly IUserRepository _userRepository;
         private readonly ISignalRepository _signalRepository;
+        private readonly IUserRepository _userRepository;
 
-        public StrategyService(IApiHandler apiHandler, IUserRepository userRepository, ISignalRepository signalRepository)
+        public StrategyService(IApiHandler apiHandler, IUserRepository userRepository,
+            ISignalRepository signalRepository)
         {
             _apiHandler = apiHandler;
             _userRepository = userRepository;
             _signalRepository = signalRepository;
         }
 
-        
 
         public async Task<BaseResponse<List<StrategyList>>> GetAllStrategy()
         {
@@ -83,9 +80,7 @@ namespace ApiTrading.Service.Strategy
             if (user == null)
             {
                 if (string.IsNullOrEmpty(strategy))
-                {
                     throw new StrategyNotGivenException("Le nom de la strategy est nécecssaire");
-                }
                 var dataSystem = await GetSignalOfSystem(strategyInitialized, symbol, timeframe);
                 signalResponse.Data = dataSystem;
             }
@@ -122,7 +117,6 @@ namespace ApiTrading.Service.Strategy
 
         public async Task<BaseResponse<List<string>>> GetUsersGiverSignal()
         {
-         
             var data = await _signalRepository.GetAllGiverSignal();
 
             return new BaseResponse<List<string>>(data);
@@ -141,7 +135,7 @@ namespace ApiTrading.Service.Strategy
         private async Task<List<SignalInfoStrategy>> GetSignalOfSystem(Strategy strategy, string symbol,
             string timeframe)
         {
-            var dataSignal =await _signalRepository.GetSignalsOfSystem(strategy.Description, symbol, timeframe);
+            var dataSignal = await _signalRepository.GetSignalsOfSystem(strategy.Description, symbol, timeframe);
 
             var lastSignal = dataSignal.LastOrDefault();
             int? index = null;
@@ -150,7 +144,7 @@ namespace ApiTrading.Service.Strategy
                 index = strategy.History.Where(x => x.Date > lastSignal.DateTime).Select((candle, i) => i).First();
 
             var dataSignalsAnalyzed = await strategy.Run(index);
-            await  _signalRepository.SaveSignals(dataSignalsAnalyzed);
+            await _signalRepository.SaveSignals(dataSignalsAnalyzed);
             dataSignal.AddRange(dataSignalsAnalyzed);
             return dataSignal.OrderByDescending(x => x.DateTime).ToList();
         }
@@ -162,7 +156,6 @@ namespace ApiTrading.Service.Strategy
             return dataSignal.OrderByDescending(x => x.DateTime).ToList();
         }
 
-        
 
         private Strategy GetStrategyType(string strategy, string symbol, string timeframe)
         {

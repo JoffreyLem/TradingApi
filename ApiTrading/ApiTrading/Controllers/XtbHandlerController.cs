@@ -33,7 +33,7 @@ namespace ApiTrading.Controllers
         [ProducesResponseType(typeof(BaseResponse), 200)]
         [HttpPost]
         [Route("Connect")]
-        public async Task<IActionResult> Connect([FromBody] UserLoginRequest user)
+        public async Task<IActionResult> Connect([FromBody] XtbLoginRequest user)
         {
             return Ok(await _apiHandler.Login(user.Login, user.Password));
         }

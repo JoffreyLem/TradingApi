@@ -32,7 +32,7 @@ namespace ApiTrading
                 {
                     case AppException appException:
                     case TimeFrameDontExistException timeFrameDontExistException:
-                    case PasswordUpdateException passwordUpdateException:
+                    case UpdateException passwordUpdateException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
                     case AlreadyExistException e:

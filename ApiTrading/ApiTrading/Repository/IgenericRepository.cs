@@ -19,7 +19,5 @@
         Task Update(T entity);
 
         Task SaveChangeAsync();
-
-
     }
 }

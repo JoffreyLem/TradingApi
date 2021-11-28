@@ -8,7 +8,6 @@ namespace ApiTrading.Service.Utilisateur
     using System.Text;
     using System.Threading.Tasks;
     using Configuration;
-    using DbContext;
     using Domain;
     using Exception;
     using Mail;
@@ -25,37 +24,47 @@ namespace ApiTrading.Service.Utilisateur
     {
         private readonly JwtConfig _jwtConfig;
         private readonly IMail _mailService;
-        private readonly IUserRepository _userRepository;
         private readonly ITokenRepository _tokenRepository;
         private readonly TokenValidationParameters _tokenValidationParameters;
-       
+        private readonly IUserRepository _userRepository;
+
 
         public UtilisateurService(
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
-           
             IMail mailService)
         {
-          
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
-     
+
             _mailService = mailService;
         }
 
         public async Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user)
         {
+            List<string> ErrorExistMessage = new List<string>();
             var existingUser = await _userRepository.FindByEmailAsync(user.Email);
             if (existingUser != null)
-                throw new AlreadyExistException("L'email existe déja");
+                ErrorExistMessage.Add("L'email existe déja");
+                
 
-            var newUser = new IdentityUser<int> { Email = user.Email, UserName = user.Email };
+            var existingEmail = await _userRepository.FindByNameAsync(user.UserName);
+            if (existingEmail != null)
+            {
+                ErrorExistMessage.Add("L'username existe déja");
+            }
+
+            if (ErrorExistMessage.Count > 0)
+            {
+                throw new AlreadyExistException(ErrorExistMessage);
+            }
+
+            var newUser = new IdentityUser<int> { Email = user.Email, UserName = user.UserName };
 
             var isCreated = await _userRepository.CreateAsync(newUser, user.Password);
 
             if (isCreated.Succeeded)
             {
-               
                 var jwtToken = await GenerateJwtToken(newUser);
                 var message = new StringBuilder();
                 message.Append("Inscription réussi\n");
@@ -76,7 +85,7 @@ namespace ApiTrading.Service.Utilisateur
 
         public async Task<BaseResponse<RegistrationResponse>> Login(UserLoginRequest user)
         {
-            var existingUser = await _userRepository.FindByEmailAsync(user.Login);
+            var existingUser = await _userRepository.FindByEmailAsync(user.Email);
 
             if (existingUser != null)
             {
@@ -113,15 +122,16 @@ namespace ApiTrading.Service.Utilisateur
                 var checkPasswd = await _userRepository.CheckPasswordAsync(userCurrent, user.OldPassword);
 
                 if (!checkPasswd)
-                    throw new PasswordUpdateException("Password incorrect");
+                    throw new UpdateException("Password incorrect");
                 if (user.OldPassword == user.NewPassword)
-                    throw new PasswordUpdateException("L'ancien mot de passe doit être changer");
+                    throw new UpdateException("L'ancien mot de passe doit être changer");
 
                 if (string.IsNullOrWhiteSpace(user.NewPassword))
-                    throw new PasswordUpdateException("Le nouveau mot de passe ne peut pas être vide");
+                    throw new UpdateException("Le nouveau mot de passe ne peut pas être vide");
 
 
-                var updatePwd = await _userRepository.UpdatePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
+                var updatePwd =
+                    await _userRepository.UpdatePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
 
                 if (!updatePwd.Succeeded)
                 {
@@ -132,10 +142,42 @@ namespace ApiTrading.Service.Utilisateur
             else if (string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword) ||
                      !string.IsNullOrEmpty(user.OldPassword) && string.IsNullOrEmpty(user.NewPassword))
             {
-                throw new PasswordUpdateException("Veuillez indiquer l'ancien et le nouveau mot de passe");
+                throw new UpdateException("Veuillez indiquer l'ancien et le nouveau mot de passe");
             }
 
-        
+            if (!string.IsNullOrEmpty(user.Email))
+            {
+                var test = await _userRepository.FindByEmailAsync(user.Email);
+
+                if (test != null)
+                {
+                    throw new AlreadyExistException("L'email existe déjà");
+                }
+
+                userCurrent.Email = user.Email;
+
+              
+
+            }
+            
+            if(!string.IsNullOrEmpty(user.UserName))
+            {
+                var test = await _userRepository.FindByNameAsync(user.UserName);
+
+                if (test != null)
+                {
+                    throw new AlreadyExistException("L'username existe déjà");
+                }
+                
+                userCurrent.UserName = user.UserName;
+            }
+            
+            var test2 = await _userRepository.UpdateUser(userCurrent);
+
+            if (!test2.Succeeded)
+            {
+                throw new UpdateException("Erreur de mise à jour de ");
+            }
 
 
             var message = new StringBuilder();
@@ -199,7 +241,7 @@ namespace ApiTrading.Service.Utilisateur
             };
 
             await _tokenRepository.AddToken(refreshToken);
-           
+
 
             return new AutResult
             {

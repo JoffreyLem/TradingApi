@@ -9,6 +9,11 @@ namespace Modele
 
     public class SignalInfoStrategy
     {
+
+        public SignalInfoStrategy()
+        {
+            
+        }
         public SignalInfoStrategy(string timeframe, string symbol)
         {
             this.Timeframe = timeframe;

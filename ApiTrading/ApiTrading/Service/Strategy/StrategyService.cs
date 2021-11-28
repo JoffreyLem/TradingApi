@@ -19,6 +19,7 @@ namespace ApiTrading.Service.Strategy
     using DbContext;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.OpenApi.Any;
+    using Modele.DTO.Request;
     using Strategy = global::Strategy.Strategy;
 
     public class StrategyService : IStrategyService
@@ -100,6 +101,24 @@ namespace ApiTrading.Service.Strategy
             
         }
 
+        public async Task<BaseResponse> PostSignal(SignalInfoRequest infoRequest, IdentityUser<int> user)
+        {
+            var signalInfoStrategy = new SignalInfoStrategy();
+            signalInfoStrategy.Symbol = infoRequest.Symbol;
+            signalInfoStrategy.Timeframe = infoRequest.Timeframe;
+            signalInfoStrategy.EntryLevel = infoRequest.EntryLevel;
+            signalInfoStrategy.StopLoss = infoRequest.StopLoss;
+            signalInfoStrategy.TakeProfit = infoRequest.TakeProfit;
+            signalInfoStrategy.User = user;
+            signalInfoStrategy.Strategy = "";
+            signalInfoStrategy.Signal = infoRequest.Signal;
+            signalInfoStrategy.DateTime = infoRequest.DateTime;
+             await _context.SignalInfoStrategies.AddAsync(signalInfoStrategy);
+
+             return new BaseResponse("Signal ajouter");
+
+        }
+
         private async Task<List<SignalInfoStrategy>> GetSignalOfSystem(Strategy strategy, string symbol, string timeframe)
         {
             
@@ -168,31 +187,6 @@ namespace ApiTrading.Service.Strategy
 
         }
         
-        private (DateTime start, DateTime? end) DateControl(string start, string? end)
-        {
-            DateTime dateStart = default;
-            DateTime dateEnd = default;
-
-            
-            start = start ?? throw new FormatDateException($"L'argument start ne doit pas être vide");
-            if (!DateTime.TryParse(start, out dateStart))
-            {
-                throw new FormatDateException("La start date n'est pas au bon format");
-            }
-            if (end is not null)
-            {
-                if (!DateTime.TryParse(end, out dateEnd))
-                {
-                    throw new FormatDateException("La start date n'est pas au bon format");
-                }
-                if (dateEnd < dateStart)
-                {
-                    throw new InvalideDateRangeException("La end date doit être supérieur à la start date");
-                }
-                return (dateStart,dateEnd);
-            }
-            return (dateStart,null);
-
-        }
+       
     }
 }

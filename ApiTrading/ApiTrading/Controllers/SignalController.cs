@@ -64,11 +64,17 @@ namespace ApiTrading.Controllers
             return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe,user));
         }
         
+        /// <summary>
+        /// Sauvegarde d'un signal dans la base de données
+        /// </summary>
+        /// <param name="infoRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
-        public async Task<IActionResult> PostSignal([FromQuery][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
+        public async Task<IActionResult> PostSignal([FromBody] SignalInfoRequest infoRequest)
         {
-           return Ok();
+            var user = HttpContext.GetCurrentUser();
+            return CreatedAtAction(nameof(PostSignal), await _strategyService.PostSignal(infoRequest,user));
         }
     }
 }

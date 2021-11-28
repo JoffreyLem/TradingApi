@@ -19,8 +19,11 @@
 
         public async Task<IdentityResult> CreateAsync(IdentityUser<int> user, string password, string role = "User")
         {
+            using var transaction = Context.Database.BeginTransaction();
+            
             var created = await _userManager.CreateAsync(user, password);
             var roleCreated = await _userManager.AddToRoleAsync(user, role);
+            await transaction.CommitAsync();
             return created;
         }
 

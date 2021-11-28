@@ -8,10 +8,13 @@ namespace ApiTrading.Service.Strategy
     using System.Threading.Tasks;
     using Exception;
     using ExternalAPIHandler;
+    using Filter;
     using global::Modele;
     using global::Strategy;
     using global::StrategyManager;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Modele;
     using Modele.DTO.Request;
     using Modele.DTO.Response;
     using Repository.Signal;
@@ -22,13 +25,15 @@ namespace ApiTrading.Service.Strategy
         private readonly IApiHandler _apiHandler;
         private readonly ISignalRepository _signalRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public StrategyService(IApiHandler apiHandler, IUserRepository userRepository,
-            ISignalRepository signalRepository)
+            ISignalRepository signalRepository, IHttpContextAccessor httpContextAccessor)
         {
             _apiHandler = apiHandler;
             _userRepository = userRepository;
             _signalRepository = signalRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -95,7 +100,7 @@ namespace ApiTrading.Service.Strategy
             return signalResponse;
         }
 
-        public async Task<BaseResponse> PostSignal(SignalInfoRequest infoRequest, IdentityUser<int> user)
+        public async Task<BaseResponse> PostSignal(SignalInfoRequest infoRequest)
         {
             if (!_apiHandler.AllSymbolList.Any(x => x.Symbol == infoRequest.Symbol))
                 throw new NotFoundException("Le symbol n'existe pas");
@@ -106,7 +111,7 @@ namespace ApiTrading.Service.Strategy
             signalInfoStrategy.EntryLevel = infoRequest.EntryLevel;
             signalInfoStrategy.StopLoss = infoRequest.StopLoss;
             signalInfoStrategy.TakeProfit = infoRequest.TakeProfit;
-            signalInfoStrategy.User = user;
+            signalInfoStrategy.User = _httpContextAccessor.HttpContext.GetCurrentUser();
             signalInfoStrategy.Strategy = "";
             signalInfoStrategy.Signal = infoRequest.Signal;
             signalInfoStrategy.DateTime = infoRequest.DateTime;
@@ -124,12 +129,25 @@ namespace ApiTrading.Service.Strategy
 
         public async Task<BaseResponse> SubscribeToSymbolInfo(string symbol)
         {
-            throw new NotImplementedException();
+            var user = _httpContextAccessor.HttpContext.GetCurrentUser();
+            await _signalRepository.SubscribeToSignal(user, symbol);
+            return new BaseResponse("Subscription ok");
         }
 
         public async Task<BaseResponse> UnsubscribeToSymbolInfo(string symbol)
         {
-            throw new NotImplementedException();
+            var user = _httpContextAccessor.HttpContext.GetCurrentUser();
+            await _signalRepository.UnsubscribeToSignal(user, symbol);
+            return new BaseResponse("UnSubscription ok");
+        }
+
+      
+
+        public async Task<BaseResponse<List<Subscription>>> GetCurrentSignalSubscription()
+        {
+            var user = _httpContextAccessor.HttpContext.GetCurrentUser();
+            var data = await _signalRepository.GetCurrentSignalSubscription(user);
+            return new BaseResponse<List<Subscription>>(data);
         }
 
         private async Task<List<SignalInfoStrategy>> GetSignalOfSystem(Strategy strategy, string symbol,

@@ -6,6 +6,7 @@
     using System.Linq.Expressions;
     using System.Threading.Tasks;
     using DbContext;
+    using Exception;
     using Microsoft.EntityFrameworkCore;
 
     public class GenericRepository<T> : IGenericRepository<T> where T : class
@@ -64,7 +65,12 @@
 
         public async Task SaveChangeAsync()
         {
-            await Context.SaveChangesAsync();
+          var success=  await Context.SaveChangesAsync()>0;
+          if (!success)
+          {
+              throw new AppException("Erreur interne");
+          }
+          
         }
     }
 }

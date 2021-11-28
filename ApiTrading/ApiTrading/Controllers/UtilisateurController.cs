@@ -59,6 +59,18 @@ namespace ApiTrading.Controllers
         }
 
         /// <summary>
+        /// Récupération des infos de l'utilisateur
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Info")]
+        [ProducesResponseType(typeof(BaseResponse<UserInfoReponse>), 200)]
+        public async Task<IActionResult> GetUsersInfo()
+        {
+            
+            return Ok(await _utilisateurService.GetUsersInfo());
+        }
+
+        /// <summary>
         ///     Mise à jour des informations de l'utilisateur
         /// </summary>
         /// <response code="200">Utilisateurs mit à jour</response>
@@ -68,11 +80,11 @@ namespace ApiTrading.Controllers
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody] UserUpdateRequest userUpdate)
         {
-            var test = ControllerContext.HttpContext.User;
-
-            var user = HttpContext.GetCurrentUser();
-            return Ok(await _utilisateurService.Update(userUpdate, user, ControllerContext.HttpContext.User));
+          
+            return Ok(await _utilisateurService.Update(userUpdate));
         }
+        
+
 
         /// <summary>
         ///     Suppression de l'utilisateur
@@ -80,12 +92,13 @@ namespace ApiTrading.Controllers
         /// <response code="403">Token bearer incorrect</response>
         /// <response code="200">Utilisateurs deleted</response>
         [HttpDelete]
+        [ProducesResponseType(403)]
         [ProducesResponseType(typeof(BaseResponse), 200)]
         [Route("Delete")]
         public async Task<IActionResult> Delete()
         {
-            var user = HttpContext.GetCurrentUser();
-            return Ok(await _utilisateurService.Delete(user));
+
+            return Ok(await _utilisateurService.Delete());
         }
     }
 }

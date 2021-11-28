@@ -137,7 +137,7 @@ namespace ApiTrading
                 .AddEntityFrameworkStores<ApiTradingDatabaseContext>()
                 .AddPasswordValidator<PasswordValidatorHelper<IdentityUser<int>>>();
 
-
+            services.AddHttpContextAccessor();
             services.AddScoped<IMail, MailService>();
             services.AddScoped<IUtilisateurService, UtilisateurService>();
             services.AddScoped<IStrategyService, StrategyService>();

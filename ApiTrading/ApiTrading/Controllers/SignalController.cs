@@ -71,7 +71,7 @@ namespace ApiTrading.Controllers
         public async Task<IActionResult> PostSignal([FromBody] SignalInfoRequest infoRequest)
         {
             var user = HttpContext.GetCurrentUser();
-            return CreatedAtAction(nameof(PostSignal), await _strategyService.PostSignal(infoRequest, user));
+            return CreatedAtAction(nameof(PostSignal), await _strategyService.PostSignal(infoRequest));
         }
 
         [HttpGet("UserGiverSignals")]
@@ -80,5 +80,29 @@ namespace ApiTrading.Controllers
         {
             return Ok(await _strategyService.GetUsersGiverSignal());
         }
+
+        [HttpPost("Subscribe")]
+        [ProducesResponseType(typeof(BaseResponse), 200)]
+        public async Task<IActionResult> SubscribeToSymbol([FromBody][Required]SubscriptionModel model)
+        {
+            return Ok(await _strategyService.SubscribeToSymbolInfo(model.Symbol));
+        }
+        
+        [HttpPost("Unsubscribe")]
+        [ProducesResponseType(typeof(BaseResponse), 200)]
+        public async Task<IActionResult> UnubscribeToSymbol([FromBody][Required]SubscriptionModel model)
+        {
+            return Ok(await _strategyService.UnsubscribeToSymbolInfo(model.Symbol));
+        }
+        
+        
+        [HttpGet("GetAllSubscriptions")]
+        [ProducesResponseType(typeof(BaseResponse), 200)]
+        public async Task<IActionResult> GetSubscriptions()
+        {
+            return Ok(await _strategyService.GetCurrentSignalSubscription());
+        }
+        
+        
     }
 }

@@ -10,7 +10,9 @@ namespace ApiTrading.Service.Utilisateur
     using Configuration;
     using Domain;
     using Exception;
+    using Filter;
     using Mail;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
@@ -27,17 +29,19 @@ namespace ApiTrading.Service.Utilisateur
         private readonly ITokenRepository _tokenRepository;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IUserRepository _userRepository;
-
+      
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UtilisateurService(
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
-            IMail mailService)
+            IMail mailService, IHttpContextAccessor httpContextAccessor)
         {
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
 
             _mailService = mailService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user)
@@ -107,6 +111,8 @@ namespace ApiTrading.Service.Utilisateur
 
             throw new AuthException("Echec de l'authentication, utilisateur/mdp incorrect");
         }
+        
+        
 
         public Task<BaseResponse<TokenResponse>> GetId(string email)
         {
@@ -114,9 +120,9 @@ namespace ApiTrading.Service.Utilisateur
         }
 
 
-        public async Task<BaseResponse> Update(UserUpdateRequest user, IdentityUser<int> userCurrent,
-            ClaimsPrincipal claimsPrincipal)
+        public async Task<BaseResponse> Update(UserUpdateRequest user)
         {
+            var userCurrent = _httpContextAccessor.HttpContext.GetCurrentUser();
             if (!string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword))
             {
                 var checkPasswd = await _userRepository.CheckPasswordAsync(userCurrent, user.OldPassword);
@@ -190,8 +196,9 @@ namespace ApiTrading.Service.Utilisateur
             };
         }
 
-        public async Task<BaseResponse> Delete(IdentityUser<int> userCurrent)
+        public async Task<BaseResponse> Delete()
         {
+            var userCurrent = _httpContextAccessor.HttpContext.GetCurrentUser();
             var deleteUser = await _userRepository.DeleteUser(userCurrent);
 
             if (deleteUser.Succeeded)
@@ -204,6 +211,15 @@ namespace ApiTrading.Service.Utilisateur
 
             var messageErrorList = deleteUser.Errors.Select(x => x.Description).ToList();
             throw new AppException(messageErrorList);
+        }
+
+        public async Task<BaseResponse<UserInfoReponse>> GetUsersInfo()
+        {
+            var user = _httpContextAccessor.HttpContext.GetCurrentUser();
+            var info = new UserInfoReponse();
+            info.Email = user.Email;
+            info.Username = user.UserName;
+            return new BaseResponse<UserInfoReponse>(info);
         }
 
         private async Task<AutResult> GenerateJwtToken(IdentityUser<int> user)

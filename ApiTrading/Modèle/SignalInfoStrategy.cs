@@ -7,6 +7,7 @@ namespace Modele
     using Microsoft.AspNetCore.Identity;
    
 
+    
     public class SignalInfoStrategy
     {
 

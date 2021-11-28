@@ -1,16 +1,18 @@
-﻿using Modele.StramingModel;
+﻿
 
 namespace XtbLibrairie.streaming
 {
+    using records;
+
     public interface StreamingListener
     {
-        void ReceiveTradeRecord(TradeRecordStreaming tradeRecord);
-        void ReceiveTickRecord(TickRecordStreaming tickRecord);
-        void ReceiveBalanceRecord(BalanceRecordStreaming balanceRecord);
-        void ReceiveTradeStatusRecord(TradeStatusStreaming tradeStatusRecord);
-        void ReceiveProfitRecord(ProfitRecordStreaming profitRecord);
-        void ReceiveNewsRecord(NewsRecordStreaming newsRecord);
-        void ReceiveKeepAliveRecord(KeepAliveRecordStreaming keepAliveRecord);
-        void ReceiveCandleRecord(CandleRecordStreaming candleRecord);
+        void ReceiveTradeRecord(StreamingTradeRecord tradeRecord);
+        void ReceiveTickRecord(StreamingTickRecord tickRecord);
+        void ReceiveBalanceRecord(StreamingBalanceRecord balanceRecord);
+        void ReceiveTradeStatusRecord(StreamingTradeStatusRecord tradeStatusRecord);
+        void ReceiveProfitRecord(StreamingProfitRecord profitRecord);
+        void ReceiveNewsRecord(StreamingNewsRecord newsRecord);
+        void ReceiveKeepAliveRecord(StreamingKeepAliveRecord keepAliveRecord);
+        void ReceiveCandleRecord(StreamingCandleRecord candleRecord);
     }
 }

@@ -8,7 +8,7 @@ using ApiTrading.Exception;
 using ApiTrading.Modele.DTO.Response;
 using ApiTrading.Service.ExternalAPIHandler;
 using Modele;
-using Modele.StramingModel;
+
 using Utility;
 using XtbLibrairie.codes;
 using XtbLibrairie.commands;
@@ -189,12 +189,7 @@ namespace APIhandler
 
        
 
-        public  async Task<BaseResponse<AccountInfo>> GetAccountInfo()
-        {
-            var data = APICommandFactory.ExecuteMarginLevelCommand(connector);
-            var account = new AccountInfo(data);
-            return new BaseResponse<AccountInfo>(account);
-        }
+      
 
 
         public List<SymbolInformations> AllSymbolList { get; set; }
@@ -295,22 +290,6 @@ namespace APIhandler
             }
         }
 
-        public TRADE_OPERATION_CODE? GetTradeOperationBySignal(Signal signal)
-        {
-            if (signal == Signal.Buy)
-                return TRADE_OPERATION_CODE.BUY;
-            if (signal == Signal.Sell)
-                return TRADE_OPERATION_CODE.SELL;
-            return null;
-        }
-
-        public TRADE_OPERATION_CODE? GetTradeOperationByTypePosition(TypePosition signal)
-        {
-            if (signal == TypePosition.Buy)
-                return TRADE_OPERATION_CODE.BUY;
-            if (signal == TypePosition.Sell)
-                return TRADE_OPERATION_CODE.SELL;
-            return null;
-        }
+   
     }
 }

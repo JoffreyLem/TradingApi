@@ -53,7 +53,6 @@ namespace Indicator
             return Signal.None;
         }
 
-        public Log Log { get; set; }
 
         Signal IIndicator.GetState(int i, decimal? close)
         {

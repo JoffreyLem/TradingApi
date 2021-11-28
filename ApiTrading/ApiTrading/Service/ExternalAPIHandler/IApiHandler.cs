@@ -20,8 +20,6 @@ namespace ApiTrading.Service.ExternalAPIHandler
       
 
 
-        public abstract void Ping();
-        public abstract SymbolInformations? GetSymbolInformation(string symbol);
         public abstract Task<BaseResponse<List<SymbolResponse>>> GetAllSymbol();
 
         public Task<BaseResponse<bool>> CheckIfSymbolExist(string symbol);
@@ -37,7 +35,7 @@ namespace ApiTrading.Service.ExternalAPIHandler
         public abstract Task<BaseResponse<List<Candle>>> GetChart(string symbol, string periodCodeStr,
             string? start, string? end);
 
-        public abstract Task<BaseResponse<AccountInfo>> GetAccountInfo();
+
       
     }
 }

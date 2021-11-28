@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading;
-using Modele.StramingModel;
+
 using XtbLibrairie.errors;
 using XtbLibrairie.responses;
 using XtbLibrairie.streaming;
@@ -13,6 +13,8 @@ using JSONObject = Newtonsoft.Json.Linq.JObject;
 
 namespace XtbLibrairie.sync
 {
+    using records;
+
     public class StreamingAPIConnector : Connector, IDisposable
     {
         /// <summary>
@@ -190,9 +192,9 @@ namespace XtbLibrairie.sync
 
                     if (commandName == "tickPrices")
                     {
-                        var tickRecord = new TickRecordStreaming();
-                        tickRecord.XtbParsing((JSONObject) responseBody["data"]);
-
+                        var tickRecord = new StreamingTickRecord();
+                        tickRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                      
                         if (TickRecordReceived != null)
                             TickRecordReceived.Invoke(tickRecord);
                         if (sl != null)
@@ -200,8 +202,8 @@ namespace XtbLibrairie.sync
                     }
                     else if (commandName == "trade")
                     {
-                        var tradeRecord = new TradeRecordStreaming();
-                        tradeRecord.XtbParsing((JSONObject) responseBody["data"]);
+                        var tradeRecord = new StreamingTradeRecord();
+                        tradeRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
 
                         if (TradeRecordReceived != null)
                             TradeRecordReceived.Invoke(tradeRecord);
@@ -210,8 +212,8 @@ namespace XtbLibrairie.sync
                     }
                     else if (commandName == "balance")
                     {
-                        var balanceRecord = new BalanceRecordStreaming();
-                        balanceRecord.XtbParsing((JSONObject) responseBody["data"]);
+                        var balanceRecord = new StreamingBalanceRecord();
+                        balanceRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
 
                         if (BalanceRecordReceived != null)
                             BalanceRecordReceived.Invoke(balanceRecord);
@@ -220,8 +222,8 @@ namespace XtbLibrairie.sync
                     }
                     else if (commandName == "tradeStatus")
                     {
-                        var tradeStatusRecord = new TradeStatusStreaming();
-                        tradeStatusRecord.XtbParsing((JSONObject) responseBody["data"]);
+                        var tradeStatusRecord = new StreamingTradeStatusRecord();
+                        tradeStatusRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
 
                         if (TradeStatusRecordReceived != null)
                             TradeStatusRecordReceived.Invoke(tradeStatusRecord);
@@ -230,8 +232,8 @@ namespace XtbLibrairie.sync
                     }
                     else if (commandName == "profit")
                     {
-                        var profitRecord = new ProfitRecordStreaming();
-                        profitRecord.XtbParsing((JSONObject) responseBody["data"]);
+                        var profitRecord = new StreamingProfitRecord();
+                        profitRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
 
                         if (ProfitRecordReceived != null)
                             ProfitRecordReceived.Invoke(profitRecord);
@@ -240,8 +242,8 @@ namespace XtbLibrairie.sync
                     }
                     else if (commandName == "news")
                     {
-                        var newsRecord = new NewsRecordStreaming();
-                        newsRecord.XtbParsing((JSONObject) responseBody["data"]);
+                        var newsRecord = new StreamingNewsRecord();
+                        newsRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
 
                         if (NewsRecordReceived != null)
                             NewsRecordReceived.Invoke(newsRecord);
@@ -250,8 +252,8 @@ namespace XtbLibrairie.sync
                     }
                     else if (commandName == "keepAlive")
                     {
-                        var keepAliveRecord = new KeepAliveRecordStreaming();
-                        keepAliveRecord.XtbParsing((JSONObject) responseBody["data"]);
+                        var keepAliveRecord = new StreamingKeepAliveRecord();
+                        keepAliveRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
 
                         if (KeepAliveRecordReceived != null)
                             KeepAliveRecordReceived.Invoke(keepAliveRecord);
@@ -260,8 +262,8 @@ namespace XtbLibrairie.sync
                     }
                     else if (commandName == "candle")
                     {
-                        var candleRecord = new CandleRecordStreaming();
-                        candleRecord.XtbParsing((JSONObject) responseBody["data"]);
+                        var candleRecord = new StreamingCandleRecord();
+                        candleRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
 
                         if (CandleRecordReceived != null)
                             CandleRecordReceived.Invoke(candleRecord);
@@ -417,7 +419,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on tick record arrival.
         /// </summary>
         /// <param name="tickRecord">Received tick record</param>
-        public delegate void OnTick(TickRecordStreaming tickRecord);
+        public delegate void OnTick(StreamingTickRecord tickRecord);
 
         /// <summary>
         ///     Event raised when tick is received.
@@ -428,7 +430,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on trade record arrival.
         /// </summary>
         /// <param name="tradeRecord">Received trade record</param>
-        public delegate void OnTrade(TradeRecordStreaming tradeRecord);
+        public delegate void OnTrade(StreamingTradeRecord tradeRecord);
 
         /// <summary>
         ///     Event raised when trade record is received.
@@ -439,7 +441,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on balance record arrival.
         /// </summary>
         /// <param name="balanceRecord">Received balance record</param>
-        public delegate void OnBalance(BalanceRecordStreaming balanceRecord);
+        public delegate void OnBalance(StreamingBalanceRecord balanceRecord);
 
         /// <summary>
         ///     Event raised when balance record is received.
@@ -450,7 +452,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on trade status record arrival.
         /// </summary>
         /// <param name="tradeStatusRecord">Received trade status record</param>
-        public delegate void OnTradeStatus(TradeStatusStreaming tradeStatusRecord);
+        public delegate void OnTradeStatus(StreamingTradeStatusRecord tradeStatusRecord);
 
         /// <summary>
         ///     Event raised when trade status record is received.
@@ -461,7 +463,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on profit record arrival.
         /// </summary>
         /// <param name="profitRecord">Received profit record</param>
-        public delegate void OnProfit(ProfitRecordStreaming profitRecord);
+        public delegate void OnProfit(StreamingProfitRecord profitRecord);
 
         /// <summary>
         ///     Event raised when profit record is received.
@@ -472,7 +474,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on news record arrival.
         /// </summary>
         /// <param name="newsRecord">Received news record</param>
-        public delegate void OnNews(NewsRecordStreaming newsRecord);
+        public delegate void OnNews(StreamingNewsRecord newsRecord);
 
         /// <summary>
         ///     Event raised when news record is received.
@@ -483,7 +485,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on keep alive record arrival.
         /// </summary>
         /// <param name="keepAliveRecord">Received keep alive record</param>
-        public delegate void OnKeepAlive(KeepAliveRecordStreaming keepAliveRecord);
+        public delegate void OnKeepAlive(StreamingKeepAliveRecord keepAliveRecord);
 
         /// <summary>
         ///     Event raised when keep alive record is received.
@@ -494,7 +496,7 @@ namespace XtbLibrairie.sync
         ///     Delegate called on candle record arrival.
         /// </summary>
         /// <param name="candleRecord">Received candle record</param>
-        public delegate void OnCandle(CandleRecordStreaming candleRecord);
+        public delegate void OnCandle(StreamingCandleRecord candleRecord);
 
         /// <summary>
         ///     Event raised when candle record is received.

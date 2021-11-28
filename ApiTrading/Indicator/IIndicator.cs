@@ -9,7 +9,7 @@ namespace Indicator
 
         public IndicatorLevel IndicatorLevel { get; set; }
 
-        public Log Log { get; set; }
+       
 
         public Signal GetState(int i, decimal? close = null);
     }

@@ -22,19 +22,19 @@ namespace ApiTrading.Service.ExternalAPIHandler
 
         public abstract void Ping();
         public abstract SymbolInformations? GetSymbolInformation(string symbol);
-        public abstract void GetAllSymbol();
+        public abstract Task<BaseResponse<List<SymbolResponse>>> GetAllSymbol();
 
-        public SymbolInformations RequestSymbol(string symbol)
-        {
-            return AllSymbolList.FirstOrDefault(x => x.Symbol == symbol);
-        }
+        public Task<BaseResponse<bool>> CheckIfSymbolExist(string symbol);
 
-       
+
 
         public abstract Task<BaseResponse<List<Candle>>> GetAllChart(string symbol, string periodCodeStr, 
             bool fullData = true);
 
         public abstract Task<BaseResponse<List<Candle>>> GetPartialChart(string symbol, string periodCodeStr, 
+            string? start, string? end);
+
+        public abstract Task<BaseResponse<List<Candle>>> GetChart(string symbol, string periodCodeStr,
             string? start, string? end);
 
         public abstract Task<BaseResponse<AccountInfo>> GetAccountInfo();

@@ -19,6 +19,8 @@ using BaseResponse = ApiTrading.Modele.DTO.Response.BaseResponse;
 
 namespace APIhandler
 {
+    using SymbolResponse = ApiTrading.Modele.DTO.Response.SymbolResponse;
+
     public class XtbApiHandler : IApiHandler
     {
         private  readonly Server serverData = Servers.DEMO;
@@ -63,13 +65,50 @@ namespace APIhandler
 
         public SymbolInformations? GetSymbolInformation(string symbol)
         {
+          
             return AllSymbolList.FirstOrDefault(x => x.Symbol == symbol);
         }
 
-        public  void GetAllSymbol()
+        public async  Task<BaseResponse<List<SymbolResponse>>> GetAllSymbol()
         {
             var data = APICommandFactory.ExecuteAllSymbolsCommand(connector);
+            var rsp = new BaseResponse<List<SymbolResponse>>();
             AllSymbolList = data.SymbolRecords.Select(x => new SymbolInformations(x)).ToList();
+            rsp.Data = data.SymbolRecords.Select(x => new SymbolResponse(x.Symbol,x.Description)).ToList();
+            
+            return rsp;
+        }
+
+        public async Task<BaseResponse<bool>> CheckIfSymbolExist(string symbol)
+        {
+            var data = APICommandFactory.ExecuteSymbolCommand(connector, symbol);
+            var rsp = new BaseResponse<bool>();
+            if (data is null)
+            {
+                rsp.Data = false;
+                rsp.Message = "Le symbole n'existe pas";
+            }
+            else
+            {
+                rsp.Data = true;
+                rsp.Message = "Le symbole existe";
+            }
+
+            return rsp;
+        }
+
+        public async Task<BaseResponse<List<Candle>>> GetChart(string symbol, string periodCodeStr,
+            string? start, string? end)
+        {
+            if (start is null && end is null)
+            {
+                return await GetAllChart(symbol, periodCodeStr);
+            }
+            else
+            {
+                return await GetPartialChart(symbol, periodCodeStr, start, end);
+            }
+            
         }
 
   

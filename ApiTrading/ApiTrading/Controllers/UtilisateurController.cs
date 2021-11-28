@@ -36,6 +36,7 @@ namespace ApiTrading.Controllers
     [ProducesResponseType(500)]
     [ProducesResponseType(415)]
     [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]

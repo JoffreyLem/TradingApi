@@ -31,6 +31,18 @@
 
                 }
             }
+            
+            if (parameter.Name.Equals("timeframe", StringComparison.InvariantCultureIgnoreCase))
+            {
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var serviceStrategy = scope.ServiceProvider.GetRequiredService<IStrategyService>();
+                    var allStrategy = serviceStrategy.GetAllTimeframe().Result;
+                    var data = allStrategy.Data;
+                    parameter.Schema.Enum = data.Select(x => new OpenApiString(x)).ToList<IOpenApiAny>();
+
+                }
+            }
         }
     }
 }

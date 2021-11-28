@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
-namespace XtbLibrairie.responses
+﻿namespace XtbLibrairie.responses
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using records;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class AllSpreadsResponse : BaseResponse
     {
-        private readonly LinkedList<SpreadRecord> spreadRecords = new LinkedList<SpreadRecord>();
+        private readonly LinkedList<SpreadRecord> spreadRecords = new();
 
         public AllSpreadsResponse(string body) : base(body)
         {
-            var symbolRecords = (JSONArray) ReturnData;
+            var symbolRecords = (JSONArray)ReturnData;
             foreach (JSONObject e in symbolRecords)
             {
                 var spreadRecord = new SpreadRecord();

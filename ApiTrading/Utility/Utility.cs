@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Reflection;
-using Modele;
-
-#nullable enable
+﻿#nullable enable
 
 namespace Utility
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Reflection;
+    using Modele;
+
     public static class Utility
     {
         public static string GetID()
@@ -71,7 +71,7 @@ namespace Utility
             var test = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(Convert.ToDouble(timestamp))
                 .ToLocalTime();
             return test;
-            var date = (long) timestamp;
+            var date = (long)timestamp;
             return DateTimeOffset.FromUnixTimeMilliseconds(date).DateTime.ToLocalTime();
         }
 
@@ -85,7 +85,5 @@ namespace Utility
         {
             list.AddRange(elements);
         }
-
-    
     }
 }

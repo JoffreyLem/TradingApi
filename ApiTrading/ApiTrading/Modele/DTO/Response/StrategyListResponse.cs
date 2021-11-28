@@ -1,26 +1,23 @@
-using System.Collections.Generic;
-
 namespace ApiTrading.Modele.DTO.Response
 {
+    using System.Collections.Generic;
 
-    public class StrategyResponse 
+    public class StrategyResponse
     {
-        public List<StrategyList> StrategyLists { get; set; }
-
-    
         public StrategyResponse()
         {
             StrategyLists = new List<StrategyList>();
         }
 
 
-
-        public StrategyResponse(List<StrategyList> strategyLists) 
+        public StrategyResponse(List<StrategyList> strategyLists)
         {
             StrategyLists = strategyLists;
         }
+
+        public List<StrategyList> StrategyLists { get; set; }
     }
-    
+
     public class StrategyList
     {
         public string Name { get; set; }

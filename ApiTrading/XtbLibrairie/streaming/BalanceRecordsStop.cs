@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace XtbLibrairie.streaming
+﻿namespace XtbLibrairie.streaming
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     internal class BalanceRecordsStop
     {

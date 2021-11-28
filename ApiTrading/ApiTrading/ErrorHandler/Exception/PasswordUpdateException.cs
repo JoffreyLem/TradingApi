@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-
 namespace ApiTrading.Exception
 {
-    public class PasswordUpdateException: CustomErrorException
+    using System.Collections.Generic;
+
+    public class PasswordUpdateException : CustomErrorException
 
     {
         public PasswordUpdateException(List<string> errorsMessages) : base(errorsMessages)

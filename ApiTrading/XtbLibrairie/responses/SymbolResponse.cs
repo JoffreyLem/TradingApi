@@ -1,9 +1,7 @@
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
 namespace XtbLibrairie.responses
 {
-    using JSONObject = JObject;
+    using records;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class SymbolResponse : BaseResponse
     {
@@ -11,7 +9,7 @@ namespace XtbLibrairie.responses
 
         public SymbolResponse(string body) : base(body)
         {
-            var ob = (JSONObject) ReturnData;
+            var ob = (JSONObject)ReturnData;
             symbol = new SymbolRecord();
             symbol.FieldsFromJSONObject(ob);
         }

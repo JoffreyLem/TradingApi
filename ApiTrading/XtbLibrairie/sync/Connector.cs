@@ -1,11 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Net.Sockets;
-using System.Text;
-using XtbLibrairie.errors;
-
-namespace XtbLibrairie.sync
+﻿namespace XtbLibrairie.sync
 {
+    using System;
+    using System.IO;
+    using System.Net.Sockets;
+    using System.Text;
+    using errors;
+
     public class Connector : IDisposable
     {
         /// <summary>

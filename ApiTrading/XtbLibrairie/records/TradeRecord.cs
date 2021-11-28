@@ -1,9 +1,7 @@
-using System;
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using System;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class TradeRecord : BaseResponseRecord
     {
@@ -141,31 +139,31 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            close_price = (double?) value["close_price"];
-            close_time = (long?) value["close_time"];
-            closed = (bool?) value["closed"];
-            cmd = (long?) value["cmd"];
-            comment = (string) value["comment"];
-            commission = (double?) value["commission"];
-            commission_agent = (double?) value["commission_agent"];
-            customComment = (string) value["customComment"];
-            digits = (long?) value["digits"];
-            expiration = (long?) value["expiration"];
-            expirationString = (string) value["expirationString"];
-            margin_rate = (double?) value["margin_rate"];
-            open_price = (double?) value["open_price"];
-            open_time = (long?) value["open_time"];
-            order = (long?) value["order"];
-            order2 = (long?) value["order2"];
-            position = (long?) value["position"];
-            profit = (double?) value["profit"];
-            sl = (double?) value["sl"];
-            storage = (double?) value["storage"];
-            symbol = (string) value["symbol"];
-            timestamp = (long?) value["timestamp"];
-            tp = (double?) value["tp"];
-            value_date = (long?) value["value_date"];
-            volume = (double?) value["volume"];
+            close_price = (double?)value["close_price"];
+            close_time = (long?)value["close_time"];
+            closed = (bool?)value["closed"];
+            cmd = (long?)value["cmd"];
+            comment = (string)value["comment"];
+            commission = (double?)value["commission"];
+            commission_agent = (double?)value["commission_agent"];
+            customComment = (string)value["customComment"];
+            digits = (long?)value["digits"];
+            expiration = (long?)value["expiration"];
+            expirationString = (string)value["expirationString"];
+            margin_rate = (double?)value["margin_rate"];
+            open_price = (double?)value["open_price"];
+            open_time = (long?)value["open_time"];
+            order = (long?)value["order"];
+            order2 = (long?)value["order2"];
+            position = (long?)value["position"];
+            profit = (double?)value["profit"];
+            sl = (double?)value["sl"];
+            storage = (double?)value["storage"];
+            symbol = (string)value["symbol"];
+            timestamp = (long?)value["timestamp"];
+            tp = (double?)value["tp"];
+            value_date = (long?)value["value_date"];
+            volume = (double?)value["volume"];
         }
 
         [Obsolete("Method outdated")]

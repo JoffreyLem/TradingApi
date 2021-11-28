@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace XtbLibrairie.sync
+﻿namespace XtbLibrairie.sync
 {
+    using System;
+
     public class Credentials
     {
         [Obsolete("Up from 2.3.3 login is not a long, but string")]

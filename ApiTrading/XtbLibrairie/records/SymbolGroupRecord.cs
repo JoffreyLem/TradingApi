@@ -1,9 +1,7 @@
-using System;
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using System;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class SymbolGroupRecord : BaseResponseRecord
     {
@@ -24,9 +22,9 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            type = (long?) value["type"];
-            description = (string) value["description"];
-            name = (string) value["name"];
+            type = (long?)value["type"];
+            description = (string)value["description"];
+            name = (string)value["name"];
         }
     }
 }

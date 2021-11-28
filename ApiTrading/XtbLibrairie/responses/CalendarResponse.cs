@@ -1,18 +1,16 @@
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
 namespace XtbLibrairie.responses
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using records;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class CalendarResponse : BaseResponse
     {
         public CalendarResponse(string body)
             : base(body)
         {
-            var returnData = (JSONArray) ReturnData;
+            var returnData = (JSONArray)ReturnData;
 
             foreach (JSONObject e in returnData)
             {

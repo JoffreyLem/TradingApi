@@ -1,6 +1,8 @@
 ﻿namespace Strategy.Exception
 {
-    public class InvalidStartIndexException : System.Exception
+    using System;
+
+    public class InvalidStartIndexException : Exception
     {
         public InvalidStartIndexException(string? message) : base(message)
         {

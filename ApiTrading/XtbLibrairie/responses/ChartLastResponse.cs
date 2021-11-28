@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
 namespace XtbLibrairie.responses
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using records;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class ChartLastResponse : BaseResponse
     {
@@ -13,9 +11,9 @@ namespace XtbLibrairie.responses
 
         public ChartLastResponse(string body) : base(body)
         {
-            var rd = (JSONObject) ReturnData;
-            Digits = (long?) rd["digits"];
-            var arr = (JSONArray) rd["rateInfos"];
+            var rd = (JSONObject)ReturnData;
+            Digits = (long?)rd["digits"];
+            var arr = (JSONArray)rd["rateInfos"];
 
             foreach (JSONObject e in arr)
             {

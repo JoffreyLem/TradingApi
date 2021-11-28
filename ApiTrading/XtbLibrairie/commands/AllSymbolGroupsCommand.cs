@@ -1,9 +1,7 @@
-using System;
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.commands
 {
-    using JSONObject = JObject;
+    using System;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class AllSymbolGroupsCommand : BaseCommand
     {

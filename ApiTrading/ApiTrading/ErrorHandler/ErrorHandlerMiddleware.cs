@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text.Json;
-using System.Threading.Tasks;
-using ApiTrading.Exception;
-using Microsoft.AspNetCore.Http;
-using XtbLibrairie.errors;
-using XtbLibrairie.responses;
-using AuthenticationException = MailKit.Security.AuthenticationException;
-
 namespace ApiTrading
 {
+    using System;
+    using System.Net;
+    using System.Threading.Tasks;
+    using Exception;
+    using Microsoft.AspNetCore.Http;
+    using XtbLibrairie.errors;
+    using XtbLibrairie.responses;
+
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;
@@ -77,8 +74,6 @@ namespace ApiTrading
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     result.ErrorMessage.Add("Erreur de communication avec l'API XTB");
                 }
-
-
 
 
                 await response.WriteAsync(result.ToString());

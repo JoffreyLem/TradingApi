@@ -1,6 +1,4 @@
-﻿
-
-namespace XtbLibrairie.streaming
+﻿namespace XtbLibrairie.streaming
 {
     using records;
 

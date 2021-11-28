@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using XtbLibrairie.codes;
-
-namespace XtbLibrairie.records
+﻿namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using codes;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class StreamingTradeStatusRecord : BaseResponseRecord
     {
@@ -19,11 +17,11 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            CustomComment = (string) value["customComment"];
-            Message = (string) value["message"];
-            Order = (long?) value["order"];
-            Price = (double?) value["price"];
-            RequestStatus = new REQUEST_STATUS((long) value["requestStatus"]);
+            CustomComment = (string)value["customComment"];
+            Message = (string)value["message"];
+            Order = (long?)value["order"];
+            Price = (double?)value["price"];
+            RequestStatus = new REQUEST_STATUS((long)value["requestStatus"]);
         }
 
         public override string ToString()

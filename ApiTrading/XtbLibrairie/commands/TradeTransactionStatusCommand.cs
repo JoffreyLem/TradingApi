@@ -1,8 +1,6 @@
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.commands
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class TradeTransactionStatusCommand : BaseCommand
     {
@@ -15,7 +13,7 @@ namespace XtbLibrairie.commands
 
         public override string[] RequiredArguments
         {
-            get { return new[] {"order"}; }
+            get { return new[] { "order" }; }
         }
     }
 }

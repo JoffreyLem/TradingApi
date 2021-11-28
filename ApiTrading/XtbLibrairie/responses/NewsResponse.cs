@@ -1,19 +1,17 @@
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
 namespace XtbLibrairie.responses
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using records;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class NewsResponse : BaseResponse
     {
-        private readonly LinkedList<NewsTopicRecord> newsTopicRecords = new LinkedList<NewsTopicRecord>();
+        private readonly LinkedList<NewsTopicRecord> newsTopicRecords = new();
 
         public NewsResponse(string body) : base(body)
         {
-            var arr = (JSONArray) ReturnData;
+            var arr = (JSONArray)ReturnData;
             foreach (JSONObject e in arr)
             {
                 var record = new NewsTopicRecord();

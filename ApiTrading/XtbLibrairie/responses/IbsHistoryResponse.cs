@@ -1,18 +1,16 @@
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
 namespace XtbLibrairie.responses
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using records;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class IbsHistoryResponse : BaseResponse
     {
         public IbsHistoryResponse(string body)
             : base(body)
         {
-            var arr = (JSONArray) ReturnData;
+            var arr = (JSONArray)ReturnData;
 
             foreach (JSONObject e in arr)
             {

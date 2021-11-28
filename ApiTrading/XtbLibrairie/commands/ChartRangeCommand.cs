@@ -1,8 +1,6 @@
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.commands
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class ChartRangeCommand : BaseCommand
     {
@@ -14,7 +12,7 @@ namespace XtbLibrairie.commands
 
         public override string[] RequiredArguments
         {
-            get { return new[] {"info"}; }
+            get { return new[] { "info" }; }
         }
     }
 }

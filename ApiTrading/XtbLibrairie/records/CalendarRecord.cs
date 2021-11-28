@@ -1,8 +1,6 @@
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class CalendarRecord : BaseResponseRecord
     {
@@ -24,14 +22,14 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Country = (string) value["country"];
-            Current = (string) value["current"];
-            Forecast = (string) value["forecast"];
-            Impact = (string) value["impact"];
-            Period = (string) value["period"];
-            Previous = (string) value["previous"];
-            Time = (long?) value["time"];
-            Title = (string) value["title"];
+            Country = (string)value["country"];
+            Current = (string)value["current"];
+            Forecast = (string)value["forecast"];
+            Impact = (string)value["impact"];
+            Period = (string)value["period"];
+            Previous = (string)value["previous"];
+            Time = (long?)value["time"];
+            Title = (string)value["title"];
         }
 
         public override string ToString()

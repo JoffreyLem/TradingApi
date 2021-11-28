@@ -1,8 +1,6 @@
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class HoursRecord : BaseResponseRecord
     {
@@ -18,9 +16,9 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            day = (long?) value["day"];
-            fromT = (long?) value["fromT"];
-            toT = (long?) value["toT"];
+            day = (long?)value["day"];
+            fromT = (long?)value["fromT"];
+            toT = (long?)value["toT"];
         }
 
         public override string ToString()

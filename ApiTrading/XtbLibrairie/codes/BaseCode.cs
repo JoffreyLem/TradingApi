@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace XtbLibrairie.codes
+﻿namespace XtbLibrairie.codes
 {
+    using System;
+
     /// <summary>
     ///     Base class for all xAPI codes.
     /// </summary>
@@ -33,7 +33,7 @@ namespace XtbLibrairie.codes
             if (ReferenceEquals(baseCode1, baseCode2))
                 return true;
 
-            if ((object) baseCode1 == null || (object) baseCode2 == null)
+            if ((object)baseCode1 == null || (object)baseCode2 == null)
                 return false;
 
             return baseCode1.Code == baseCode2.Code;
@@ -50,7 +50,7 @@ namespace XtbLibrairie.codes
                 return false;
 
             var baseCode = target as BaseCode;
-            if ((object) baseCode == null)
+            if ((object)baseCode == null)
                 return false;
 
             return Code == baseCode.Code;

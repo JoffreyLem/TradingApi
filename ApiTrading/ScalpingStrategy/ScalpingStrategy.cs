@@ -1,48 +1,39 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Indicator.Indicator;
-using Modele;
-using Utility;
-
-namespace ScalpingStrategy
+﻿namespace ScalpingStrategy
 {
-    public class ScalpingStrategy : Strategy.Strategy
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Indicator.Indicator;
+    using Modele;
+    using Strategy;
+
+    public class ScalpingStrategy : Strategy
     {
-        public string Symbol { get; private set; }
-        
-        public string Timeframe { get; set; }
-
-        
-  
-
-        public ScalpingStrategy(string symbol,string timeframe) : base(symbol)
+        public ScalpingStrategy(string symbol, string timeframe) : base(symbol)
         {
             Timeframe = timeframe;
             Symbol = symbol;
-        
+
             CciIndicator = new CciIndicator(null);
             SarIndicator = new SarIndicator(null);
             FastSarIndicator = new SarIndicator(null, 0.08);
             Description = "Scalping strategy TEST";
         }
-        
-     
 
+        public string Symbol { get; }
+
+        public string Timeframe { get; set; }
 
 
         public CciIndicator CciIndicator { get; set; }
         public SarIndicator SarIndicator { get; set; }
         public SarIndicator FastSarIndicator { get; set; }
 
-  
 
         public override async Task<List<SignalInfoStrategy>> Run(int? index)
         {
-            List<SignalInfoStrategy> signalInfos = new List<SignalInfoStrategy>();
+            var signalInfos = new List<SignalInfoStrategy>();
             index = index ?? 0;
             for (var i = index.Value; i < History.Count; i++)
-            {
                 if (i > 1)
                 {
                     var cciSignal = CciIndicator.GetSignal(3);
@@ -51,17 +42,15 @@ namespace ScalpingStrategy
 
                     if (globalSignal)
                     {
-                        var signalInfo = new SignalInfoStrategy(Timeframe,Symbol);
+                        var signalInfo = new SignalInfoStrategy(Timeframe, Symbol);
                         signalInfo.Signal = sarSignal;
                         signalInfo.EntryLevel = History[i].Close;
                         signalInfo.DateTime = History[i].Date;
                         signalInfos.Add(signalInfo);
                     }
                 }
-            }
+
             return signalInfos;
         }
-
-        
     }
 }

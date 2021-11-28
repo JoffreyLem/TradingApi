@@ -1,19 +1,17 @@
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
 namespace XtbLibrairie.responses
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using records;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class TradingHoursResponse : BaseResponse
     {
-        private readonly LinkedList<TradingHoursRecord> tradingHoursRecords = new LinkedList<TradingHoursRecord>();
+        private readonly LinkedList<TradingHoursRecord> tradingHoursRecords = new();
 
         public TradingHoursResponse(string body) : base(body)
         {
-            var ob = (JSONArray) ReturnData;
+            var ob = (JSONArray)ReturnData;
             foreach (JSONObject e in ob)
             {
                 var record = new TradingHoursRecord();

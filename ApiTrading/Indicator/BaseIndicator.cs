@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using Indicator.Exception;
-using Modele;
-using Utility;
-
-namespace Indicator
+﻿namespace Indicator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using Exception;
+    using Modele;
+
     public abstract class BaseIndicator<T> : List<T>, IIndicator
     {
         protected BaseIndicator(int loopBackPeriodRequested = 0)
@@ -60,8 +59,6 @@ namespace Indicator
         }
 
 
-       
-
         private decimal? GetDynamicDecimalValue(dynamic test)
         {
             foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(test))
@@ -70,7 +67,7 @@ namespace Indicator
 
                 foreach (var propertyInfo in propertieinfos)
                     if (propertyInfo.PropertyType == typeof(decimal?))
-                        return (decimal?) propertyInfo.GetValue(test, null);
+                        return (decimal?)propertyInfo.GetValue(test, null);
             }
 
             return null;

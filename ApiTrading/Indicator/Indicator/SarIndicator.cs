@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using Modele;
-using Skender.Stock.Indicators;
-
-namespace Indicator.Indicator
+﻿namespace Indicator.Indicator
 {
+    using System.Collections.Generic;
+    using Modele;
+    using Skender.Stock.Indicators;
+
     public class SarIndicator : BaseIndicator<ParabolicSarResult>
     {
         public SarIndicator(List<Candle> data, double accelerationstep = 0.02,
-            double maxAccelerationFactor = 0.2, IndicatorLevel indicatorLevel = IndicatorLevel.L1) 
+            double maxAccelerationFactor = 0.2, IndicatorLevel indicatorLevel = IndicatorLevel.L1)
         {
             AccelerationStep = new decimal(accelerationstep);
             MaxAccelerationFactor = new decimal(maxAccelerationFactor);
-          
         }
 
         public decimal AccelerationStep { get; set; }
@@ -49,17 +48,15 @@ namespace Indicator.Indicator
 
             return false;
         }
-        
+
         public sealed override void Update(List<Candle> history)
         {
             if (history.Count > 2)
             {
-                var data = Skender.Stock.Indicators.Indicator.GetParabolicSar(history, AccelerationStep,
+                var data = Indicator.GetParabolicSar(history, AccelerationStep,
                     MaxAccelerationFactor);
                 base.Update(data);
             }
         }
-
-   
     }
 }

@@ -4,9 +4,8 @@
     {
         public SymbolResponse()
         {
-            
         }
-        
+
         public SymbolResponse(string name, string description)
         {
             Name = name;
@@ -15,6 +14,5 @@
 
         public string Name { get; set; }
         public string Description { get; set; }
-        
     }
 }

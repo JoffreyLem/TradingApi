@@ -1,20 +1,18 @@
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.records;
-
 namespace XtbLibrairie.responses
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using records;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class StepRulesResponse : BaseResponse
     {
-        private readonly LinkedList<StepRuleRecord> stepRulesRecords = new LinkedList<StepRuleRecord>();
+        private readonly LinkedList<StepRuleRecord> stepRulesRecords = new();
 
         public StepRulesResponse(string body)
             : base(body)
         {
-            var stepRulesRecords = (JSONArray) ReturnData;
+            var stepRulesRecords = (JSONArray)ReturnData;
             foreach (JSONObject e in stepRulesRecords)
             {
                 var stepRulesRecord = new StepRuleRecord();

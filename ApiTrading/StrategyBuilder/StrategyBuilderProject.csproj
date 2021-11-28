@@ -6,29 +6,29 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="MoneyManagement\**" />
-        <EmbeddedResource Remove="MoneyManagement\**" />
-        <None Remove="MoneyManagement\**" />
+        <Compile Remove="MoneyManagement\**"/>
+        <EmbeddedResource Remove="MoneyManagement\**"/>
+        <None Remove="MoneyManagement\**"/>
     </ItemGroup>
 
     <ItemGroup>
-       
-      
-        <ProjectReference Include="..\Indicator\Indicator.csproj" />
 
-      
-        <ProjectReference Include="..\Modèle\Modele.csproj" />
-        <ProjectReference Include="..\Utility\Utility.csproj" />
-        <ProjectReference Include="..\XtbLibrairie\XtbLibrairie.csproj" />
+
+        <ProjectReference Include="..\Indicator\Indicator.csproj"/>
+
+
+        <ProjectReference Include="..\Modèle\Modele.csproj"/>
+        <ProjectReference Include="..\Utility\Utility.csproj"/>
+        <ProjectReference Include="..\XtbLibrairie\XtbLibrairie.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ConsoleTables" Version="2.4.2" />
-        <PackageReference Include="Skender.Stock.Indicators" Version="1.12.2" />
+        <PackageReference Include="ConsoleTables" Version="2.4.2"/>
+        <PackageReference Include="Skender.Stock.Indicators" Version="1.12.2"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Exception\" />
+        <Folder Include="Exception\"/>
     </ItemGroup>
 
 </Project>

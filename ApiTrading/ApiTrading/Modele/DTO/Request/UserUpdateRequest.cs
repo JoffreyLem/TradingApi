@@ -1,11 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace ApiTrading.Modele.DTO.Request
 {
-    public class UserUpdateRequest 
+    using System.ComponentModel.DataAnnotations;
+
+    public class UserUpdateRequest
     {
-        [EmailAddress]
-        public string Email { get; set; }
+        [EmailAddress] public string Email { get; set; }
+
         public string OldPassword { get; set; }
         public string NewPassword { get; set; }
     }

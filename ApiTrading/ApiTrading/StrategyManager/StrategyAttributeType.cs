@@ -1,15 +1,9 @@
-using System;
-
 namespace StrategyManager
 {
-    
+    using System;
+
     public class StrategyAttributeType : Attribute
     {
-        public Type Type { get; set; }
-        public string Description { get; set; }
-        
-        public string Name { get; set; }
-
         public StrategyAttributeType(Type type)
         {
             Type = type;
@@ -27,5 +21,10 @@ namespace StrategyManager
             Type = type;
             Description = description;
         }
+
+        public Type Type { get; set; }
+        public string Description { get; set; }
+
+        public string Name { get; set; }
     }
 }

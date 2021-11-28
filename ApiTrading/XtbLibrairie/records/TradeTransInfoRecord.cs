@@ -1,15 +1,11 @@
-using System;
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.codes;
-
 namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using System;
+    using codes;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class TradeTransInfoRecord
     {
-        private long? expiration;
-
         public TradeTransInfoRecord(TRADE_OPERATION_CODE cmd, TRADE_TRANSACTION_TYPE type, double? price, double? sl,
             double? tp, string symbol, double? volume, long? order, string customComment, long? expiration)
         {
@@ -22,7 +18,7 @@ namespace XtbLibrairie.records
             Volume = volume;
             Order = order;
             CustomComment = customComment;
-            this.expiration = expiration;
+            this.Expiration = expiration;
         }
 
         [Obsolete("Fields ie_devation and comment are not used anymore. Use another constructor instead.")]
@@ -38,7 +34,7 @@ namespace XtbLibrairie.records
             Symbol = symbol;
             Volume = volume;
             Order = order;
-            this.expiration = expiration;
+            this.Expiration = expiration;
             CustomComment = comment;
         }
 
@@ -46,11 +42,7 @@ namespace XtbLibrairie.records
 
         public string CustomComment { get; set; }
 
-        public long? Expiration
-        {
-            get => expiration;
-            set => expiration = value;
-        }
+        public long? Expiration { get; set; }
 
         public long? Order { get; set; }
 
@@ -78,7 +70,7 @@ namespace XtbLibrairie.records
             obj.Add("volume", Volume);
             obj.Add("order", Order);
             obj.Add("customComment", CustomComment);
-            obj.Add("expiration", expiration);
+            obj.Add("expiration", Expiration);
             return obj;
         }
 
@@ -94,7 +86,7 @@ namespace XtbLibrairie.records
                    Volume +
                    Order + ", " +
                    CustomComment + ", " +
-                   expiration + ", " +
+                   Expiration + ", " +
                    "]";
         }
     }

@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-
-namespace XtbLibrairie.records
+﻿namespace XtbLibrairie.records
 {
-    using JSONArray = JArray;
-    using JSONObject = JObject;
+    using System.Collections.Generic;
+    using JSONArray = Newtonsoft.Json.Linq.JArray;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class TradingHoursRecord : BaseResponseRecord
     {
@@ -25,11 +23,11 @@ namespace XtbLibrairie.records
 
         public bool FieldsFromJSONObject(JSONObject value, string str)
         {
-            symbol = (string) value["symbol"];
+            symbol = (string)value["symbol"];
             quotes = new LinkedList<HoursRecord>();
             if (value["quotes"] != null)
             {
-                var jsonarray = (JSONArray) value["quotes"];
+                var jsonarray = (JSONArray)value["quotes"];
                 foreach (JSONObject i in jsonarray)
                 {
                     var rec = new HoursRecord();
@@ -41,7 +39,7 @@ namespace XtbLibrairie.records
             trading = new LinkedList<HoursRecord>();
             if (value["trading"] != null)
             {
-                var jsonarray = (JSONArray) value["trading"];
+                var jsonarray = (JSONArray)value["trading"];
                 foreach (JSONObject i in jsonarray)
                 {
                     var rec = new HoursRecord();

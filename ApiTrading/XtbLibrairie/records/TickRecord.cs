@@ -1,8 +1,6 @@
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class TickRecord : BaseResponseRecord
     {
@@ -47,17 +45,17 @@ namespace XtbLibrairie.records
 
         public bool FieldsFromJSONObject(JSONObject value, string str)
         {
-            ask = (double?) value["ask"];
-            askVolume = (long?) value["askVolume"];
-            bid = (double?) value["bid"];
-            bidVolume = (long?) value["bidVolume"];
-            high = (double?) value["high"];
-            level = (long?) value["level"];
-            low = (double?) value["low"];
-            spreadRaw = (double?) value["spreadRaw"];
-            spreadTable = (double?) value["spreadTable"];
-            symbol = (string) value["symbol"];
-            timestamp = (long?) value["timestamp"];
+            ask = (double?)value["ask"];
+            askVolume = (long?)value["askVolume"];
+            bid = (double?)value["bid"];
+            bidVolume = (long?)value["bidVolume"];
+            high = (double?)value["high"];
+            level = (long?)value["level"];
+            low = (double?)value["low"];
+            spreadRaw = (double?)value["spreadRaw"];
+            spreadTable = (double?)value["spreadTable"];
+            symbol = (string)value["symbol"];
+            timestamp = (long?)value["timestamp"];
 
             if (ask == null || bid == null || symbol == null || timestamp == null) return false;
             return true;

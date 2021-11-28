@@ -1,12 +1,11 @@
-using System.Configuration;
-using Microsoft.AspNetCore.Identity;
-
 namespace ApiTrading.Helper
 {
+    using Microsoft.AspNetCore.Identity;
+
     public class IdentityDataInitializer
     {
         public static void SeedData
-        (UserManager<IdentityUser<int>> userManager, 
+        (UserManager<IdentityUser<int>> userManager,
             RoleManager<IdentityRole<int>> roleManager)
         {
             SeedRoles(roleManager);
@@ -18,16 +17,12 @@ namespace ApiTrading.Helper
         {
             if (userManager.FindByNameAsync("System").Result == null)
             {
-                IdentityUser<int> identityUser = new IdentityUser<int>();
+                var identityUser = new IdentityUser<int>();
                 identityUser.UserName = "System";
-                string passwd = PasswordGenerator.GenerateRandomPassword();
-                IdentityResult result = userManager.CreateAsync(identityUser, passwd).Result;
+                var passwd = PasswordGenerator.GenerateRandomPassword();
+                var result = userManager.CreateAsync(identityUser, passwd).Result;
 
-                if (result.Succeeded)
-                {
-                    userManager.AddToRoleAsync(identityUser, "System").Wait();
-                    
-                }
+                if (result.Succeeded) userManager.AddToRoleAsync(identityUser, "System").Wait();
             }
         }
 
@@ -36,25 +31,24 @@ namespace ApiTrading.Helper
         {
             if (!roleManager.RoleExistsAsync("User").Result)
             {
-                IdentityRole<int> role = new IdentityRole<int>();
+                var role = new IdentityRole<int>();
                 role.Name = "User";
-                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                var roleResult = roleManager.CreateAsync(role).Result;
             }
-            
+
             if (!roleManager.RoleExistsAsync("System").Result)
             {
-                IdentityRole<int> role = new IdentityRole<int>();
+                var role = new IdentityRole<int>();
                 role.Name = "System";
-                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                var roleResult = roleManager.CreateAsync(role).Result;
             }
-            
+
             if (!roleManager.RoleExistsAsync("Admin").Result)
             {
-                IdentityRole<int> role = new IdentityRole<int>();
+                var role = new IdentityRole<int>();
                 role.Name = "Admin";
-                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
+                var roleResult = roleManager.CreateAsync(role).Result;
             }
-            
         }
     }
 }

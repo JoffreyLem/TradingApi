@@ -1,6 +1,8 @@
 ﻿namespace Strategy.Exception
 {
-    public class InvalidTakeProfitException : System.Exception
+    using System;
+
+    public class InvalidTakeProfitException : Exception
     {
         public InvalidTakeProfitException(string message) : base(message)
         {

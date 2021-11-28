@@ -1,16 +1,15 @@
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using ApiTrading.Modele.DTO.Request;
-using ApiTrading.Modele.DTO.Response;
-using ApiTrading.Service.Strategy;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using XtbLibrairie.commands;
-using ApiTrading.Filter;
 namespace ApiTrading.Controllers
 {
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Threading.Tasks;
+    using Filter;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Modele.DTO.Request;
+    using Modele.DTO.Response;
+    using Service.Strategy;
+
 
     [Consumes("application/json")]
     [Produces("application/json")]
@@ -20,7 +19,6 @@ namespace ApiTrading.Controllers
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-  
     [Route("api/[controller]")]
     [ApiController]
     public class SignalController : ControllerBase
@@ -31,20 +29,20 @@ namespace ApiTrading.Controllers
         {
             _strategyService = strategyService;
         }
-        
+
         /// <summary>
-        /// Récupération de toutes les stratégies disponible dans le système
+        ///     Récupération de toutes les stratégies disponible dans le système
         /// </summary>
         /// <returns></returns>
         [HttpGet("Strategy")]
-        [ProducesResponseType(typeof(StrategyResponse),200)]
+        [ProducesResponseType(typeof(StrategyResponse), 200)]
         public async Task<IActionResult> GetAllStrategy()
         {
             return Ok(await _strategyService.GetAllStrategy());
         }
 
         /// <summary>
-        /// Récupération des signaux de l'utilisateur si indiquer sinon du systeme
+        ///     Récupération des signaux de l'utilisateur si indiquer sinon du systeme
         /// </summary>
         /// <param name="strategy"></param>
         /// <param name="symbol"></param>
@@ -53,28 +51,27 @@ namespace ApiTrading.Controllers
         /// <returns></returns>
         [HttpGet]
         [TypeFilter(typeof(XtbCheckConnectorFilter))]
-        [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
+        [ProducesResponseType(typeof(BaseResponse<SignalResponse>), 200)]
         public async Task<IActionResult> GetSignals(
-            [FromQuery][Required] string strategy,
-            [FromQuery][Required] string symbol,
-            [FromQuery][Required] string timeframe,
-            [FromQuery]string user)
+            [FromQuery] [Required] string strategy,
+            [FromQuery] [Required] string symbol,
+            [FromQuery] [Required] string timeframe,
+            [FromQuery] string user)
         {
-           
-            return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe,user));
+            return Ok(await _strategyService.GetSignals(strategy, symbol, timeframe, user));
         }
-        
+
         /// <summary>
-        /// Sauvegarde d'un signal dans la base de données
+        ///     Sauvegarde d'un signal dans la base de données
         /// </summary>
         /// <param name="infoRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(BaseResponse),200)]
+        [ProducesResponseType(typeof(BaseResponse), 200)]
         public async Task<IActionResult> PostSignal([FromBody] SignalInfoRequest infoRequest)
         {
             var user = HttpContext.GetCurrentUser();
-            return CreatedAtAction(nameof(PostSignal), await _strategyService.PostSignal(infoRequest,user));
+            return CreatedAtAction(nameof(PostSignal), await _strategyService.PostSignal(infoRequest, user));
         }
     }
 }

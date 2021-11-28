@@ -1,8 +1,6 @@
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.commands
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class IbsHistoryCommand : BaseCommand
     {
@@ -15,7 +13,7 @@ namespace XtbLibrairie.commands
 
         public override string[] RequiredArguments
         {
-            get { return new[] {"start", "end"}; }
+            get { return new[] { "start", "end" }; }
         }
     }
 }

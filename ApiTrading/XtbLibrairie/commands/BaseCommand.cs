@@ -1,9 +1,8 @@
-using Newtonsoft.Json.Linq;
-using XtbLibrairie.errors;
-
 namespace XtbLibrairie.commands
 {
-    using JSONObject = JObject;
+    using errors;
+    using Newtonsoft.Json.Linq;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public abstract class BaseCommand
     {

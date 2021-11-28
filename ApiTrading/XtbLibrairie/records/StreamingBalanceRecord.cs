@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace XtbLibrairie.records
+﻿namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class StreamingBalanceRecord : BaseResponseRecord
     {
@@ -20,12 +18,12 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Balance = (double?) value["balance"];
-            Margin = (double?) value["margin"];
-            MarginFree = (double?) value["marginFree"];
-            MarginLevel = (double?) value["marginLevel"];
-            Equity = (double?) value["equity"];
-            Credit = (double?) value["credit"];
+            Balance = (double?)value["balance"];
+            Margin = (double?)value["margin"];
+            MarginFree = (double?)value["marginFree"];
+            MarginLevel = (double?)value["marginLevel"];
+            Equity = (double?)value["equity"];
+            Credit = (double?)value["credit"];
         }
 
         public override string ToString()

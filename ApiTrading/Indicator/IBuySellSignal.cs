@@ -1,7 +1,7 @@
-﻿using Modele;
-
-namespace Indicator
+﻿namespace Indicator
 {
+    using Modele;
+
     public interface IBuySellSignal
     {
         public bool Buy(int i);

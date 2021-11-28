@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace XtbLibrairie.records
+﻿namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class StreamingCandleRecord : BaseResponseRecord
     {
@@ -26,15 +24,15 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Close = (double?) value["close"];
-            Ctm = (long?) value["ctm"];
-            CtmString = (string) value["ctmString"];
-            High = (double?) value["high"];
-            Low = (double?) value["low"];
-            Open = (double?) value["open"];
-            QuoteId = (long?) value["quoteId"];
-            Symbol = (string) value["symbol"];
-            Vol = (double?) value["vol"];
+            Close = (double?)value["close"];
+            Ctm = (long?)value["ctm"];
+            CtmString = (string)value["ctmString"];
+            High = (double?)value["high"];
+            Low = (double?)value["low"];
+            Open = (double?)value["open"];
+            QuoteId = (long?)value["quoteId"];
+            Symbol = (string)value["symbol"];
+            Vol = (double?)value["vol"];
         }
 
         public override string ToString()

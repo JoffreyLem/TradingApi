@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using XtbLibrairie.codes;
-
-namespace XtbLibrairie.records
+﻿namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using codes;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class StreamingTradeRecord : BaseResponseRecord
     {
@@ -55,29 +53,29 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Close_price = (double?) value["close_price"];
-            Close_time = (long?) value["close_time"];
-            Closed = (bool?) value["closed"];
-            Cmd = (long) value["cmd"];
-            Comment = (string) value["comment"];
-            Commision = (double?) value["commision"];
-            CustomComment = (string) value["customComment"];
-            Expiration = (long?) value["expiration"];
-            Margin_rate = (double?) value["margin_rate"];
-            Open_price = (double?) value["open_price"];
-            Open_time = (long?) value["open_time"];
-            Order = (long?) value["order"];
-            Order2 = (long?) value["order2"];
-            Position = (long?) value["position"];
-            Profit = (double?) value["profit"];
-            Type = new STREAMING_TRADE_TYPE((long) value["type"]);
-            Sl = (double?) value["sl"];
-            State = (string) value["state"];
-            Storage = (double?) value["storage"];
-            Symbol = (string) value["symbol"];
-            Tp = (double?) value["tp"];
-            Volume = (double?) value["volume"];
-            Digits = (int?) value["digits"];
+            Close_price = (double?)value["close_price"];
+            Close_time = (long?)value["close_time"];
+            Closed = (bool?)value["closed"];
+            Cmd = (long)value["cmd"];
+            Comment = (string)value["comment"];
+            Commision = (double?)value["commision"];
+            CustomComment = (string)value["customComment"];
+            Expiration = (long?)value["expiration"];
+            Margin_rate = (double?)value["margin_rate"];
+            Open_price = (double?)value["open_price"];
+            Open_time = (long?)value["open_time"];
+            Order = (long?)value["order"];
+            Order2 = (long?)value["order2"];
+            Position = (long?)value["position"];
+            Profit = (double?)value["profit"];
+            Type = new STREAMING_TRADE_TYPE((long)value["type"]);
+            Sl = (double?)value["sl"];
+            State = (string)value["state"];
+            Storage = (double?)value["storage"];
+            Symbol = (string)value["symbol"];
+            Tp = (double?)value["tp"];
+            Volume = (double?)value["volume"];
+            Digits = (int?)value["digits"];
         }
 
         public override string ToString()

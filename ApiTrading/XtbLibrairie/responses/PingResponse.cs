@@ -1,8 +1,6 @@
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.responses
 {
-    using JSONObject = JObject;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class PingResponse : BaseResponse
     {
@@ -11,7 +9,7 @@ namespace XtbLibrairie.responses
 
         public PingResponse(string body) : base(body)
         {
-            var ob = (JSONObject) ReturnData;
+            var ob = (JSONObject)ReturnData;
         }
     }
 }

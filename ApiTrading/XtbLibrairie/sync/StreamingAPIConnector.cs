@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Threading;
-
-using XtbLibrairie.errors;
-using XtbLibrairie.responses;
-using XtbLibrairie.streaming;
-using XtbLibrairie.utils;
-using JSONObject = Newtonsoft.Json.Linq.JObject;
+﻿using JSONObject = Newtonsoft.Json.Linq.JObject;
 
 namespace XtbLibrairie.sync
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Net.Security;
+    using System.Net.Sockets;
+    using System.Threading;
+    using errors;
     using records;
+    using responses;
+    using streaming;
+    using utils;
 
     public class StreamingAPIConnector : Connector, IDisposable
     {
@@ -193,8 +192,8 @@ namespace XtbLibrairie.sync
                     if (commandName == "tickPrices")
                     {
                         var tickRecord = new StreamingTickRecord();
-                        tickRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
-                      
+                        tickRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
+
                         if (TickRecordReceived != null)
                             TickRecordReceived.Invoke(tickRecord);
                         if (sl != null)
@@ -203,7 +202,7 @@ namespace XtbLibrairie.sync
                     else if (commandName == "trade")
                     {
                         var tradeRecord = new StreamingTradeRecord();
-                        tradeRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                        tradeRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
 
                         if (TradeRecordReceived != null)
                             TradeRecordReceived.Invoke(tradeRecord);
@@ -213,7 +212,7 @@ namespace XtbLibrairie.sync
                     else if (commandName == "balance")
                     {
                         var balanceRecord = new StreamingBalanceRecord();
-                        balanceRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                        balanceRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
 
                         if (BalanceRecordReceived != null)
                             BalanceRecordReceived.Invoke(balanceRecord);
@@ -223,7 +222,7 @@ namespace XtbLibrairie.sync
                     else if (commandName == "tradeStatus")
                     {
                         var tradeStatusRecord = new StreamingTradeStatusRecord();
-                        tradeStatusRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                        tradeStatusRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
 
                         if (TradeStatusRecordReceived != null)
                             TradeStatusRecordReceived.Invoke(tradeStatusRecord);
@@ -233,7 +232,7 @@ namespace XtbLibrairie.sync
                     else if (commandName == "profit")
                     {
                         var profitRecord = new StreamingProfitRecord();
-                        profitRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                        profitRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
 
                         if (ProfitRecordReceived != null)
                             ProfitRecordReceived.Invoke(profitRecord);
@@ -243,7 +242,7 @@ namespace XtbLibrairie.sync
                     else if (commandName == "news")
                     {
                         var newsRecord = new StreamingNewsRecord();
-                        newsRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                        newsRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
 
                         if (NewsRecordReceived != null)
                             NewsRecordReceived.Invoke(newsRecord);
@@ -253,7 +252,7 @@ namespace XtbLibrairie.sync
                     else if (commandName == "keepAlive")
                     {
                         var keepAliveRecord = new StreamingKeepAliveRecord();
-                        keepAliveRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                        keepAliveRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
 
                         if (KeepAliveRecordReceived != null)
                             KeepAliveRecordReceived.Invoke(keepAliveRecord);
@@ -263,7 +262,7 @@ namespace XtbLibrairie.sync
                     else if (commandName == "candle")
                     {
                         var candleRecord = new StreamingCandleRecord();
-                        candleRecord.FieldsFromJSONObject((JSONObject) responseBody["data"]);
+                        candleRecord.FieldsFromJSONObject((JSONObject)responseBody["data"]);
 
                         if (CandleRecordReceived != null)
                             CandleRecordReceived.Invoke(candleRecord);

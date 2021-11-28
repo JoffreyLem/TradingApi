@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-
-namespace Indicator
+﻿namespace Indicator
 {
+    using System.ComponentModel;
+
     public enum IndicatorLevel
     {
         [Description("L1")] L1,

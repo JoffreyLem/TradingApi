@@ -1,10 +1,8 @@
-using ApiTrading.Domain;
-using Microsoft.AspNetCore.Authentication;
-
 namespace ApiTrading.Modele.DTO.Response
 {
+    using Domain;
+
     public class RegistrationResponse : AutResult
     {
-        
     }
 }

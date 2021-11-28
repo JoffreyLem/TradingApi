@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-
 namespace XtbLibrairie.records
 {
-    using JSONObject = JObject;
+    using System;
+    using System.Collections.Generic;
+    using JSONObject = Newtonsoft.Json.Linq.JObject;
 
     public class NewsTopicRecord : BaseResponseRecord
     {
@@ -39,12 +37,12 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            body = (string) value["body"];
-            bodylen = (long?) value["bodylen"];
-            key = (string) value["key"];
-            time = (long?) value["time"];
-            timeString = (string) value["timeString"];
-            title = (string) value["title"];
+            body = (string)value["body"];
+            bodylen = (long?)value["bodylen"];
+            key = (string)value["key"];
+            time = (long?)value["time"];
+            timeString = (string)value["timeString"];
+            title = (string)value["title"];
         }
     }
 }

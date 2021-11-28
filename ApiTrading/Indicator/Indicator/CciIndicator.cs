@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using Modele;
-using Skender.Stock.Indicators;
-
-namespace Indicator.Indicator
+﻿namespace Indicator.Indicator
 {
+    using System.Collections.Generic;
+    using Modele;
+    using Skender.Stock.Indicators;
+
     public class CciIndicator : BaseIndicator<CciResult>
     {
         public CciIndicator(List<Candle> history, int lookbackPeriod = 20,
-            IndicatorLevel indicatorLevel = IndicatorLevel.L1) : base( lookbackPeriod)
+            IndicatorLevel indicatorLevel = IndicatorLevel.L1) : base(lookbackPeriod)
         {
-          
         }
 
         public override bool Buy(int i)
@@ -41,15 +40,14 @@ namespace Indicator.Indicator
 
             return false;
         }
-        
+
         public sealed override void Update(List<Candle> history)
         {
             if (history.Count > LookbackPeriod)
             {
-                var data = Skender.Stock.Indicators.Indicator.GetCci(history, LookbackPeriod);
+                var data = Indicator.GetCci(history, LookbackPeriod);
                 base.Update(data);
             }
         }
-    
     }
 }

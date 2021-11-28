@@ -1,36 +1,32 @@
-using System.Collections.Generic;
-using ApiTrading.Helper;
-using Modele;
-using Newtonsoft.Json;
-
 namespace ApiTrading.Modele.DTO.Response
 {
-    public class CandleListResponse 
-    {
-        [JsonProperty(Order = 3)]
-        public List<Candle> Data { get; set; }
+    using System.Collections.Generic;
+    using global::Modele;
+    using Helper;
+    using Newtonsoft.Json;
 
-        public CandleListResponse( List<Candle> data) 
+    public class CandleListResponse
+    {
+        public CandleListResponse(List<Candle> data)
         {
             Data = data;
         }
 
         public CandleListResponse()
         {
-           
         }
+
+        [JsonProperty(Order = 3)] public List<Candle> Data { get; set; }
 
 
         public override string ToString()
         {
-            var settings = new JsonSerializerSettings()
+            var settings = new JsonSerializerSettings
             {
                 ContractResolver = new OrderedContractResolver()
             };
-   
-            return JsonConvert.SerializeObject(this, Formatting.Indented,settings);
+
+            return JsonConvert.SerializeObject(this, Formatting.Indented, settings);
         }
-
-
     }
 }

@@ -1,19 +1,14 @@
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-
 namespace ApiTrading.Exception
 {
-    public class CustomErrorException : System.Exception
-    {
-        public List<string> ErrorsMessages { get; set; }
+    using System;
+    using System.Collections.Generic;
 
+    public class CustomErrorException : Exception
+    {
         public CustomErrorException(List<string> errorsMessages)
         {
             ErrorsMessages = new List<string>();
-            foreach (var errorsMessage in errorsMessages)
-            {
-                ErrorsMessages.Add(errorsMessage);
-            }
+            foreach (var errorsMessage in errorsMessages) ErrorsMessages.Add(errorsMessage);
         }
 
         protected CustomErrorException(string? message)
@@ -21,5 +16,7 @@ namespace ApiTrading.Exception
             ErrorsMessages = new List<string>();
             ErrorsMessages.Add(message);
         }
+
+        public List<string> ErrorsMessages { get; set; }
     }
 }

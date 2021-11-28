@@ -1,28 +1,29 @@
-using System;
-using System.IO;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Security.Authentication;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-using XtbLibrairie.commands;
-using XtbLibrairie.errors;
-using XtbLibrairie.utils;
 using JSONObject = Newtonsoft.Json.Linq.JObject;
 
 namespace XtbLibrairie.sync
 {
+    using System;
+    using System.IO;
+    using System.Net.Security;
+    using System.Net.Sockets;
+    using System.Security.Authentication;
+    using System.Security.Cryptography.X509Certificates;
+    using System.Threading;
+    using commands;
+    using errors;
+    using utils;
+
     public class SyncAPIConnector : Connector
     {
-        /// <summary>
-        ///     Last command timestamp (used to calculate interval between each command).
-        /// </summary>
-        private long lastCommandTimestamp;
-
         /// <summary>
         ///     Lock object used to synchronize access to read/write socket operations.
         /// </summary>
         private readonly object locker = new();
+
+        /// <summary>
+        ///     Last command timestamp (used to calculate interval between each command).
+        /// </summary>
+        private long lastCommandTimestamp;
 
         /// <summary>
         ///     Streaming API connector.
@@ -190,7 +191,7 @@ namespace XtbLibrairie.sync
                 var interval = currentTimestamp - lastCommandTimestamp;
 
                 // If interval between now and last command is less than minimum command time space - wait
-                if (interval < COMMAND_TIME_SPACE) Thread.Sleep((int) (COMMAND_TIME_SPACE - interval));
+                if (interval < COMMAND_TIME_SPACE) Thread.Sleep((int)(COMMAND_TIME_SPACE - interval));
 
                 WriteMessage(message);
 

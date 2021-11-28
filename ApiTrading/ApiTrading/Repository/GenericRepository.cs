@@ -62,7 +62,12 @@
         {
             _context.Set<T>().Update(entity);
         }
-        
-        
+
+        public async Task SaveChangeAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

@@ -15,23 +15,25 @@ namespace ApiTrading.Service.Strategy
     using Microsoft.AspNetCore.Identity;
     using Modele.DTO.Request;
     using Modele.DTO.Response;
+    using Repository.Signal;
+    using Repository.Utilisateurs;
 
     public class StrategyService : IStrategyService
     {
-        private readonly RoleManager<IdentityRole<int>> _roleManager;
-        private readonly UserManager<IdentityUser<int>> _userManager;
+       
 
         private readonly IApiHandler _apiHandler;
-        private readonly ApiTradingDatabaseContext _context;
+        private readonly IUserRepository _userRepository;
+        private readonly ISignalRepository _signalRepository;
 
-        public StrategyService(IApiHandler apiHandler, ApiTradingDatabaseContext apiDbContext,
-            RoleManager<IdentityRole<int>> roleManager, UserManager<IdentityUser<int>> userManager)
+        public StrategyService(IApiHandler apiHandler, IUserRepository userRepository, ISignalRepository signalRepository)
         {
             _apiHandler = apiHandler;
-            _context = apiDbContext;
-            _roleManager = roleManager;
-            _userManager = userManager;
+            _userRepository = userRepository;
+            _signalRepository = signalRepository;
         }
+
+        
 
         public async Task<BaseResponse<List<StrategyList>>> GetAllStrategy()
         {
@@ -80,6 +82,10 @@ namespace ApiTrading.Service.Strategy
             strategyInitialized.History = data2;
             if (user == null)
             {
+                if (string.IsNullOrEmpty(strategy))
+                {
+                    throw new StrategyNotGivenException("Le nom de la strategy est nécecssaire");
+                }
                 var dataSystem = await GetSignalOfSystem(strategyInitialized, symbol, timeframe);
                 signalResponse.Data = dataSystem;
             }
@@ -109,18 +115,15 @@ namespace ApiTrading.Service.Strategy
             signalInfoStrategy.Strategy = "";
             signalInfoStrategy.Signal = infoRequest.Signal;
             signalInfoStrategy.DateTime = infoRequest.DateTime;
-            await _context.SignalInfoStrategies.AddAsync(signalInfoStrategy);
+            await _signalRepository.SaveSignal(signalInfoStrategy);
 
             return new BaseResponse("Signal ajouter");
         }
 
         public async Task<BaseResponse<List<string>>> GetUsersGiverSignal()
         {
-            var systemUser = await _userManager.FindByNameAsync("System");
-            var data = _context.SignalInfoStrategies
-                .Where(x => x.User != systemUser)
-                .GroupBy(x=>x.User.UserName)
-                .Select(x=>x.First()).Select(x=>x.User.UserName).ToList();
+         
+            var data = await _signalRepository.GetAllGiverSignal();
 
             return new BaseResponse<List<string>>(data);
         }
@@ -138,8 +141,7 @@ namespace ApiTrading.Service.Strategy
         private async Task<List<SignalInfoStrategy>> GetSignalOfSystem(Strategy strategy, string symbol,
             string timeframe)
         {
-            var dataSignal = _context.SignalInfoStrategies.Where(x =>
-                x.Symbol == symbol && x.Timeframe == timeframe && x.Strategy == strategy.Description).ToList();
+            var dataSignal =await _signalRepository.GetSignalsOfSystem(strategy.Description, symbol, timeframe);
 
             var lastSignal = dataSignal.LastOrDefault();
             int? index = null;
@@ -148,34 +150,19 @@ namespace ApiTrading.Service.Strategy
                 index = strategy.History.Where(x => x.Date > lastSignal.DateTime).Select((candle, i) => i).First();
 
             var dataSignalsAnalyzed = await strategy.Run(index);
-            await SaveSignal(dataSignalsAnalyzed);
+            await  _signalRepository.SaveSignals(dataSignalsAnalyzed);
             dataSignal.AddRange(dataSignalsAnalyzed);
-
             return dataSignal.OrderByDescending(x => x.DateTime).ToList();
         }
 
         private async Task<List<SignalInfoStrategy>> GetSignalOfUser(string symbol, string timeframe, string userName)
         {
-            var user = await _userManager.FindByNameAsync(userName);
-
-
-            var dataSignal = _context.SignalInfoStrategies.Where(x => x.User == user).Where(x => x.Symbol == symbol)
-                .Where(x => x.Timeframe == timeframe).ToList();
-
-
+            var user = await _userRepository.FindByNameAsync(userName);
+            var dataSignal = await _signalRepository.GetSignalsOfUser(symbol, timeframe, userName);
             return dataSignal.OrderByDescending(x => x.DateTime).ToList();
         }
 
-        private async Task SaveSignal(List<SignalInfoStrategy> signals, IdentityUser<int> user = null)
-        {
-            if (user is null) user = await _userManager.FindByNameAsync("System");
-
-            Parallel.ForEach(signals, strategy => { strategy.User = user; });
-
-
-            await _context.SignalInfoStrategies.AddRangeAsync(signals);
-            await _context.SaveChangesAsync();
-        }
+        
 
         private Strategy GetStrategyType(string strategy, string symbol, string timeframe)
         {

@@ -15,6 +15,8 @@ namespace ApiTrading.DbContext
 
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
         public virtual DbSet<SignalInfoStrategy> SignalInfoStrategies { get; set; }
+        
+        public virtual DbSet<Subscription> Subscriptions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

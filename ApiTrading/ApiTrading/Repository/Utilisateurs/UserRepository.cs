@@ -29,6 +29,11 @@
             return await _userManager.FindByEmailAsync(email);
         }
 
+        public async Task<IdentityUser<int>> FindByNameAsync(string name)
+        {
+            return await _userManager.FindByNameAsync(name);
+        }
+
         public async Task<bool> CheckPasswordAsync(IdentityUser<int> user, string password)
         {
             return await _userManager.CheckPasswordAsync(user, password);

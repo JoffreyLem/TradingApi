@@ -24,6 +24,9 @@ namespace ApiTrading
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
     using Modele.DTO.Response;
+    using Repository.Signal;
+    using Repository.Token;
+    using Repository.Utilisateurs;
     using Service.ExternalAPIHandler;
     using Service.Mail;
     using Service.Strategy;
@@ -139,6 +142,9 @@ namespace ApiTrading
             services.AddScoped<IUtilisateurService, UtilisateurService>();
             services.AddScoped<IStrategyService, StrategyService>();
             services.AddSingleton<IApiHandler, XtbApiHandler>();
+            services.AddTransient<ISignalRepository, SignalRepository>();
+            services.AddTransient<ITokenRepository, TokenRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

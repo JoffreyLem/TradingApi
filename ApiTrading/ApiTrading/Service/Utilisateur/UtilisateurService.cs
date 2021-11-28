@@ -18,28 +18,28 @@ namespace ApiTrading.Service.Utilisateur
     using Modele;
     using Modele.DTO.Request;
     using Modele.DTO.Response;
+    using Repository.Token;
     using Repository.Utilisateurs;
 
     public class UtilisateurService : IUtilisateurService
     {
-        private readonly ApiTradingDatabaseContext _apiDbContext;
-
         private readonly JwtConfig _jwtConfig;
         private readonly IMail _mailService;
         private readonly IUserRepository _userRepository;
+        private readonly ITokenRepository _tokenRepository;
         private readonly TokenValidationParameters _tokenValidationParameters;
        
 
         public UtilisateurService(
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
-            ApiTradingDatabaseContext apiDbContext,
+           
             IMail mailService)
         {
           
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
-            _apiDbContext = apiDbContext;
+     
             _mailService = mailService;
         }
 
@@ -198,8 +198,8 @@ namespace ApiTrading.Service.Utilisateur
                 Token = RandomString(25) + Guid.NewGuid()
             };
 
-            await _apiDbContext.RefreshTokens.AddAsync(refreshToken);
-            await _apiDbContext.SaveChangesAsync();
+            await _tokenRepository.AddToken(refreshToken);
+           
 
             return new AutResult
             {

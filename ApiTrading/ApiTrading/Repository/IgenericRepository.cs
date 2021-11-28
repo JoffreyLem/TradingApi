@@ -17,7 +17,9 @@
 
         IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression);
         Task Update(T entity);
-        
-        
+
+        Task SaveChangeAsync();
+
+
     }
 }

@@ -10,6 +10,8 @@
 
         public Task<IdentityUser<int>> FindByEmailAsync(string email);
 
+        public Task<IdentityUser<int>> FindByNameAsync(string name);
+
         public Task<bool> CheckPasswordAsync(IdentityUser<int> user, string password);
 
         public Task<IdentityResult> UpdatePasswordAsync(IdentityUser<int> user, string oldpwd, string newpwd);

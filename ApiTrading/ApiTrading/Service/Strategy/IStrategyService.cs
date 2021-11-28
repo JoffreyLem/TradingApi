@@ -17,5 +17,11 @@ namespace ApiTrading.Service.Strategy
             string user = null);
 
         public Task<BaseResponse> PostSignal(SignalInfoRequest infoRequest, IdentityUser<int> user);
+
+        public Task<BaseResponse<List<string>>> GetUsersGiverSignal();
+
+        public Task<BaseResponse> SubscribeToSymbolInfo(string symbol);
+
+        public Task<BaseResponse> UnsubscribeToSymbolInfo(string symbol);
     }
 }

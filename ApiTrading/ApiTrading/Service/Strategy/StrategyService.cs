@@ -114,6 +114,27 @@ namespace ApiTrading.Service.Strategy
             return new BaseResponse("Signal ajouter");
         }
 
+        public async Task<BaseResponse<List<string>>> GetUsersGiverSignal()
+        {
+            var systemUser = await _userManager.FindByNameAsync("System");
+            var data = _context.SignalInfoStrategies
+                .Where(x => x.User != systemUser)
+                .GroupBy(x=>x.User.UserName)
+                .Select(x=>x.First()).Select(x=>x.User.UserName).ToList();
+
+            return new BaseResponse<List<string>>(data);
+        }
+
+        public async Task<BaseResponse> SubscribeToSymbolInfo(string symbol)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<BaseResponse> UnsubscribeToSymbolInfo(string symbol)
+        {
+            throw new NotImplementedException();
+        }
+
         private async Task<List<SignalInfoStrategy>> GetSignalOfSystem(Strategy strategy, string symbol,
             string timeframe)
         {

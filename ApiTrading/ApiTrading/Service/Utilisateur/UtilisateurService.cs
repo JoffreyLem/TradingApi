@@ -18,6 +18,7 @@ namespace ApiTrading.Service.Utilisateur
     using Modele;
     using Modele.DTO.Request;
     using Modele.DTO.Response;
+    using Repository.Utilisateurs;
 
     public class UtilisateurService : IUtilisateurService
     {
@@ -25,19 +26,17 @@ namespace ApiTrading.Service.Utilisateur
 
         private readonly JwtConfig _jwtConfig;
         private readonly IMail _mailService;
-        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private readonly IUserRepository _userRepository;
         private readonly TokenValidationParameters _tokenValidationParameters;
-        private readonly UserManager<IdentityUser<int>> _userManager;
+       
 
-        public UtilisateurService(UserManager<IdentityUser<int>> userManager,
-            RoleManager<IdentityRole<int>> roleManager,
+        public UtilisateurService(
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
             ApiTradingDatabaseContext apiDbContext,
             IMail mailService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
+          
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
             _apiDbContext = apiDbContext;
@@ -46,33 +45,17 @@ namespace ApiTrading.Service.Utilisateur
 
         public async Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user)
         {
-            var existingUser = await _userManager.FindByEmailAsync(user.Email);
+            var existingUser = await _userRepository.FindByEmailAsync(user.Email);
             if (existingUser != null)
                 throw new AlreadyExistException("L'email existe déja");
 
             var newUser = new IdentityUser<int> { Email = user.Email, UserName = user.Email };
 
-            var isCreated = await _userManager.CreateAsync(newUser, user.Password);
+            var isCreated = await _userRepository.CreateAsync(newUser, user.Password);
 
             if (isCreated.Succeeded)
             {
-                if (!_roleManager.RoleExistsAsync("User").Result)
-                {
-                    var identityRole = new IdentityRole<int>();
-                    identityRole.Name = "User";
-                    var roleResult = _roleManager.CreateAsync(identityRole).Result;
-                    if (!roleResult.Succeeded) throw new AppException("Création du role imposible");
-                }
-
-
-                var claim = new List<Claim>();
-                claim.Add(new Claim(ClaimTypes.NameIdentifier, newUser.Id.ToString()));
-                claim.Add(new Claim(ClaimTypes.Name, newUser.UserName));
-
-                await _userManager.AddClaimsAsync(newUser, claim);
-
-                await _userManager.AddToRoleAsync(newUser, "User");
-                var userretrived = await _userManager.FindByEmailAsync(user.Email);
+               
                 var jwtToken = await GenerateJwtToken(newUser);
                 var message = new StringBuilder();
                 message.Append("Inscription réussi\n");
@@ -81,7 +64,7 @@ namespace ApiTrading.Service.Utilisateur
                 var registration = new RegistrationResponse
                 {
                     Token = jwtToken.Token,
-                    Id = userretrived.Id
+                    Id = newUser.Id
                 };
 
                 return new BaseResponse<RegistrationResponse>(registration);
@@ -93,11 +76,11 @@ namespace ApiTrading.Service.Utilisateur
 
         public async Task<BaseResponse<RegistrationResponse>> Login(UserLoginRequest user)
         {
-            var existingUser = await _userManager.FindByEmailAsync(user.Login);
+            var existingUser = await _userRepository.FindByEmailAsync(user.Login);
 
             if (existingUser != null)
             {
-                var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
+                var isCorrect = await _userRepository.CheckPasswordAsync(existingUser, user.Password);
 
                 if (isCorrect)
                 {
@@ -127,7 +110,7 @@ namespace ApiTrading.Service.Utilisateur
         {
             if (!string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword))
             {
-                var checkPasswd = await _userManager.CheckPasswordAsync(userCurrent, user.OldPassword);
+                var checkPasswd = await _userRepository.CheckPasswordAsync(userCurrent, user.OldPassword);
 
                 if (!checkPasswd)
                     throw new PasswordUpdateException("Password incorrect");
@@ -138,7 +121,7 @@ namespace ApiTrading.Service.Utilisateur
                     throw new PasswordUpdateException("Le nouveau mot de passe ne peut pas être vide");
 
 
-                var updatePwd = await _userManager.ChangePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
+                var updatePwd = await _userRepository.UpdatePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
 
                 if (!updatePwd.Succeeded)
                 {
@@ -152,19 +135,7 @@ namespace ApiTrading.Service.Utilisateur
                 throw new PasswordUpdateException("Veuillez indiquer l'ancien et le nouveau mot de passe");
             }
 
-            var claim = await _userManager.GetClaimsAsync(userCurrent);
-            userCurrent.Email = user.Email;
-            userCurrent.UserName = user.Email;
-            var update = await _userManager.UpdateAsync(userCurrent);
-            if (!update.Succeeded)
-            {
-                var messageErrorList = update.Errors.Select(x => x.Description).ToList();
-                throw new AppException(messageErrorList);
-            }
-
-            var claimToUpdate = claim.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
-            var newClaim = new Claim(ClaimTypes.NameIdentifier, user.Email);
-            var test = await _userManager.ReplaceClaimAsync(userCurrent, claimToUpdate, newClaim);
+        
 
 
             var message = new StringBuilder();
@@ -179,7 +150,7 @@ namespace ApiTrading.Service.Utilisateur
 
         public async Task<BaseResponse> Delete(IdentityUser<int> userCurrent)
         {
-            var deleteUser = await _userManager.DeleteAsync(userCurrent);
+            var deleteUser = await _userRepository.DeleteUser(userCurrent);
 
             if (deleteUser.Succeeded)
             {

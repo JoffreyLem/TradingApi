@@ -39,8 +39,8 @@
         /// </summary>
         /// <param name="symbol"></param>
         /// <param name="timeframe"></param>
-        /// <param name="start"></param>
-        /// <param name="end"></param>
+        /// <param name="start">Récupere les données depuis cette date</param>
+        /// <param name="end">Limite la récupération à cette date, nécessite le parametre start si utilisée</param>
         /// <returns></returns>
          [ProducesResponseType(typeof(BaseResponse<CandleListResponse>),200)]
          [HttpGet("GetChart")]

@@ -13,8 +13,9 @@ namespace ApiTrading.Service.Strategy
 
         public Task<BaseResponse<List<string>>> GetAllTimeframe();
 
-        public Task<BaseResponse<List<SignalInfoStrategy>>> GetSignals(string strategy, string symbol, string timeframe,IdentityUser<int> user = null);
-        
-      
+        public Task<BaseResponse<List<SignalInfoStrategy>>> GetSignals(string strategy, string symbol, string timeframe,string user = null);
+
+
+
     }
 }

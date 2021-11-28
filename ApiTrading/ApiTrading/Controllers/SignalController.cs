@@ -32,35 +32,43 @@ namespace ApiTrading.Controllers
             _strategyService = strategyService;
         }
         
-        [HttpGet]
-        [Route("Strategy")]
+        /// <summary>
+        /// Récupération de toutes les stratégies disponible dans le système
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Strategy")]
         [ProducesResponseType(typeof(StrategyResponse),200)]
         public async Task<IActionResult> GetAllStrategy()
         {
             return Ok(await _strategyService.GetAllStrategy());
         }
 
-        [HttpGet]
-        [Route("Timeframes")]
-        [ProducesResponseType(typeof(TimeframeResponse),200)]
-        public async Task<IActionResult> Timeframes()
-        {
-            return Ok(await _strategyService.GetAllTimeframe());
-        }
-
+        /// <summary>
+        /// Récupération des signaux de l'utilisateur si indiquer sinon du systeme
+        /// </summary>
+        /// <param name="strategy"></param>
+        /// <param name="symbol"></param>
+        /// <param name="timeframe"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         [HttpGet]
         [TypeFilter(typeof(XtbCheckConnectorFilter))]
         [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
-        public async Task<IActionResult> GetSignals([FromQuery][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
+        public async Task<IActionResult> GetSignals(
+            [FromQuery][Required] string strategy,
+            [FromQuery][Required] string symbol,
+            [FromQuery][Required] string timeframe,
+            [FromQuery]string user)
         {
-            return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe));
+           
+            return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe,user));
         }
         
         [HttpPost]
         [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
         public async Task<IActionResult> PostSignal([FromQuery][Required] string strategy,[FromQuery][Required] string symbol,[FromQuery][Required] string timeframe)
         {
-            return Ok(await _strategyService.GetSignals(strategy,symbol,timeframe));
+           return Ok();
         }
     }
 }

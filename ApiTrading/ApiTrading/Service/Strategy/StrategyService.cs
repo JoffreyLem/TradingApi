@@ -103,6 +103,11 @@ namespace ApiTrading.Service.Strategy
 
         public async Task<BaseResponse> PostSignal(SignalInfoRequest infoRequest, IdentityUser<int> user)
         {
+            if (!_apiHandler.AllSymbolList.Any(x=>x.Symbol==infoRequest.Symbol))
+            {
+                throw new NotFoundException("Le symbol n'existe pas");
+            }
+            
             var signalInfoStrategy = new SignalInfoStrategy();
             signalInfoStrategy.Symbol = infoRequest.Symbol;
             signalInfoStrategy.Timeframe = infoRequest.Timeframe;
@@ -123,17 +128,18 @@ namespace ApiTrading.Service.Strategy
         {
             
             List<SignalInfoStrategy> dataSignal = _context.SignalInfoStrategies.Where(x=>x.Symbol == symbol && x.Timeframe== timeframe && x.Strategy==strategy.Description).ToList();
-
+            
             var lastSignal = dataSignal.LastOrDefault();
-
+            int? index = null; 
+            
             if (lastSignal != null)
             {
-                strategy.History = strategy.History.Where(x => x.Date > lastSignal.DateTime).ToList();
+                index= strategy.History.Where(x => x.Date > lastSignal.DateTime).Select(((candle, i) =>i )).First();
             }
 
-            var dataSignalsAnalyzed =await strategy.Run();
+            var dataSignalsAnalyzed =await strategy.Run(index);
             await SaveSignal(dataSignalsAnalyzed);
-            dataSignal.ToList().AddRange(dataSignalsAnalyzed);
+            dataSignal.AddRange(dataSignalsAnalyzed);
             
             return dataSignal.OrderByDescending(x => x.DateTime).ToList();
 
@@ -157,13 +163,16 @@ namespace ApiTrading.Service.Strategy
                 user = await _userManager.FindByNameAsync("System");
             }
 
-            foreach (var signalInfoStrategy in signals)
+            Parallel.ForEach(signals, strategy =>
             {
-                signalInfoStrategy.User = user;
+                strategy.User = user;
+            });
 
-               await _context.SignalInfoStrategies.AddAsync(signalInfoStrategy);
-               await _context.SaveChangesAsync();
-            }
+
+            await _context.SignalInfoStrategies.AddRangeAsync(signals);
+            await _context.SaveChangesAsync();
+
+
         }
 
         private Strategy GetStrategyType(string strategy, string symbol, string timeframe)

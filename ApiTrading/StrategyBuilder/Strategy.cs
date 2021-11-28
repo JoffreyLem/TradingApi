@@ -37,7 +37,7 @@ namespace Strategy
             }
         }
 
-        public abstract Task<List<SignalInfoStrategy>> Run();
+        public abstract Task<List<SignalInfoStrategy>> Run(int? index);
 
 
      

@@ -70,7 +70,7 @@ namespace ApiTrading.Controllers
         /// <param name="infoRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(BaseResponse<SignalResponse>),200)]
+        [ProducesResponseType(typeof(BaseResponse),200)]
         public async Task<IActionResult> PostSignal([FromBody] SignalInfoRequest infoRequest)
         {
             var user = HttpContext.GetCurrentUser();

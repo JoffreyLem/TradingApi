@@ -37,11 +37,11 @@ namespace ScalpingStrategy
 
   
 
-        public override async Task<List<SignalInfoStrategy>> Run()
+        public override async Task<List<SignalInfoStrategy>> Run(int? index)
         {
             List<SignalInfoStrategy> signalInfos = new List<SignalInfoStrategy>();
-            
-            for (var i = 0; i < History.Count; i++)
+            index = index ?? 0;
+            for (var i = index.Value; i < History.Count; i++)
             {
                 if (i > 1)
                 {

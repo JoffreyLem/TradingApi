@@ -5,6 +5,7 @@ namespace ApiTrading.Service.Strategy
     using System.ComponentModel;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
     using System.Threading.Tasks;
     using Exception;
     using ExternalAPIHandler;
@@ -12,6 +13,7 @@ namespace ApiTrading.Service.Strategy
     using global::Modele;
     using global::Strategy;
     using global::StrategyManager;
+    using Mail;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Modele;
@@ -26,14 +28,15 @@ namespace ApiTrading.Service.Strategy
         private readonly ISignalRepository _signalRepository;
         private readonly IUserRepository _userRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
+        private readonly IMail _mailService;
         public StrategyService(IApiHandler apiHandler, IUserRepository userRepository,
-            ISignalRepository signalRepository, IHttpContextAccessor httpContextAccessor)
+            ISignalRepository signalRepository, IHttpContextAccessor httpContextAccessor, IMail mailService)
         {
             _apiHandler = apiHandler;
             _userRepository = userRepository;
             _signalRepository = signalRepository;
             _httpContextAccessor = httpContextAccessor;
+            _mailService = mailService;
         }
 
 
@@ -104,19 +107,19 @@ namespace ApiTrading.Service.Strategy
         {
             if (!_apiHandler.AllSymbolList.Any(x => x.Symbol == infoRequest.Symbol))
                 throw new NotFoundException("Le symbol n'existe pas");
-
+            var user = _httpContextAccessor.HttpContext.GetCurrentUser();
             var signalInfoStrategy = new SignalInfoStrategy();
             signalInfoStrategy.Symbol = infoRequest.Symbol;
             signalInfoStrategy.Timeframe = infoRequest.Timeframe;
             signalInfoStrategy.EntryLevel = infoRequest.EntryLevel;
             signalInfoStrategy.StopLoss = infoRequest.StopLoss;
             signalInfoStrategy.TakeProfit = infoRequest.TakeProfit;
-            signalInfoStrategy.User = _httpContextAccessor.HttpContext.GetCurrentUser();
+            signalInfoStrategy.User = user;
             signalInfoStrategy.Strategy = "";
             signalInfoStrategy.Signal = infoRequest.Signal;
             signalInfoStrategy.DateTime = infoRequest.DateTime;
             await _signalRepository.SaveSignal(signalInfoStrategy);
-
+            await SendMailSubscription(infoRequest.Symbol, user.UserName);
             return new BaseResponse("Signal ajouter");
         }
 
@@ -175,6 +178,23 @@ namespace ApiTrading.Service.Strategy
             await _signalRepository.SaveSignals(dataSignalsAnalyzed);
             dataSignal.AddRange(dataSignalsAnalyzed);
             return dataSignal.OrderByDescending(x => x.DateTime).ToList();
+        }
+
+        private async Task SendMailSubscription(string symbol, string sender)
+        {
+            var subscription = await _signalRepository.GetSubscriptionsOfSymbol(symbol);
+            var message = new StringBuilder();
+            message.Append("Nouveau message disponible !\n");
+          
+            foreach (var sub in subscription)
+            {
+                message.Append($"Un nouveau signal sur {symbol} de {sender}");
+                await _mailService.Send(sub.User.Email, $"[{symbol}] Nouveau signal disponible", message.ToString());
+            }
+            
+          
+       
+            
         }
 
         private async Task<List<SignalInfoStrategy>> GetSignalOfUser(string symbol, string timeframe, string userName)

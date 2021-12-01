@@ -20,5 +20,7 @@
         public Task UnsubscribeToSignal(IdentityUser<int> user, string symbol);
 
         public Task<List<Subscription>> GetCurrentSignalSubscription(IdentityUser<int> user);
+
+        public  Task<List<Subscription>> GetSubscriptionsOfSymbol(string symbol);
     }
 }

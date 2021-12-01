@@ -61,6 +61,11 @@
         {
             return Context.Subscriptions.Where(x => x.User == user).ToList();
         }
+        
+        public async Task<List<Subscription>> GetSubscriptionsOfSymbol(string symbol)
+        {
+            return Context.Subscriptions.Where(x => x.Symbol == symbol).ToList();
+        }
 
         public async Task SaveSignals(List<SignalInfoStrategy> signals)
         {

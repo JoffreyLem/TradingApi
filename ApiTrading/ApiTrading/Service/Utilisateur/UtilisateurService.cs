@@ -35,13 +35,15 @@ namespace ApiTrading.Service.Utilisateur
         public UtilisateurService(
             IOptionsMonitor<JwtConfig> optionsMonitor,
             TokenValidationParameters tokenValidationParameters,
-            IMail mailService, IHttpContextAccessor httpContextAccessor)
+            IMail mailService, IHttpContextAccessor httpContextAccessor, IUserRepository userRepository, ITokenRepository tokenRepository)
         {
             _jwtConfig = optionsMonitor.CurrentValue;
             _tokenValidationParameters = tokenValidationParameters;
 
             _mailService = mailService;
             _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
+            _tokenRepository = tokenRepository;
         }
 
         public async Task<BaseResponse<RegistrationResponse>> Register(UserRegistrationRequestDto user)
@@ -122,6 +124,9 @@ namespace ApiTrading.Service.Utilisateur
 
         public async Task<BaseResponse> Update(UserUpdateRequest user)
         {
+            bool updatePasswd = false;
+            bool updateEmail = false;
+            bool updateUsername = false;
             var userCurrent = _httpContextAccessor.HttpContext.GetCurrentUser();
             if (!string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword))
             {
@@ -135,15 +140,8 @@ namespace ApiTrading.Service.Utilisateur
                 if (string.IsNullOrWhiteSpace(user.NewPassword))
                     throw new UpdateException("Le nouveau mot de passe ne peut pas être vide");
 
+                updatePasswd = true;
 
-                var updatePwd =
-                    await _userRepository.UpdatePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
-
-                if (!updatePwd.Succeeded)
-                {
-                    var messageErrorList = updatePwd.Errors.Select(x => x.Description).ToList();
-                    throw new AppException(messageErrorList);
-                }
             }
             else if (string.IsNullOrEmpty(user.OldPassword) && !string.IsNullOrEmpty(user.NewPassword) ||
                      !string.IsNullOrEmpty(user.OldPassword) && string.IsNullOrEmpty(user.NewPassword))
@@ -162,7 +160,7 @@ namespace ApiTrading.Service.Utilisateur
 
                 userCurrent.Email = user.Email;
 
-              
+                updateEmail = true;
 
             }
             
@@ -174,16 +172,38 @@ namespace ApiTrading.Service.Utilisateur
                 {
                     throw new AlreadyExistException("L'username existe déjà");
                 }
+
+                updateUsername = true;
                 
                 userCurrent.UserName = user.UserName;
             }
-            
-            var test2 = await _userRepository.UpdateUser(userCurrent);
 
-            if (!test2.Succeeded)
+            if (updateEmail || updateUsername)
             {
-                throw new UpdateException("Erreur de mise à jour de ");
+                var test2 = await _userRepository.UpdateUser(userCurrent);
+
+                if (!test2.Succeeded)
+                {
+                    throw new UpdateException("Erreur de mise à jour de ");
+                }
             }
+            
+           
+
+            if (updatePasswd)
+            {
+                var updatePwd =
+                    await _userRepository.UpdatePasswordAsync(userCurrent, user.OldPassword, user.NewPassword);
+
+                if (!updatePwd.Succeeded)
+                {
+                    var messageErrorList = updatePwd.Errors.Select(x => x.Description).ToList();
+                    throw new AppException(messageErrorList);
+                }
+            }
+            
+            
+           
 
 
             var message = new StringBuilder();

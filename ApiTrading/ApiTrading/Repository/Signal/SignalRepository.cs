@@ -18,12 +18,14 @@
         public async Task SaveSignal(SignalInfoStrategy signal)
         {
             await Context.SignalInfoStrategies.AddAsync(signal);
+            await SaveChangeAsync();
         }
 
         public async Task<List<string>> GetAllGiverSignal()
         {
-            return Context.SignalInfoStrategies.Where(x => x.User.Id != 1).GroupBy(x => x.User.UserName)
-                .Select(x => x.First()).Select(x => x.User.UserName).ToList();
+            return Context.SignalInfoStrategies.Where(x => x.User.Id != 1).Select(x => x.User).ToList()
+                .GroupBy(x=>x.UserName).Select(x=>x.Key).ToList();
+     
         }
 
         public async Task SubscribeToSignal(IdentityUser<int> user, string symbol)
@@ -35,9 +37,10 @@
             
             if (selected == null)
             {
-                Context.Subscriptions.Remove(selected);
+                await Context.Subscriptions.AddAsync(subscription);
             }
-            await Context.Subscriptions.AddAsync(subscription);
+          
+            await SaveChangeAsync();
 
         }
 
@@ -45,7 +48,12 @@
         {
             var selected = Context.Subscriptions.FirstOrDefault(x => x.User == user && x.Symbol == symbol);
 
-           
+            if (selected != null)
+            {
+                Context.Subscriptions.Remove(selected);
+            }
+          
+            await SaveChangeAsync();
 
         }
 

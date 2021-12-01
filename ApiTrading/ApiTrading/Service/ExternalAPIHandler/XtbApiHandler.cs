@@ -16,6 +16,11 @@ namespace APIhandler
 
     public class XtbApiHandler : IApiHandler
     {
+        public XtbApiHandler()
+        {
+            GetAllSymbol();
+        }
+        
         private readonly Server serverData = Servers.DEMO;
         private string appId = "";
         private string appName = "RobotData <DEMO>";

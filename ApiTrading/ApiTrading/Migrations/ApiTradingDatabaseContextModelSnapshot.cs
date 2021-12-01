@@ -51,6 +51,28 @@ namespace ApiTrading.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("ApiTrading.Modele.Subscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastSignalInfoSend")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Symbol")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Subscriptions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -367,6 +389,15 @@ namespace ApiTrading.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ApiTrading.Modele.Subscription", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<int>", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

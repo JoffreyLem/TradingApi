@@ -127,9 +127,18 @@ namespace ApiTrading.Service.Strategy
             return new BaseResponse<List<string>>(data);
         }
 
-        public async Task<BaseResponse> SubscribeToSymbolInfo(string symbol)
+        public async Task<BaseResponse> SubscribeToSymbolInfo(string modelUser, string symbol)
         {
-            var user = _httpContextAccessor.HttpContext.GetCurrentUser();
+            var user = await _userRepository.FindByNameAsync(modelUser);
+            if (user is null)
+            {
+                throw new NotFoundException("L'utilisateur n'existe pas");
+            }
+
+            if (!_apiHandler.AllSymbolList.Any(x => x.Symbol == symbol))
+            {
+                throw new NotFoundException("Le symbole n'existe pas");
+            }
             await _signalRepository.SubscribeToSignal(user, symbol);
             return new BaseResponse("Subscription ok");
         }
@@ -143,11 +152,12 @@ namespace ApiTrading.Service.Strategy
 
       
 
-        public async Task<BaseResponse<List<Subscription>>> GetCurrentSignalSubscription()
+        public async Task<BaseResponse<List<SubscriptionResponse>>> GetCurrentSignalSubscription()
         {
             var user = _httpContextAccessor.HttpContext.GetCurrentUser();
             var data = await _signalRepository.GetCurrentSignalSubscription(user);
-            return new BaseResponse<List<Subscription>>(data);
+            var rsp = data.Select(x => new SubscriptionResponse(x) { }).ToList();
+            return new BaseResponse<List<SubscriptionResponse>>(rsp);
         }
 
         private async Task<List<SignalInfoStrategy>> GetSignalOfSystem(Strategy strategy, string symbol,

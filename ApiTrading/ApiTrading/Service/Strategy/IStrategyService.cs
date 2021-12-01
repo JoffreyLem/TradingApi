@@ -21,12 +21,12 @@ namespace ApiTrading.Service.Strategy
 
         public Task<BaseResponse<List<string>>> GetUsersGiverSignal();
 
-        public Task<BaseResponse> SubscribeToSymbolInfo(string symbol);
+        public Task<BaseResponse> SubscribeToSymbolInfo(string modelUser, string symbol);
 
         public Task<BaseResponse> UnsubscribeToSymbolInfo(string symbol);
         
    
 
-        public Task<BaseResponse<List<Subscription>>> GetCurrentSignalSubscription();
+        public Task<BaseResponse<List<SubscriptionResponse>>> GetCurrentSignalSubscription();
     }
 }

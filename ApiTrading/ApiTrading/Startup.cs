@@ -7,11 +7,14 @@ namespace ApiTrading
     using System.Reflection;
     using System.Text;
     using System.Text.Json.Serialization;
+    using System.Threading.Tasks;
     using APIhandler;
     using Configuration;
     using DbContext;
     using Helper;
+    using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -124,6 +127,34 @@ namespace ApiTrading
 
                     jwt.Events = new JwtBearerEvents
                     {
+                        OnMessageReceived = context =>
+                        {
+                            var allowAnonymous = context.HttpContext.GetEndpoint()
+                                ?.Metadata.GetMetadata<IAllowAnonymous>();
+
+                            if (allowAnonymous != null)
+                            {
+                                return Task.CompletedTask;
+                            }
+                            
+                            string authorization = context.Request.Headers["Authorization"];
+                            if (string.IsNullOrEmpty(authorization))
+                            {
+                                context.NoResult();
+                                context.Response.StatusCode = 403;
+                                var errormodel = new BaseResponse("Access denied");
+                                return context.Response.WriteAsJsonAsync(errormodel);
+                            }
+
+                            if (authorization.StartsWith("Token ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                context.Token = authorization.Substring("Token ".Length).Trim();
+                            }
+
+
+                            return Task.CompletedTask;
+                        },
+                       
                         OnAuthenticationFailed = ctx =>
                         {
                             ctx.Response.StatusCode = 401;

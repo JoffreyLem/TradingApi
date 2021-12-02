@@ -1,9 +1,9 @@
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+
 namespace ApiTrading.Modele
 {
-    using System;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using Microsoft.AspNetCore.Identity;
-
     public class RefreshToken
 
     {

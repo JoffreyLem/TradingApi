@@ -1,8 +1,6 @@
 ﻿namespace Strategy.Exception
 {
-    using System;
-
-    public class InvalidStopLossException : Exception
+    public class InvalidStopLossException : System.Exception
     {
         public InvalidStopLossException(string message) : base(message)
         {

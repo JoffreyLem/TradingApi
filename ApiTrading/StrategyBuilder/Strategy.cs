@@ -1,12 +1,12 @@
-﻿namespace Strategy
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading.Tasks;
-    using Indicator;
-    using Modele;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Indicator;
+using Modele;
 
+namespace Strategy
+{
     public abstract class Strategy
     {
         private List<Candle> _history;

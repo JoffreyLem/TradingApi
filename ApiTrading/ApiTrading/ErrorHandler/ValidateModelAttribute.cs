@@ -1,9 +1,9 @@
+using System;
+using ApiTrading.Exception;
+using Microsoft.AspNetCore.Mvc.Filters;
+
 namespace ApiTrading
 {
-    using System;
-    using Exception;
-    using Microsoft.AspNetCore.Mvc.Filters;
-
     public class ValidateModelAttribute : Attribute, IActionFilter
     {
         public void OnActionExecuting(ActionExecutingContext context)

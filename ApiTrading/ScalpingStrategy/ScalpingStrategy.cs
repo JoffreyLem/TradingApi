@@ -1,12 +1,12 @@
-﻿namespace ScalpingStrategy
-{
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Indicator.Indicator;
-    using Modele;
-    using Strategy;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Indicator.Indicator;
+using Modele;
+using Utility;
 
-    public class ScalpingStrategy : Strategy
+namespace ScalpingStrategy
+{
+    public class ScalpingStrategy : Strategy.Strategy
     {
         public ScalpingStrategy(string symbol, string timeframe) : base(symbol)
         {
@@ -36,16 +36,18 @@
             for (var i = index.Value; i < History.Count; i++)
                 if (i > 1)
                 {
+                    var datatest = History[i].Date;
                     var cciSignal = CciIndicator.GetSignal(3);
                     var sarSignal = SarIndicator.GetSignal(1);
                     var globalSignal = cciSignal == sarSignal;
 
-                    if (globalSignal)
+                    if (sarSignal != Signal.None)
                     {
                         var signalInfo = new SignalInfoStrategy(Timeframe, Symbol);
-                        signalInfo.Signal = sarSignal;
+                        signalInfo.Signal = sarSignal.GetEnumDescription();
                         signalInfo.EntryLevel = History[i].Close;
                         signalInfo.DateTime = History[i].Date;
+                        signalInfo.StopLoss = SarIndicator[i].Sar;
                         signalInfos.Add(signalInfo);
                     }
                 }

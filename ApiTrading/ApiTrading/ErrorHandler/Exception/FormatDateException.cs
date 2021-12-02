@@ -1,7 +1,7 @@
-﻿namespace ApiTrading.Exception
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace ApiTrading.Exception
+{
     public class FormatDateException : CustomErrorException
     {
         public FormatDateException(List<string> errorsMessages) : base(errorsMessages)

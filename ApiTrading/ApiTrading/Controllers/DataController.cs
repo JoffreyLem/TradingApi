@@ -1,15 +1,15 @@
-﻿namespace ApiTrading.Controllers
-{
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading.Tasks;
-    using Filter;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Modele.DTO.Response;
-    using Service.ExternalAPIHandler;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using ApiTrading.Filter;
+using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.ExternalAPIHandler;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
+namespace ApiTrading.Controllers
+{
     [Consumes("application/json")]
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]
@@ -40,7 +40,7 @@
         /// <param name="end">Limite la récupération à cette date, nécessite le parametre start si utilisée</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(BaseResponse<CandleListResponse>), 200)]
-        [HttpGet("GetChart")]
+        [HttpGet("Chart")]
         public async Task<IActionResult> GetSymbolChart(
             [Required] [FromQuery] string symbol,
             [Required] [FromQuery] string timeframe,
@@ -58,7 +58,7 @@
         /// </summary>
         /// <returns></returns>
         [ProducesResponseType(typeof(BaseResponse<List<SymbolResponse>>), 200)]
-        [HttpGet("GetSymbols")]
+        [HttpGet("Symbols")]
         public async Task<IActionResult> GetAllSymbols()
         {
             return Ok(await _apiHandler.GetAllSymbol());

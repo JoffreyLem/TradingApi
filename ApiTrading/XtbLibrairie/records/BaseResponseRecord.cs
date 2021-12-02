@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public interface BaseResponseRecord
     {

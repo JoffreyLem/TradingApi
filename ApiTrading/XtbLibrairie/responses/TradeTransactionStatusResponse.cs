@@ -1,7 +1,9 @@
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.codes;
+
 namespace XtbLibrairie.responses
 {
-    using codes;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class TradeTransactionStatusResponse : BaseResponse
     {
@@ -14,13 +16,13 @@ namespace XtbLibrairie.responses
 
         public TradeTransactionStatusResponse(string body) : base(body)
         {
-            var ob = (JSONObject)ReturnData;
-            ask = (double?)ob["ask"];
-            bid = (double?)ob["bid"];
-            customComment = (string)ob["customComment"];
-            message = (string)ob["message"];
-            order = (long?)ob["order"];
-            requestStatus = new REQUEST_STATUS((long)ob["requestStatus"]);
+            var ob = (JSONObject) ReturnData;
+            ask = (double?) ob["ask"];
+            bid = (double?) ob["bid"];
+            customComment = (string) ob["customComment"];
+            message = (string) ob["message"];
+            order = (long?) ob["order"];
+            requestStatus = new REQUEST_STATUS((long) ob["requestStatus"]);
         }
 
         public virtual double? Ask

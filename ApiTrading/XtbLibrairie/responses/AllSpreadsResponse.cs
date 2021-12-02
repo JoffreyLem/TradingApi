@@ -1,9 +1,11 @@
-﻿namespace XtbLibrairie.responses
+﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.records;
+
+namespace XtbLibrairie.responses
 {
-    using System.Collections.Generic;
-    using records;
-    using JSONArray = Newtonsoft.Json.Linq.JArray;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONArray = JArray;
+    using JSONObject = JObject;
 
     public class AllSpreadsResponse : BaseResponse
     {
@@ -11,7 +13,7 @@
 
         public AllSpreadsResponse(string body) : base(body)
         {
-            var symbolRecords = (JSONArray)ReturnData;
+            var symbolRecords = (JSONArray) ReturnData;
             foreach (JSONObject e in symbolRecords)
             {
                 var spreadRecord = new SpreadRecord();

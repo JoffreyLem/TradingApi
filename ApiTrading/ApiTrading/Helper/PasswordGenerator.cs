@@ -1,10 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
+
 namespace ApiTrading.Helper
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.AspNetCore.Identity;
-
     public static class PasswordGenerator
     {
         /// <summary>

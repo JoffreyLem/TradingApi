@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.commands
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class CommissionDefCommand : BaseCommand
     {
@@ -12,7 +14,7 @@ namespace XtbLibrairie.commands
 
         public override string[] RequiredArguments
         {
-            get { return new[] { "symbol", "volume" }; }
+            get { return new[] {"symbol", "volume"}; }
         }
 
         public override string ToJSONString()

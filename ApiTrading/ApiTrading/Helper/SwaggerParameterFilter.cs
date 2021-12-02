@@ -1,13 +1,13 @@
-﻿namespace ApiTrading.Helper
-{
-    using System;
-    using System.Linq;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.OpenApi.Any;
-    using Microsoft.OpenApi.Models;
-    using Service.Strategy;
-    using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using System;
+using System.Linq;
+using ApiTrading.Service.Strategy;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
+namespace ApiTrading.Helper
+{
     public class SwaggerParameterFilter : IParameterFilter
 
     {

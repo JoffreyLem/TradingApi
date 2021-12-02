@@ -1,8 +1,10 @@
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.records
 {
-    using System.Collections.Generic;
-    using JSONArray = Newtonsoft.Json.Linq.JArray;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONArray = JArray;
+    using JSONObject = JObject;
 
     public class StepRuleRecord : BaseResponseRecord
     {
@@ -12,13 +14,13 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Id = (int)value["id"];
-            Name = (string)value["name"];
+            Id = (int) value["id"];
+            Name = (string) value["name"];
 
             Steps = new LinkedList<StepRecord>();
             if (value["steps"] != null)
             {
-                var jsonarray = (JSONArray)value["steps"];
+                var jsonarray = (JSONArray) value["steps"];
                 foreach (JSONObject i in jsonarray)
                 {
                     var rec = new StepRecord();

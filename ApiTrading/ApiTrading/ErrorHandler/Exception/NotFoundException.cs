@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+
 namespace ApiTrading.Exception
 {
-    using System.Collections.Generic;
-
     public class NotFoundException : CustomErrorException
     {
         public NotFoundException(string? message) : base(message)

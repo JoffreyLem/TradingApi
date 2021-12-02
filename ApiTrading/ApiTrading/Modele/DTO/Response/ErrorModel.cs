@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using ApiTrading.Helper;
+using Newtonsoft.Json;
+
 namespace ApiTrading
 {
-    using System.Collections.Generic;
-    using Helper;
-    using Newtonsoft.Json;
-
     public class ErrorModel
     {
         public ErrorModel(int statusCode, List<string> errorMessage)

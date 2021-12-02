@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace ApiTrading.Helper
 {
-    using Microsoft.AspNetCore.Identity;
-
     public class IdentityDataInitializer
     {
         public static void SeedData

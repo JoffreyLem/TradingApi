@@ -1,6 +1,8 @@
-﻿namespace XtbLibrairie.records
+﻿using Newtonsoft.Json.Linq;
+
+namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class SpreadRecord : BaseResponseRecord
     {
@@ -14,10 +16,10 @@
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Symbol = (string)value["symbol"];
-            Precision = (long?)value["precision"];
-            Value = (long?)value["value"];
-            QuoteId = (long?)value["quoteId"];
+            Symbol = (string) value["symbol"];
+            Precision = (long?) value["precision"];
+            Value = (long?) value["value"];
+            QuoteId = (long?) value["quoteId"];
         }
     }
 }

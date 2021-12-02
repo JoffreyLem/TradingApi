@@ -1,8 +1,8 @@
-﻿namespace ApiTrading.Repository.Utilisateurs
-{
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Identity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
+namespace ApiTrading.Repository.Utilisateurs
+{
     public interface IUserRepository : IGenericRepository<IdentityUser<int>>
     {
         public Task<IdentityResult> CreateAsync(IdentityUser<int> user, string password, string role = "User");

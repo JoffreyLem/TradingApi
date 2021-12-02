@@ -1,8 +1,8 @@
-﻿namespace Modele
-{
-    using System;
-    using Skender.Stock.Indicators;
+﻿using System;
+using Skender.Stock.Indicators;
 
+namespace Modele
+{
     public class Candle : IQuote
     {
         private decimal close;
@@ -37,13 +37,13 @@
         public Candle(double? open, double? high, double? low, double? close, DateTime date, double? volume,
             double? symbolTickSize)
         {
-            var rationConverted = (decimal)symbolTickSize;
+            var rationConverted = (decimal) symbolTickSize;
             Date = date;
-            Open = (decimal)open * rationConverted;
-            High = Open + (decimal)high * rationConverted;
-            Low = Open + (decimal)low * rationConverted;
-            Close = Open + (decimal)close * rationConverted;
-            Volume = (decimal)volume;
+            Open = (decimal) open * rationConverted;
+            High = Open + (decimal) high * rationConverted;
+            Low = Open + (decimal) low * rationConverted;
+            Close = Open + (decimal) close * rationConverted;
+            Volume = (decimal) volume;
         }
 
 

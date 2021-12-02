@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.commands
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class PingCommand : BaseCommand
     {

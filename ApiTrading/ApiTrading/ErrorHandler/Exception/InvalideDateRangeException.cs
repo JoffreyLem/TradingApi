@@ -1,7 +1,7 @@
-﻿namespace ApiTrading.Exception
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace ApiTrading.Exception
+{
     public class InvalideDateRangeException : CustomErrorException
     {
         public InvalideDateRangeException(List<string> errorsMessages) : base(errorsMessages)

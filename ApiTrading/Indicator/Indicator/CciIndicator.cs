@@ -1,9 +1,9 @@
-﻿namespace Indicator.Indicator
-{
-    using System.Collections.Generic;
-    using Modele;
-    using Skender.Stock.Indicators;
+﻿using System.Collections.Generic;
+using Modele;
+using Skender.Stock.Indicators;
 
+namespace Indicator.Indicator
+{
     public class CciIndicator : BaseIndicator<CciResult>
     {
         public CciIndicator(List<Candle> history, int lookbackPeriod = 20,
@@ -45,7 +45,7 @@
         {
             if (history.Count > LookbackPeriod)
             {
-                var data = Indicator.GetCci(history, LookbackPeriod);
+                var data = Skender.Stock.Indicators.Indicator.GetCci(history, LookbackPeriod);
                 base.Update(data);
             }
         }

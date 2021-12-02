@@ -1,8 +1,8 @@
+using System;
+using XtbLibrairie.errors;
+
 namespace XtbLibrairie.responses
 {
-    using System;
-    using errors;
-
     public class APIErrorResponse : Exception
     {
         private readonly ERR_CODE code;

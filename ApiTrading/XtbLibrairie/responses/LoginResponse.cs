@@ -1,7 +1,9 @@
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.records;
+
 namespace XtbLibrairie.responses
 {
-    using records;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class LoginResponse : BaseResponse
     {
@@ -11,9 +13,9 @@ namespace XtbLibrairie.responses
             : base(body)
         {
             var ob = JSONObject.Parse(body);
-            StreamSessionId = (string)ob["streamSessionId"];
+            StreamSessionId = (string) ob["streamSessionId"];
 
-            var redirectJSON = (JSONObject)ob["redirect"];
+            var redirectJSON = (JSONObject) ob["redirect"];
 
             if (redirectJSON != null)
             {

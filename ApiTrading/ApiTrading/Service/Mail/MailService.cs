@@ -1,10 +1,10 @@
+using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
+using MimeKit;
+
 namespace ApiTrading.Service.Mail
 {
-    using System.Threading.Tasks;
-    using MailKit.Net.Smtp;
-    using Microsoft.Extensions.Configuration;
-    using MimeKit;
-
     public class MailService : IMail
     {
         private readonly bool _enableSsl;

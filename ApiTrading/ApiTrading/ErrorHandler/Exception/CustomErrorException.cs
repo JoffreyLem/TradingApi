@@ -1,9 +1,8 @@
+using System.Collections.Generic;
+
 namespace ApiTrading.Exception
 {
-    using System;
-    using System.Collections.Generic;
-
-    public class CustomErrorException : Exception
+    public class CustomErrorException : System.Exception
     {
         public CustomErrorException(List<string> errorsMessages)
         {

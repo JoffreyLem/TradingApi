@@ -1,13 +1,13 @@
+using System.Threading.Tasks;
+using ApiTrading.Modele.DTO.Request;
+using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.ExternalAPIHandler;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 namespace ApiTrading.Controllers
 {
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Modele.DTO.Request;
-    using Modele.DTO.Response;
-    using Service.ExternalAPIHandler;
-
     [Consumes("application/json")]
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]

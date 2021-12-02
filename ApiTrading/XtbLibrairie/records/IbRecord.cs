@@ -1,7 +1,9 @@
-﻿namespace XtbLibrairie.records
+﻿using Newtonsoft.Json.Linq;
+using XtbLibrairie.codes;
+
+namespace XtbLibrairie.records
 {
-    using codes;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class IbRecord : BaseResponseRecord
     {
@@ -61,15 +63,15 @@
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            ClosePrice = (double)value["closePrice"];
-            Login = (string)value["login"];
-            Nominal = (double)value["nominal"];
-            OpenPrice = (double)value["openPrice"];
-            Side = Side.FromCode((int)value["side"]);
-            Surname = (string)value["surname"];
-            Symbol = (string)value["symbol"];
-            Timestamp = (long)value["timestamp"];
-            Volume = (double)value["volume"];
+            ClosePrice = (double) value["closePrice"];
+            Login = (string) value["login"];
+            Nominal = (double) value["nominal"];
+            OpenPrice = (double) value["openPrice"];
+            Side = Side.FromCode((int) value["side"]);
+            Surname = (string) value["surname"];
+            Symbol = (string) value["symbol"];
+            Timestamp = (long) value["timestamp"];
+            Volume = (double) value["volume"];
         }
     }
 }

@@ -1,7 +1,7 @@
+using System;
+
 namespace StrategyManager
 {
-    using System;
-
     public class StrategyAttributeType : Attribute
     {
         public StrategyAttributeType(Type type)

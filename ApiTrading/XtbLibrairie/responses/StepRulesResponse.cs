@@ -1,9 +1,11 @@
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.records;
+
 namespace XtbLibrairie.responses
 {
-    using System.Collections.Generic;
-    using records;
-    using JSONArray = Newtonsoft.Json.Linq.JArray;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONArray = JArray;
+    using JSONObject = JObject;
 
     public class StepRulesResponse : BaseResponse
     {
@@ -12,7 +14,7 @@ namespace XtbLibrairie.responses
         public StepRulesResponse(string body)
             : base(body)
         {
-            var stepRulesRecords = (JSONArray)ReturnData;
+            var stepRulesRecords = (JSONArray) ReturnData;
             foreach (JSONObject e in stepRulesRecords)
             {
                 var stepRulesRecord = new StepRuleRecord();

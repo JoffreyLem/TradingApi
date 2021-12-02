@@ -12,9 +12,9 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            MainPort = (int)value["mainPort"];
-            StreamingPort = (int)value["streamingPort"];
-            Address = (string)value["address"];
+            MainPort = (int) value["mainPort"];
+            StreamingPort = (int) value["streamingPort"];
+            Address = (string) value["address"];
         }
 
         public override string ToString()

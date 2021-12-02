@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using Modele;
+
 namespace ApiTrading.Modele.DTO.Response
 {
-    using System.Collections.Generic;
-    using global::Modele;
-
     public class SignalResponse
     {
         public SignalResponse()

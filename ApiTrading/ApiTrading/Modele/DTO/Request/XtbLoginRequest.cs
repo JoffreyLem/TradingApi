@@ -1,7 +1,7 @@
-﻿namespace ApiTrading.Modele.DTO.Request
-{
-    using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
+namespace ApiTrading.Modele.DTO.Request
+{
     public class XtbLoginRequest
     {
         [Required] public string Login { get; set; }

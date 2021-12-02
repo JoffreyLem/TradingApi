@@ -1,7 +1,7 @@
+using System;
+
 namespace XtbLibrairie.codes
 {
-    using System;
-
     public class TRADE_OPERATION_CODE : BaseCode
     {
         public static readonly TRADE_OPERATION_CODE BUY = new(0L);

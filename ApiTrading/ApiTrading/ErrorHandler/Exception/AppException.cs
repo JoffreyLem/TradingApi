@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+
 namespace ApiTrading.Exception
 {
-    using System.Collections.Generic;
-
     public class AppException : CustomErrorException
     {
         public AppException(string message) : base(message)

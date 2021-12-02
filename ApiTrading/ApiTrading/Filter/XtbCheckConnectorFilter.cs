@@ -1,12 +1,12 @@
-﻿namespace ApiTrading.Filter
-{
-    using System.Linq;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using Microsoft.Extensions.DependencyInjection;
-    using Service.ExternalAPIHandler;
-    using XtbLibrairie.sync;
+﻿using System.Linq;
+using ApiTrading.Service.ExternalAPIHandler;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
+using XtbLibrairie.sync;
 
+namespace ApiTrading.Filter
+{
     public class XtbCheckConnectorFilter : IActionFilter
     {
         public void OnActionExecuting(ActionExecutingContext context)

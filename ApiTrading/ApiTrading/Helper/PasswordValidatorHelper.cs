@@ -1,8 +1,8 @@
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+
 namespace ApiTrading.Helper
 {
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Identity;
-
     public class PasswordValidatorHelper<T> : IPasswordValidator<T> where T : IdentityUser<int>
 
     {

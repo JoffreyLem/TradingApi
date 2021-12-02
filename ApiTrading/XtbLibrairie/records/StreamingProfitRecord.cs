@@ -1,6 +1,8 @@
-﻿namespace XtbLibrairie.records
+﻿using Newtonsoft.Json.Linq;
+
+namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class StreamingProfitRecord : BaseResponseRecord
     {
@@ -14,8 +16,8 @@
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Profit = (double?)value["profit"];
-            Order = (long?)value["order"];
+            Profit = (double?) value["profit"];
+            Order = (long?) value["order"];
         }
 
         public override string ToString()

@@ -1,40 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using APIhandler;
+using ApiTrading.Configuration;
+using ApiTrading.DbContext;
+using ApiTrading.Helper;
+using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Repository.Signal;
+using ApiTrading.Repository.Token;
+using ApiTrading.Repository.Utilisateurs;
+using ApiTrading.Service.ExternalAPIHandler;
+using ApiTrading.Service.Mail;
+using ApiTrading.Service.Strategy;
+using ApiTrading.Service.Utilisateur;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+
 namespace ApiTrading
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
-    using System.Text.Json.Serialization;
-    using System.Threading.Tasks;
-    using APIhandler;
-    using Configuration;
-    using DbContext;
-    using Helper;
-    using Microsoft.AspNetCore.Authentication;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.IdentityModel.Tokens;
-    using Microsoft.OpenApi.Models;
-    using Modele.DTO.Response;
-    using Repository.Signal;
-    using Repository.Token;
-    using Repository.Utilisateurs;
-    using Service.ExternalAPIHandler;
-    using Service.Mail;
-    using Service.Strategy;
-    using Service.Utilisateur;
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -67,7 +66,7 @@ namespace ApiTrading
             });
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiTrading", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "ApiTrading", Version = "v1"});
                 c.SchemaFilter<SchemaFilter>();
                 c.ParameterFilter<SwaggerParameterFilter>();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -132,11 +131,8 @@ namespace ApiTrading
                             var allowAnonymous = context.HttpContext.GetEndpoint()
                                 ?.Metadata.GetMetadata<IAllowAnonymous>();
 
-                            if (allowAnonymous != null)
-                            {
-                                return Task.CompletedTask;
-                            }
-                            
+                            if (allowAnonymous != null) return Task.CompletedTask;
+
                             string authorization = context.Request.Headers["Authorization"];
                             if (string.IsNullOrEmpty(authorization))
                             {
@@ -147,14 +143,12 @@ namespace ApiTrading
                             }
 
                             if (authorization.StartsWith("Token ", StringComparison.OrdinalIgnoreCase))
-                            {
                                 context.Token = authorization.Substring("Token ".Length).Trim();
-                            }
 
 
                             return Task.CompletedTask;
                         },
-                       
+
                         OnAuthenticationFailed = ctx =>
                         {
                             ctx.Response.StatusCode = 401;

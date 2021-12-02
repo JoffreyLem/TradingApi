@@ -1,8 +1,10 @@
+using System;
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.codes;
+
 namespace XtbLibrairie.records
 {
-    using System;
-    using codes;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class TradeTransInfoRecord
     {

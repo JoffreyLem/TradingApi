@@ -1,11 +1,11 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ApiTrading.Modele.DTO.Response;
+using Modele;
+using XtbLibrairie.sync;
+
 namespace ApiTrading.Service.ExternalAPIHandler
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using global::Modele;
-    using Modele.DTO.Response;
-    using XtbLibrairie.sync;
-
     public interface IApiHandler
     {
         public List<SymbolInformations> AllSymbolList { get; set; }

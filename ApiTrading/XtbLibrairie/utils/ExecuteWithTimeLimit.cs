@@ -1,8 +1,8 @@
-﻿namespace XtbLibrairie.utils
-{
-    using System;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
+namespace XtbLibrairie.utils
+{
     internal class ExecuteWithTimeLimit
     {
         public static bool Execute(TimeSpan timeSpan, Action codeBlock)

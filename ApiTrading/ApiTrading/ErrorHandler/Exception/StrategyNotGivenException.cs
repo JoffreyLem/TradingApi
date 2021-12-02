@@ -1,7 +1,7 @@
-﻿namespace ApiTrading.Exception
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace ApiTrading.Exception
+{
     public class StrategyNotGivenException : CustomErrorException
     {
         public StrategyNotGivenException(List<string> errorsMessages) : base(errorsMessages)

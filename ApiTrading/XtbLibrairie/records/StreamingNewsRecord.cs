@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class StreamingNewsRecord : BaseResponseRecord
     {
@@ -14,10 +16,10 @@ namespace XtbLibrairie.records
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Body = (string)value["body"];
-            Key = (string)value["key"];
-            Time = (long?)value["time"];
-            Title = (string)value["title"];
+            Body = (string) value["body"];
+            Key = (string) value["key"];
+            Time = (long?) value["time"];
+            Title = (string) value["title"];
         }
     }
 }

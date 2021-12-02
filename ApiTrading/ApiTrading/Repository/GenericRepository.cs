@@ -1,14 +1,14 @@
-﻿namespace ApiTrading.Repository
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
-    using DbContext;
-    using Exception;
-    using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using ApiTrading.DbContext;
+using ApiTrading.Exception;
+using Microsoft.EntityFrameworkCore;
 
+namespace ApiTrading.Repository
+{
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         protected readonly ApiTradingDatabaseContext Context;
@@ -65,12 +65,8 @@
 
         public async Task SaveChangeAsync()
         {
-          var success=  await Context.SaveChangesAsync()>0;
-          if (!success)
-          {
-              throw new AppException("Erreur interne");
-          }
-          
+            var success = await Context.SaveChangesAsync() > 0;
+            if (!success) throw new AppException("Erreur interne");
         }
     }
 }

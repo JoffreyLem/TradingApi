@@ -1,8 +1,6 @@
 ﻿namespace Indicator.Exception
 {
-    using System;
-
-    public class CloseValueNotGivenException : Exception
+    public class CloseValueNotGivenException : System.Exception
     {
         public CloseValueNotGivenException(string? message) : base(message)
         {

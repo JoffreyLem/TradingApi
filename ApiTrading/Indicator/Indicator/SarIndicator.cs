@@ -1,9 +1,9 @@
-﻿namespace Indicator.Indicator
-{
-    using System.Collections.Generic;
-    using Modele;
-    using Skender.Stock.Indicators;
+﻿using System.Collections.Generic;
+using Modele;
+using Skender.Stock.Indicators;
 
+namespace Indicator.Indicator
+{
     public class SarIndicator : BaseIndicator<ParabolicSarResult>
     {
         public SarIndicator(List<Candle> data, double accelerationstep = 0.02,
@@ -53,7 +53,7 @@
         {
             if (history.Count > 2)
             {
-                var data = Indicator.GetParabolicSar(history, AccelerationStep,
+                var data = Skender.Stock.Indicators.Indicator.GetParabolicSar(history, AccelerationStep,
                     MaxAccelerationFactor);
                 base.Update(data);
             }

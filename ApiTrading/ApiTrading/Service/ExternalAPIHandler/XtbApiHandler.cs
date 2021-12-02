@@ -1,31 +1,31 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ApiTrading.Exception;
+using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.ExternalAPIHandler;
+using Modele;
+using Utility;
+using XtbLibrairie.codes;
+using XtbLibrairie.commands;
+using XtbLibrairie.records;
+using XtbLibrairie.sync;
+
 namespace APIhandler
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using ApiTrading.Exception;
-    using ApiTrading.Modele.DTO.Response;
-    using ApiTrading.Service.ExternalAPIHandler;
-    using Modele;
-    using Utility;
-    using XtbLibrairie.codes;
-    using XtbLibrairie.commands;
-    using XtbLibrairie.records;
-    using XtbLibrairie.sync;
-
     public class XtbApiHandler : IApiHandler
     {
-        public XtbApiHandler()
-        {
-            GetAllSymbol();
-        }
-        
         private readonly Server serverData = Servers.DEMO;
         private string appId = "";
         private string appName = "RobotData <DEMO>";
         private string password = "";
         private string userId = "";
+
+        public XtbApiHandler()
+        {
+            GetAllSymbol();
+        }
 
         public async Task<BaseResponse> Login(string user, string passwordData)
         {

@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+
 namespace ApiTrading.Exception
 {
-    using System.Collections.Generic;
-
     public class AlreadyExistException : CustomErrorException
     {
         public AlreadyExistException(List<string> errorMessage) : base(errorMessage)

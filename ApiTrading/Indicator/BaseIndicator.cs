@@ -1,12 +1,12 @@
-﻿namespace Indicator
-{
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
-    using Exception;
-    using Modele;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using Indicator.Exception;
+using Modele;
 
+namespace Indicator
+{
     public abstract class BaseIndicator<T> : List<T>, IIndicator
     {
         protected BaseIndicator(int loopBackPeriodRequested = 0)
@@ -67,7 +67,7 @@
 
                 foreach (var propertyInfo in propertieinfos)
                     if (propertyInfo.PropertyType == typeof(decimal?))
-                        return (decimal?)propertyInfo.GetValue(test, null);
+                        return (decimal?) propertyInfo.GetValue(test, null);
             }
 
             return null;

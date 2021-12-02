@@ -1,13 +1,11 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ApiTrading.Modele.DTO.Request;
+using ApiTrading.Modele.DTO.Response;
+using Modele;
+
 namespace ApiTrading.Service.Strategy
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using global::Modele;
-    using Microsoft.AspNetCore.Identity;
-    using Modele;
-    using Modele.DTO.Request;
-    using Modele.DTO.Response;
-
     public interface IStrategyService
     {
         public Task<BaseResponse<List<StrategyList>>> GetAllStrategy();
@@ -24,8 +22,7 @@ namespace ApiTrading.Service.Strategy
         public Task<BaseResponse> SubscribeToSymbolInfo(string modelUser, string symbol);
 
         public Task<BaseResponse> UnsubscribeToSymbolInfo(string symbol);
-        
-   
+
 
         public Task<BaseResponse<List<SubscriptionResponse>>> GetCurrentSignalSubscription();
     }

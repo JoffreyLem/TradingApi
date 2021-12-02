@@ -1,9 +1,9 @@
-﻿namespace ApiTrading.Modele.DTO.Request
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using global::Modele;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Modele;
 
+namespace ApiTrading.Modele.DTO.Request
+{
     public class SignalInfoRequest
     {
         [Required] public string Timeframe { get; set; }

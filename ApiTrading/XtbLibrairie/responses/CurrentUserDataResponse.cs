@@ -1,21 +1,23 @@
+using System;
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.responses
 {
-    using System;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class CurrentUserDataResponse : BaseResponse
     {
         public CurrentUserDataResponse(string body)
             : base(body)
         {
-            var ob = (JSONObject)ReturnData;
-            Currency = (string)ob["currency"];
-            Leverage = (long?)ob["leverage"];
-            LeverageMultiplier = (double?)ob["leverageMultiplier"];
-            Group = (string)ob["group"];
-            CompanyUnit = (int?)ob["companyUnit"];
-            SpreadType = (string)ob["spreadType"];
-            IbAccount = (bool?)ob["ibAccount"];
+            var ob = (JSONObject) ReturnData;
+            Currency = (string) ob["currency"];
+            Leverage = (long?) ob["leverage"];
+            LeverageMultiplier = (double?) ob["leverageMultiplier"];
+            Group = (string) ob["group"];
+            CompanyUnit = (int?) ob["companyUnit"];
+            SpreadType = (string) ob["spreadType"];
+            IbAccount = (bool?) ob["ibAccount"];
         }
 
         public virtual string Currency { get; }

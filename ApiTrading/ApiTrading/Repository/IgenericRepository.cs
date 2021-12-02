@@ -1,10 +1,10 @@
-﻿namespace ApiTrading.Repository
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
+namespace ApiTrading.Repository
+{
     public interface IGenericRepository<T> where T : class
     {
         T GetById(int id);

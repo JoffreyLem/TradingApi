@@ -1,15 +1,13 @@
-﻿namespace ApiTrading.Modele.DTO.Response
-{
-    using System;
-    using Microsoft.AspNetCore.Identity;
+﻿using System;
 
+namespace ApiTrading.Modele.DTO.Response
+{
     public class SubscriptionResponse
     {
-        
         public SubscriptionResponse()
         {
-            
         }
+
         public SubscriptionResponse(Subscription subscription)
         {
             Symbol = subscription.Symbol;
@@ -18,7 +16,7 @@
         }
 
         public string Symbol { get; set; }
-        public string  User { get; set; }
+        public string User { get; set; }
         public DateTime LastSignalInfoSend { get; set; }
     }
 }

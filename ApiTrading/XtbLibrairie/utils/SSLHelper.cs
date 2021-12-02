@@ -1,8 +1,8 @@
-﻿namespace XtbLibrairie.utils
-{
-    using System.Net.Security;
-    using System.Security.Cryptography.X509Certificates;
+﻿using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
+namespace XtbLibrairie.utils
+{
     internal class SSLHelper
     {
         /// <summary>

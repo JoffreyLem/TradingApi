@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+
 namespace ApiTrading.Modele.DTO.Response
 {
-    using System.Collections.Generic;
-
     public class StrategyResponse
     {
         public StrategyResponse()

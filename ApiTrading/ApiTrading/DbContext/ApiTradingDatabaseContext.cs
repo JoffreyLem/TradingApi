@@ -1,11 +1,11 @@
+using ApiTrading.Modele;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Modele;
+
 namespace ApiTrading.DbContext
 {
-    using global::Modele;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
-    using Modele;
-
     public class ApiTradingDatabaseContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>
     {
         public ApiTradingDatabaseContext(DbContextOptions<ApiTradingDatabaseContext> options)

@@ -1,10 +1,10 @@
+using System.Collections.Generic;
+using ApiTrading.Helper;
+using Modele;
+using Newtonsoft.Json;
+
 namespace ApiTrading.Modele.DTO.Response
 {
-    using System.Collections.Generic;
-    using global::Modele;
-    using Helper;
-    using Newtonsoft.Json;
-
     public class CandleListResponse
     {
         public CandleListResponse(List<Candle> data)

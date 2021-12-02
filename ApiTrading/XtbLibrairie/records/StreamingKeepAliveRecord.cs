@@ -1,6 +1,8 @@
-﻿namespace XtbLibrairie.records
+﻿using Newtonsoft.Json.Linq;
+
+namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class StreamingKeepAliveRecord : BaseResponseRecord
     {
@@ -8,7 +10,7 @@
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Timestamp = (long?)value["timestamp"];
+            Timestamp = (long?) value["timestamp"];
         }
 
         public override string ToString()

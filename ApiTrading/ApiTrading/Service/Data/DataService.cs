@@ -1,11 +1,11 @@
-﻿namespace ApiTrading.Service.Data
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using global::Modele;
-    using Modele.DTO.Response;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ApiTrading.Modele.DTO.Response;
+using Modele;
 
+namespace ApiTrading.Service.Data
+{
     public class DataService : IDataService
     {
         public Task<BaseResponse<List<Candle>>> GetAllChart(string symbol, string periodCodeStr, double? symbolTickSize,

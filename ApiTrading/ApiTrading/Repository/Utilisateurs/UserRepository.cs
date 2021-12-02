@@ -1,9 +1,9 @@
-﻿namespace ApiTrading.Repository.Utilisateurs
-{
-    using System.Threading.Tasks;
-    using DbContext;
-    using Microsoft.AspNetCore.Identity;
+﻿using System.Threading.Tasks;
+using ApiTrading.DbContext;
+using Microsoft.AspNetCore.Identity;
 
+namespace ApiTrading.Repository.Utilisateurs
+{
     public class UserRepository : GenericRepository<IdentityUser<int>>, IUserRepository
     {
         private readonly RoleManager<IdentityRole<int>> _roleManager;
@@ -20,7 +20,7 @@
         public async Task<IdentityResult> CreateAsync(IdentityUser<int> user, string password, string role = "User")
         {
             using var transaction = Context.Database.BeginTransaction();
-            
+
             var created = await _userManager.CreateAsync(user, password);
             var roleCreated = await _userManager.AddToRoleAsync(user, role);
             await transaction.CommitAsync();
@@ -29,7 +29,6 @@
 
         public async Task<IdentityUser<int>> FindByEmailAsync(string email)
         {
-            
             return await _userManager.FindByEmailAsync(email);
         }
 

@@ -1,7 +1,7 @@
-﻿namespace Modele
-{
-    using System.ComponentModel;
+﻿using System.ComponentModel;
 
+namespace Modele
+{
     public enum Timeframe
     {
         [Description("1m")] OneMinute,

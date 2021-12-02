@@ -1,6 +1,8 @@
-﻿namespace XtbLibrairie.records
+﻿using Newtonsoft.Json.Linq;
+
+namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class StepRecord : BaseResponseRecord
     {
@@ -9,8 +11,8 @@
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            FromValue = (double)value["fromValue"];
-            Step = (double)value["step"];
+            FromValue = (double) value["fromValue"];
+            Step = (double) value["step"];
         }
     }
 }

@@ -1,9 +1,11 @@
+using System;
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.errors;
+
 namespace XtbLibrairie.responses
 {
-    using System;
-    using errors;
-    using JSONAware = Newtonsoft.Json.Linq.JContainer;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONAware = JContainer;
+    using JSONObject = JObject;
 
     public class BaseResponse
     {
@@ -26,11 +28,11 @@ namespace XtbLibrairie.responses
 
             if (ob == null) throw new APIReplyParseException("JSON Parse exception: " + body);
 
-            status = (bool?)ob["status"];
-            errCode = new ERR_CODE((string)ob["errorCode"]);
-            errorDescr = (string)ob["errorDescr"];
-            returnData = (JSONAware)ob["returnData"];
-            CustomTag = (string)ob["customTag"];
+            status = (bool?) ob["status"];
+            errCode = new ERR_CODE((string) ob["errorCode"]);
+            errorDescr = (string) ob["errorDescr"];
+            returnData = (JSONAware) ob["returnData"];
+            CustomTag = (string) ob["customTag"];
 
             if (status == null)
             {
@@ -38,7 +40,7 @@ namespace XtbLibrairie.responses
                 throw new APIReplyParseException("JSON Parse error: " + "\"status\" is null!");
             }
 
-            if (status == null || (bool)!status)
+            if (status == null || (bool) !status)
                 // If status is false check if redirect exists in given response
                 if (ob["redirect"] == null)
                 {

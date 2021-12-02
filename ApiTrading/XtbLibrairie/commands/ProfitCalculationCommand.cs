@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.commands
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class ProfitCalculationCommand : BaseCommand
     {
@@ -12,7 +14,7 @@ namespace XtbLibrairie.commands
 
         public override string[] RequiredArguments
         {
-            get { return new[] { "cmd", "symbol", "volume", "openPrice", "closePrice" }; }
+            get { return new[] {"cmd", "symbol", "volume", "openPrice", "closePrice"}; }
         }
     }
 }

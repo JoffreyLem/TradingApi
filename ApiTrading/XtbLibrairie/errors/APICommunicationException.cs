@@ -1,7 +1,7 @@
+using System;
+
 namespace XtbLibrairie.errors
 {
-    using System;
-
     public class APICommunicationException : Exception
     {
         public APICommunicationException()

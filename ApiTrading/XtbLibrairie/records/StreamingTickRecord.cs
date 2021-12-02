@@ -1,6 +1,8 @@
-﻿namespace XtbLibrairie.records
+﻿using Newtonsoft.Json.Linq;
+
+namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class StreamingTickRecord : BaseResponseRecord
     {
@@ -30,18 +32,18 @@
 
         public void FieldsFromJSONObject(JSONObject value)
         {
-            Ask = (double?)value["ask"];
-            Bid = (double?)value["bid"];
-            AskVolume = (long?)value["askVolume"];
-            BidVolume = (long?)value["bidVolume"];
-            High = (double?)value["high"];
-            Low = (double?)value["low"];
-            Symbol = (string)value["symbol"];
-            Timestamp = (long?)value["timestamp"];
-            Level = (long?)value["level"];
-            QuoteId = (long?)value["quoteId"];
-            SpreadRaw = (double?)value["spreadRaw"];
-            SpreadTable = (double?)value["spreadTable"];
+            Ask = (double?) value["ask"];
+            Bid = (double?) value["bid"];
+            AskVolume = (long?) value["askVolume"];
+            BidVolume = (long?) value["bidVolume"];
+            High = (double?) value["high"];
+            Low = (double?) value["low"];
+            Symbol = (string) value["symbol"];
+            Timestamp = (long?) value["timestamp"];
+            Level = (long?) value["level"];
+            QuoteId = (long?) value["quoteId"];
+            SpreadRaw = (double?) value["spreadRaw"];
+            SpreadTable = (double?) value["spreadTable"];
         }
 
         public override string ToString()

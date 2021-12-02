@@ -1,6 +1,8 @@
-﻿namespace XtbLibrairie.streaming
+﻿using Newtonsoft.Json.Linq;
+
+namespace XtbLibrairie.streaming
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     internal class TickPricesSubscribe
     {

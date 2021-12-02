@@ -1,17 +1,16 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using ApiTrading.Filter;
+using ApiTrading.Modele.DTO.Request;
+using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.Strategy;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 namespace ApiTrading.Controllers
 {
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Threading.Tasks;
-    using Filter;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Modele;
-    using Modele.DTO.Request;
-    using Modele.DTO.Response;
-    using Service.Strategy;
-
     [Consumes("application/json")]
     [Produces("application/json")]
     [ProducesErrorResponseType(typeof(ErrorModel))]
@@ -74,56 +73,52 @@ namespace ApiTrading.Controllers
             var user = HttpContext.GetCurrentUser();
             return CreatedAtAction(nameof(PostSignal), await _strategyService.PostSignal(infoRequest));
         }
-        
+
         /// <summary>
-        ///   Récupérer tous les utilisateurs fournissant 
+        ///     Récupérer tous les utilisateurs fournissant
         /// </summary>
         /// <returns></returns>
-
-        [HttpGet("UserGiverSignals")]
+        [HttpGet("UserSignals")]
         [ProducesResponseType(typeof(BaseResponse<List<string>>), 200)]
         public async Task<IActionResult> GetAllUserGiverSignal()
         {
             return Ok(await _strategyService.GetUsersGiverSignal());
         }
-        
+
         /// <summary>
-        /// S'abonner aux signaux d'un utilisateur
+        ///     S'abonner aux signaux d'un utilisateur
         /// </summary>
         /// <param name="model">test</param>
         /// <returns></returns>
-
         [HttpPost("Subscribe")]
         [ProducesResponseType(typeof(BaseResponse), 200)]
-        public async Task<IActionResult> SubscribeToSymbol([FromBody][Required]SubscriptionModel model)
+        public async Task<IActionResult> SubscribeToSymbol([FromBody] [Required] SubscriptionModel model)
         {
-            return Ok(await _strategyService.SubscribeToSymbolInfo(model.User,model.Symbol));
+            return Ok(await _strategyService.SubscribeToSymbolInfo(model.User, model.Symbol));
         }
-        
-        
+
+
         /// <summary>
-        /// Se désabonner aux signaux d'un utilisateur
+        ///     Se désabonner aux signaux d'un utilisateur
         /// </summary>
         /// <param name="model">test</param>
         /// <returns></returns>
-        [HttpPost("Unsubscribe")]
+        [HttpDelete("Unsubscribe")]
         [ProducesResponseType(typeof(BaseResponse), 200)]
-        public async Task<IActionResult> UnubscribeToSymbol([FromBody][Required]SubscriptionModel model)
+        public async Task<IActionResult> UnubscribeToSymbol([FromBody] [Required] SubscriptionModel model)
         {
             return Ok(await _strategyService.UnsubscribeToSymbolInfo(model.Symbol));
         }
-        
+
         /// <summary>
-        /// Récupération de toutes les subscriptions de l'utilisateur
+        ///     Récupération de toutes les subscriptions de l'utilisateur
         /// </summary>
         /// <returns></returns>
-        [HttpGet("GetAllSubscriptions")]
+        [HttpGet("AllSubscriptions")]
         [ProducesResponseType(typeof(BaseResponse<List<SubscriptionResponse>>), 200)]
         public async Task<IActionResult> GetSubscriptions()
         {
             return Ok(await _strategyService.GetCurrentSignalSubscription());
         }
-        
-        
     }
 }

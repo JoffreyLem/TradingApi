@@ -1,14 +1,16 @@
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.codes;
+using XtbLibrairie.errors;
+using XtbLibrairie.records;
+using XtbLibrairie.responses;
+using XtbLibrairie.sync;
+
 namespace XtbLibrairie.commands
 {
-    using System;
-    using System.Collections.Generic;
-    using codes;
-    using errors;
-    using records;
-    using responses;
-    using sync;
-    using JSONArray = Newtonsoft.Json.Linq.JArray;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONArray = JArray;
+    using JSONObject = JObject;
 
     public class APICommandFactory
     {

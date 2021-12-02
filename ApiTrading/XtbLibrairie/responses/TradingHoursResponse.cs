@@ -1,9 +1,11 @@
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.records;
+
 namespace XtbLibrairie.responses
 {
-    using System.Collections.Generic;
-    using records;
-    using JSONArray = Newtonsoft.Json.Linq.JArray;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONArray = JArray;
+    using JSONObject = JObject;
 
     public class TradingHoursResponse : BaseResponse
     {
@@ -11,7 +13,7 @@ namespace XtbLibrairie.responses
 
         public TradingHoursResponse(string body) : base(body)
         {
-            var ob = (JSONArray)ReturnData;
+            var ob = (JSONArray) ReturnData;
             foreach (JSONObject e in ob)
             {
                 var record = new TradingHoursRecord();

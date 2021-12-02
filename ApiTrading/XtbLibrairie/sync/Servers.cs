@@ -1,9 +1,9 @@
-﻿namespace XtbLibrairie.sync
-{
-    using System;
-    using System.Collections.Generic;
-    using errors;
+﻿using System;
+using System.Collections.Generic;
+using XtbLibrairie.errors;
 
+namespace XtbLibrairie.sync
+{
     public static class Servers
     {
         /// <summary>

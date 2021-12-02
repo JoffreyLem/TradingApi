@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.records
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class RateInfoRecord : BaseResponseRecord
     {
@@ -19,12 +21,12 @@ namespace XtbLibrairie.records
         public void FieldsFromJSONObject(JSONObject value)
         {
             {
-                Close = (double?)value["close"];
-                Ctm = (long?)value["ctm"];
-                High = (double?)value["high"];
-                Low = (double?)value["low"];
-                Open = (double?)value["open"];
-                Vol = (double?)value["vol"];
+                Close = (double?) value["close"];
+                Ctm = (long?) value["ctm"];
+                High = (double?) value["high"];
+                Low = (double?) value["low"];
+                Open = (double?) value["open"];
+                Vol = (double?) value["vol"];
             }
         }
     }

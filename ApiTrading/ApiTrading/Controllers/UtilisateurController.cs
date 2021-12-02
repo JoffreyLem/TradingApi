@@ -1,14 +1,13 @@
+using System.Threading.Tasks;
+using ApiTrading.Modele.DTO.Request;
+using ApiTrading.Modele.DTO.Response;
+using ApiTrading.Service.Utilisateur;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 namespace ApiTrading.Controllers
 {
-    using System.Threading.Tasks;
-    using Filter;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using Modele.DTO.Request;
-    using Modele.DTO.Response;
-    using Service.Utilisateur;
-
     /// <response code="415">Header Content-type manquant/Invalide</response>
     [Consumes("application/json")]
     [Produces("application/json")]
@@ -59,14 +58,13 @@ namespace ApiTrading.Controllers
         }
 
         /// <summary>
-        /// Récupération des infos de l'utilisateur
+        ///     Récupération des infos de l'utilisateur
         /// </summary>
         /// <returns></returns>
         [HttpGet("Info")]
         [ProducesResponseType(typeof(BaseResponse<UserInfoReponse>), 200)]
         public async Task<IActionResult> GetUsersInfo()
         {
-            
             return Ok(await _utilisateurService.GetUsersInfo());
         }
 
@@ -74,16 +72,14 @@ namespace ApiTrading.Controllers
         ///     Mise à jour des informations de l'utilisateur
         /// </summary>
         /// <response code="200">Utilisateurs mit à jour</response>
-        [HttpPut]
+        [HttpPatch]
         [ProducesResponseType(403)]
         [ProducesResponseType(typeof(BaseResponse), 200)]
         [Route("Update")]
         public async Task<IActionResult> Update([FromBody] UserUpdateRequest userUpdate)
         {
-          
             return Ok(await _utilisateurService.Update(userUpdate));
         }
-        
 
 
         /// <summary>
@@ -97,7 +93,6 @@ namespace ApiTrading.Controllers
         [Route("Delete")]
         public async Task<IActionResult> Delete()
         {
-
             return Ok(await _utilisateurService.Delete());
         }
     }

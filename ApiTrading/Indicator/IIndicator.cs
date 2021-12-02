@@ -1,7 +1,7 @@
-﻿namespace Indicator
-{
-    using Modele;
+﻿using Modele;
 
+namespace Indicator
+{
     public interface IIndicator : IUpdate, IBuySellSignal
     {
         public int LookbackPeriod { get; set; }

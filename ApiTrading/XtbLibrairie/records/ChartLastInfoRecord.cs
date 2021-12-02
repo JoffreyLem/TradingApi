@@ -1,7 +1,9 @@
+using Newtonsoft.Json.Linq;
+using XtbLibrairie.codes;
+
 namespace XtbLibrairie.records
 {
-    using codes;
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class ChartLastInfoRecord
     {
@@ -20,7 +22,7 @@ namespace XtbLibrairie.records
         {
             var obj = new JSONObject();
             obj.Add("symbol", symbol);
-            obj.Add("period", (long?)period.Code);
+            obj.Add("period", (long?) period.Code);
             obj.Add("start", start);
             return obj;
         }

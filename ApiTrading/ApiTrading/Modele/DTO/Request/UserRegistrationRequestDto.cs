@@ -1,7 +1,7 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace ApiTrading.Modele.DTO.Request
 {
-    using System.ComponentModel.DataAnnotations;
-
     public class UserRegistrationRequestDto
     {
         [Required] public string UserName { get; set; }

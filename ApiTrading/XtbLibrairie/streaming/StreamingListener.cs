@@ -1,7 +1,7 @@
-﻿namespace XtbLibrairie.streaming
-{
-    using records;
+﻿using XtbLibrairie.records;
 
+namespace XtbLibrairie.streaming
+{
     public interface StreamingListener
     {
         void ReceiveTradeRecord(StreamingTradeRecord tradeRecord);

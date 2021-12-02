@@ -1,6 +1,8 @@
+using Newtonsoft.Json.Linq;
+
 namespace XtbLibrairie.commands
 {
-    using JSONObject = Newtonsoft.Json.Linq.JObject;
+    using JSONObject = JObject;
 
     public class TickPricesCommand : BaseCommand
     {
@@ -13,7 +15,7 @@ namespace XtbLibrairie.commands
 
         public override string[] RequiredArguments
         {
-            get { return new[] { "symbols", "timestamp" }; }
+            get { return new[] {"symbols", "timestamp"}; }
         }
     }
 }

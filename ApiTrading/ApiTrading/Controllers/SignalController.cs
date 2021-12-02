@@ -118,7 +118,7 @@ namespace ApiTrading.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("GetAllSubscriptions")]
-        [ProducesResponseType(typeof(BaseResponse<List<Subscription>>), 200)]
+        [ProducesResponseType(typeof(BaseResponse<List<SubscriptionResponse>>), 200)]
         public async Task<IActionResult> GetSubscriptions()
         {
             return Ok(await _strategyService.GetCurrentSignalSubscription());
